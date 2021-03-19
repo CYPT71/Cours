@@ -34,7 +34,7 @@ func devicesPost(c *fiber.Ctx) error {
 	err := c.BodyParser(&device)
 	log.Print(err)
 	// sql.AddDevices(body.capacity, body.model_type)
-	c.JSON(&device)
+	c.JSON(device)
 
 	return nil
 
