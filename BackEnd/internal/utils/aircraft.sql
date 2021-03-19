@@ -62,15 +62,6 @@ CREATE TABLE `Device` (
   `type` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Déchargement des données de la table `Device`
---
-
-INSERT INTO `Device` (`id`, `capacity`, `type`) VALUES
-(1, 850, 'A380'),
-(2, 170, 'A320'),
-(3, 335, 'A330');
-
 -- --------------------------------------------------------
 
 --
@@ -238,13 +229,13 @@ ALTER TABLE `CabinCrew`
 -- AUTO_INCREMENT pour la table `Departus`
 --
 ALTER TABLE `Departus`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `Device`
 --
 ALTER TABLE `Device`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `Employees`
