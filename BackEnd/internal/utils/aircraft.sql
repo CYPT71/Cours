@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 -- Structure de la table `CabinCrew`
 --
 
-CREATE TABLE `CabinCrew` (
+CREATE TABLE IF NOT EXISTS `CabinCrew` (
   `id` int NOT NULL,
   `amoung` date NOT NULL,
   `fonction` varchar(666) NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE `CabinCrew` (
 -- Structure de la table `Departus`
 --
 
-CREATE TABLE `Departus` (
+CREATE TABLE IF NOT EXISTS `Departus` (
   `id` int NOT NULL,
   `date` date NOT NULL,
   `pilote` int NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE `Departus` (
 -- Structure de la table `Device`
 --
 
-CREATE TABLE `Device` (
+CREATE TABLE IF NOT EXISTS `Device` (
   `id` int NOT NULL,
   `capacity` int NOT NULL,
   `type` varchar(200) NOT NULL
@@ -68,7 +68,7 @@ CREATE TABLE `Device` (
 -- Structure de la table `Employees`
 --
 
-CREATE TABLE `Employees` (
+CREATE TABLE IF NOT EXISTS `Employees` (
   `id` int NOT NULL,
   `aircrew` boolean NOT NULL,
   `ground` boolean NOT NULL,
@@ -84,7 +84,7 @@ CREATE TABLE `Employees` (
 -- Structure de la table `Fligth`
 --
 
-CREATE TABLE `Fligth` (
+CREATE TABLE IF NOT EXISTS `Fligth` (
   `id` int NOT NULL,
   `id_departures` int NOT NULL,
   `arrival` date NOT NULL,
@@ -98,7 +98,7 @@ CREATE TABLE `Fligth` (
 -- Structure de la table `Passenger`
 --
 
-CREATE TABLE `Passenger` (
+CREATE TABLE IF NOT EXISTS `Passenger` (
   `id` int NOT NULL,
   `name` varchar(666) NOT NULL,
   `first_name` varchar(666) NOT NULL,
@@ -114,7 +114,7 @@ CREATE TABLE `Passenger` (
 -- Structure de la table `Pilote`
 --
 
-CREATE TABLE `Pilote` (
+CREATE TABLE IF NOT EXISTS `Pilote` (
   `id` int NOT NULL,
   `licence` date NOT NULL,
   `among` time NOT NULL,
@@ -127,7 +127,7 @@ CREATE TABLE `Pilote` (
 -- Structure de la table `Route`
 --
 
-CREATE TABLE `Route` (
+CREATE TABLE IF NOT EXISTS `Route` (
   `id` int NOT NULL,
   `origin` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `arrival` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
@@ -139,7 +139,7 @@ CREATE TABLE `Route` (
 -- Structure de la table `Tickets`
 --
 
-CREATE TABLE `Tickets` (
+CREATE TABLE IF NOT EXISTS `Tickets` (
   `id` int NOT NULL,
   `expire` date NOT NULL,
   `price` int NOT NULL,
