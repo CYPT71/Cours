@@ -33,7 +33,7 @@ func passengerUpdate(c *fiber.Ctx) error {
 	var device UpdatePassenger
 	c.BodyParser(&device)
 
-	sql.UpdatePassenger(updateDepart.Column, updateDepart.Value, updateDepart.Condition)
+	sql.UpdatePassenger(device.Column, device.Value, device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Set passenger",
@@ -46,7 +46,7 @@ func passengerDelete(c *fiber.Ctx) error {
 	var device UpdatePassenger
 	c.BodyParser(&device)
 
-	sql.DeletePassenger(updateDepart.Condition)
+	sql.DeletePassenger(device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Set passenger",

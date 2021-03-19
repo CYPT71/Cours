@@ -54,10 +54,10 @@ type updateEmployees struct {
 }
 
 func employeesUpdate(c *fiber.Ctx) error {
-	var device updateDepart
+	var device updateEmployees
 	c.BodyParser(&device)
 
-	sql.UpdateEmployees(updateDepart.Column, updateDepart.Value, updateDepart.Condition)
+	sql.UpdateEmployees(device.Column, device.Value, device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Update Employees",
@@ -67,10 +67,10 @@ func employeesUpdate(c *fiber.Ctx) error {
 
 func employeesDelete(c *fiber.Ctx) error {
 
-	var device updateDepart
+	var device updateEmployees
 	c.BodyParser(&device)
 
-	sql.DeleteEmployees(updateDepart.Condition)
+	sql.DeleteEmployees(device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Delete Employees",

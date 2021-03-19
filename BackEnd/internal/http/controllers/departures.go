@@ -64,7 +64,7 @@ func departuresUpdate(c *fiber.Ctx) error {
 	var device updatedepart
 	c.BodyParser(&device)
 
-	sql.UpdateDepartus(updatedepart.Column, updatedepart.Value, updatedepart.Condition)
+	sql.UpdateDepartus(device.Column, device.Value, device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Set Departus",
@@ -77,7 +77,7 @@ func departuresDelete(c *fiber.Ctx) error {
 	var device updatedepart
 	c.BodyParser(&device)
 
-	sql.DeleteDepartus(updatedepart.Condition)
+	sql.DeleteDepartus(device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Set Departus",

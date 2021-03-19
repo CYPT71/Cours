@@ -6,27 +6,27 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func RouteBootstrap(app fiber.Router) {
-	app.Get("/", routeGetlist)
+func PiloteBootstrap(app fiber.Router) {
+	app.Get("/", piloteGetlist)
 
-	app.Post("/", routePos)
+	app.Post("/", pilotePos)
 
-	app.Patch("/", routeUpdate)
+	app.Patch("/", piloteUpdate)
 
-	app.Delete("/", routeDelete)
+	app.Delete("/", piloteDelete)
 
 }
 
-func routeGetlist(c *fiber.Ctx) error {
+func piloteGetlist(c *fiber.Ctx) error {
 	c.JSON(&fiber.Map{
 		"success": true,
-		"value":   sql.GetRoute(c.Query("specific"), c.Query("filter")),
+		"value":   sql.GetPilote(c.Query("specific"), c.Query("filter")),
 		"message": "Hello from the other side",
 	})
 	return nil
 }
 
-func routePos(c *fiber.Ctx) error {
+func pilotePos(c *fiber.Ctx) error {
 
 	c.JSON(&fiber.Map{
 		"success": true,
@@ -35,14 +35,14 @@ func routePos(c *fiber.Ctx) error {
 	return nil
 }
 
-type updateRoute struct {
+type updatePilote struct {
 	Column    string `json:"Column"`
 	Value     string `json:"Value"`
 	Condition string `json:"Condition"`
 }
 
-func routeUpdate(c *fiber.Ctx) error {
-	var device updateRoute
+func piloteUpdate(c *fiber.Ctx) error {
+	var device updatePilote
 	c.BodyParser(&device)
 
 	sql.UpdateTickets(device.Column, device.Value, device.Condition)
@@ -53,9 +53,9 @@ func routeUpdate(c *fiber.Ctx) error {
 	return nil
 }
 
-func routeDelete(c *fiber.Ctx) error {
+func piloteDelete(c *fiber.Ctx) error {
 
-	var device updateRoute
+	var device updatePilote
 	c.BodyParser(&device)
 
 	sql.DeleteTickets(device.Condition)

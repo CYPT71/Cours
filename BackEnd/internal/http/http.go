@@ -29,9 +29,9 @@ func Run() {
 	controllers.FligthsBootstrap(app.Group("/fligths"))
 	controllers.PassagersBootstrap(app.Group("/passengers"))
 	controllers.TicketsBootstrap(app.Group("/tickets"))
-	// controllers.Route(app.Group("/route"))
-	// controllers.(app.Group("/pilote"))
-	// controllers.DevicesBootstrap(app.Group("/cabincrews"))
+	controllers.RouteBootstrap(app.Group("/route"))
+	// controllers.Pilote(app.Group("/pilote"))
+	controllers.DevicesBootstrap(app.Group("/cabincrews"))
 
 	// Setup CORS/CSRF
 	app.Use(middlewares.CORS())

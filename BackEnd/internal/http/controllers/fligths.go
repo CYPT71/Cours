@@ -37,7 +37,7 @@ func fligthUpdate(c *fiber.Ctx) error {
 	var device UpdateFligth
 	c.BodyParser(&device)
 
-	sql.UpdateFligth(updateDepart.Column, updateDepart.Value, updateDepart.Condition)
+	sql.UpdateFligth(device.Column, device.Value, device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Set Fligth",
@@ -50,7 +50,7 @@ func fligthDelete(c *fiber.Ctx) error {
 	var device UpdateFligth
 	c.BodyParser(&device)
 
-	sql.DeleteFligth(updateDepart.Condition)
+	sql.DeleteFligth(device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Set Fligth",

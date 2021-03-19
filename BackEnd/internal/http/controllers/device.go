@@ -54,7 +54,7 @@ func devicesUpdate(c *fiber.Ctx) error {
 	var device updateDevices
 	c.BodyParser(&device)
 
-	sql.UpdateDevice(updateDevices.Column, updateDevices.Value, updateDevices.Condition)
+	sql.UpdateDevice(device.Column, device.Value, device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Update Device",
@@ -64,10 +64,10 @@ func devicesUpdate(c *fiber.Ctx) error {
 
 func devicesDelete(c *fiber.Ctx) error {
 
-	var device updateDepart
+	var device updateDevices
 	c.BodyParser(&device)
 
-	sql.DeleteDepartus(updateDepart.Condition)
+	sql.DeleteDevice(device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Delete Device",
