@@ -7,13 +7,13 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-type Device struct {
-	id       int
-	capacity int
-	types    string
+type Route struct {
+	id      int
+	origin  string
+	arrival string
 }
 
-func AddDevices(capacity int, types string) {
+func AddRoute(origin string, arrival string) {
 
 	db, err := sql.Open("mysql", "root:passwd@tcp(172.21.0.2:3306)/aircraft")
 
@@ -24,7 +24,8 @@ func AddDevices(capacity int, types string) {
 	defer db.Close()
 
 	// perform a db.Query insert
-	insert, err := db.Query("INSERT INTO `Device` (`capacity`, `type`) VALUES (? , ?)", capacity, types)
+	insert, err := db.Query("INSERT INTO `Route`(origin`, `arrival`) VALUES (?, ?)",
+		origin, arrival)
 
 	//if there is an error inserting, handle it
 	if err != nil {
@@ -36,7 +37,7 @@ func AddDevices(capacity int, types string) {
 
 }
 
-func GetDevices(selector string, filter string) [][]string {
+func GetRoute(selector string, filter string) [][]string {
 
 	db, err := sql.Open("mysql", "root:passwd@tcp(172.21.0.2:3306)/aircraft")
 	if err != nil {
@@ -48,7 +49,7 @@ func GetDevices(selector string, filter string) [][]string {
 	} else {
 		query += "* "
 	}
-	query += "FROM Departus "
+	query += "FROM Route "
 	if filter != "" {
 		query += " WHERE `id` IN (" + filter + ")"
 	}
@@ -62,10 +63,10 @@ func GetDevices(selector string, filter string) [][]string {
 	}
 
 	var return_val [][]string
-	var tag Device
+	var tag Route
 	for selecte.Next() {
-		selecte.Scan(&tag.id, &tag.capacity, &tag.types)
-		to_inject := []string{strconv.Itoa(tag.id), strconv.Itoa(tag.capacity), tag.types}
+		selecte.Scan(&tag.id, &tag.origin, &tag.arrival)
+		to_inject := []string{strconv.Itoa(tag.id), tag.origin, tag.arrival}
 		return_val = append(return_val, to_inject)
 	}
 

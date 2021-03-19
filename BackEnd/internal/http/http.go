@@ -29,6 +29,13 @@ func Run() {
 
 	controllers.DeparturesBootstrap(app.Group("/departures"))
 	controllers.DevicesBootstrap(app.Group("/devices"))
+	controllers.DevicesBootstrap(app.Group("/employees"))
+	controllers.DevicesBootstrap(app.Group("/fligths"))
+	controllers.DevicesBootstrap(app.Group("/passengers"))
+	controllers.DevicesBootstrap(app.Group("/tickets"))
+	controllers.DevicesBootstrap(app.Group("/route"))
+	controllers.DevicesBootstrap(app.Group("/pilote"))
+	controllers.DevicesBootstrap(app.Group("/cabincrews"))
 
 	// Commits
 	//repo.Get("/branches", controllers.Branches)

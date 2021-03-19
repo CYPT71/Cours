@@ -8,19 +8,19 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-type Tag struct {
-	id          int       `json:"id"`
-	id_flight   int       `json:"id_fligth"`
-	date        time.Time `json:"date"`
-	pilote      int       `json:"pilote"`
-	copilote    int       `json:"copilote"`
-	aircrew     string    `json:"aircrew"`
-	free_places int       `json:"free_places"`
-	occupied    int       `json:"occupied"`
-	ticket_id   int       `json:"ticket_id"`
+type Departus struct {
+	id          int
+	id_flight   int
+	date        time.Time
+	pilote      int
+	copilote    int
+	aircrew     string
+	free_places int
+	occupied    int
+	ticket_id   int
 }
 
-func AddDepartures(values string) {
+func AddDepartures(id_flight int, date time.Time, pilote int, copilote int, aircrew string, free_places int, occupied int, ticket_id int) {
 
 	db, err := sql.Open("mysql", "root:passwd@tcp(172.21.0.2:3306)/aircraft")
 
@@ -31,7 +31,8 @@ func AddDepartures(values string) {
 	defer db.Close()
 
 	// perform a db.Query insert
-	insert, err := db.Query("INSERT INTO Departus (id_flight, 	date_departure) VALUES ", values)
+	insert, err := db.Query("INSERT INTO `Departus`(`id_fligth`, `date`, `pilote`, `copilote`, `aircrew`, `free_places`, `occupied`, `ticket_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+		id_flight, date, pilote, copilote, aircrew, free_places, occupied, ticket_id)
 
 	//if there is an error inserting, handle it
 	if err != nil {
@@ -68,17 +69,17 @@ func GetDepartures(selector string, filter string) [][]string {
 		panic(err.Error())
 	}
 
-	var departures [][]string
-	var tag Tag
+	var return_val [][]string
+	var tag Departus
 	for selecte.Next() {
 		selecte.Scan(&tag.id, &tag.id_flight, &tag.date, &tag.aircrew, &tag.copilote, &tag.pilote, &tag.free_places,
 			&tag.occupied, &tag.ticket_id)
 		to_inject := []string{strconv.Itoa(tag.id), strconv.Itoa(tag.id_flight), tag.date.Format(time.UnixDate),
 			tag.aircrew, strconv.Itoa(tag.copilote), strconv.Itoa(tag.pilote), strconv.Itoa(tag.free_places),
 			strconv.Itoa(tag.occupied), strconv.Itoa(tag.ticket_id)}
-		departures = append(departures, to_inject)
+		return_val = append(return_val, to_inject)
 	}
 
-	return departures
+	return return_val
 
 }

@@ -3,7 +3,6 @@ package controllers
 import (
 	// "gitrest/internal/domain"
 	"airfilgth/internal/sql"
-	"log"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -18,23 +17,25 @@ func devicesGetlist(c *fiber.Ctx) error {
 
 	c.JSON(&fiber.Map{
 		"success": true,
-		"value":   sql.GetDevice(c.Query("specific"), c.Query("filter")),
+		"value":   sql.GetDevices(c.Query("specific"), c.Query("filter")),
 		"message": "Hello from the other side",
 	})
 	return nil
 }
 
 type deviceStruc struct {
-	capacity   int    `json:"capacity"`
-	model_type string `json:"model_type"`
+	Capacity   int    `json:"capacity"`
+	Model_type string `json:"model_type"`
 }
 
 func devicesPost(c *fiber.Ctx) error {
 	var device deviceStruc
-	err := c.BodyParser(&device)
-	log.Print(err)
-	// sql.AddDevices(body.capacity, body.model_type)
-	c.JSON(device)
+	c.BodyParser(&device)
+	sql.AddDevices(device.Capacity, device.Model_type)
+	c.JSON(&fiber.Map{
+		"success": true,
+		"message": "You added " + device.Model_type,
+	})
 
 	return nil
 

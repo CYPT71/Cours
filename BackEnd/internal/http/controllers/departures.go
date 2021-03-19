@@ -23,9 +23,21 @@ func departuresGetlist(c *fiber.Ctx) error {
 	return nil
 }
 
-func departuresSetFligth(c *fiber.Ctx) error {
+type departus struct {
+	Id_flight   int    `json:"id_flight"`
+	Date        string `json:"date"`
+	Pilote      int    `json:"pilote"`
+	Copilote    int    `json:"copilote"`
+	Aircrew     string `json:"aircrew"`
+	Free_places int    `json:"free_paces"`
+	Occupied    int    `json:"occupied"`
+	Ticket_id   int    `json:"ticket_id"`
+}
 
-	sql.AddDepartures(c.Query("values"))
+func departuresSetFligth(c *fiber.Ctx) error {
+	var device deviceStruc
+	c.BodyParser(&device)
+	// sql.AddDepartures()
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Set Fligth",

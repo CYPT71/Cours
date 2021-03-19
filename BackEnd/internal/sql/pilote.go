@@ -3,17 +3,19 @@ package sql
 import (
 	"database/sql"
 	"strconv"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
-type Device struct {
+type Pilote struct {
 	id       int
-	capacity int
-	types    string
+	license  time.Time
+	among    time.Time
+	staff_id int
 }
 
-func AddDevices(capacity int, types string) {
+func AddPilote(license time.Time, among time.Time, staff_id int) {
 
 	db, err := sql.Open("mysql", "root:passwd@tcp(172.21.0.2:3306)/aircraft")
 
@@ -24,7 +26,8 @@ func AddDevices(capacity int, types string) {
 	defer db.Close()
 
 	// perform a db.Query insert
-	insert, err := db.Query("INSERT INTO `Device` (`capacity`, `type`) VALUES (? , ?)", capacity, types)
+	insert, err := db.Query("INSERT INTO `Pilote`(`licence`, `among`, `staff_id`) VALUES  VALUES (?, ?, ?)",
+		license, among, staff_id)
 
 	//if there is an error inserting, handle it
 	if err != nil {
@@ -36,7 +39,7 @@ func AddDevices(capacity int, types string) {
 
 }
 
-func GetDevices(selector string, filter string) [][]string {
+func GetPilote(selector string, filter string) [][]string {
 
 	db, err := sql.Open("mysql", "root:passwd@tcp(172.21.0.2:3306)/aircraft")
 	if err != nil {
@@ -48,7 +51,7 @@ func GetDevices(selector string, filter string) [][]string {
 	} else {
 		query += "* "
 	}
-	query += "FROM Departus "
+	query += "FROM Pilote "
 	if filter != "" {
 		query += " WHERE `id` IN (" + filter + ")"
 	}
@@ -62,10 +65,10 @@ func GetDevices(selector string, filter string) [][]string {
 	}
 
 	var return_val [][]string
-	var tag Device
+	var tag Pilote
 	for selecte.Next() {
-		selecte.Scan(&tag.id, &tag.capacity, &tag.types)
-		to_inject := []string{strconv.Itoa(tag.id), strconv.Itoa(tag.capacity), tag.types}
+		selecte.Scan(&tag.id, &tag.license, &tag.among, &tag.staff_id)
+		to_inject := []string{strconv.Itoa(tag.id), tag.license.Format(time.UnixDate), tag.among.Format(time.UnixDate), strconv.Itoa(tag.staff_id)}
 		return_val = append(return_val, to_inject)
 	}
 
