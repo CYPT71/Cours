@@ -3,6 +3,8 @@ package controllers
 import (
 	// "gitrest/internal/domain"
 	"airfilgth/internal/sql"
+	"log"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -35,12 +37,17 @@ type departus struct {
 }
 
 func departuresSetFligth(c *fiber.Ctx) error {
-	var device deviceStruc
+	var device departus
 	c.BodyParser(&device)
-	// sql.AddDepartures()
+	Date, err := time.Parse("2006-01-02 15:04", device.Date)
+	if err != nil {
+		log.Print(err)
+	}
+
+	sql.AddDepartures(device.Id_flight, Date, device.Pilote, device.Copilote, device.Aircrew, device.Free_places, device.Occupied, device.Ticket_id)
 	c.JSON(&fiber.Map{
 		"success": true,
-		"message": "Set Fligth",
+		"message": "Set Departus",
 	})
 	return nil
 }
