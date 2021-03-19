@@ -5,6 +5,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/fiber/v2/middleware/pprof"
 
 	"github.com/ansrivas/fiberprometheus/v2"
 
@@ -42,7 +43,7 @@ func Run() {
 	// app.Use(limiter.New())
 
 	// Pprof - Profiling (Remove for production environment)
-	// app.Use(pprof.New())
+	app.Use(pprof.New())
 
 	// Prometheus Endpoint
 	prometheus := fiberprometheus.New("gitrest")
