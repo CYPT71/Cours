@@ -1,25 +1,32 @@
 package controllers
 
 import (
-	// "gitrest/internal/domain"
-	// "airfilgth/internal/domain"
-
 	"airfilgth/internal/sql"
 
 	"github.com/gofiber/fiber/v2"
 )
 
-func TicketsBootstrap(app fiber.Router) {
-	app.Get("/", ticketsGetlist)
+func RouteBootstrap(app fiber.Router) {
+	app.Get("/", routeGetlist)
 
-	app.Put("/", ticketsPos)
+	app.Post("/", routePos)
 
-	app.Patch("/", ticketUpdate)
+	app.Patch("/", routeUpdate)
 
-	app.Delete("/", ticketDelete)
+	app.Delete("/", routeDelete)
+
 }
 
-func ticketsGetlist(c *fiber.Ctx) error {
+func routeGetlist(c *fiber.Ctx) error {
+	c.JSON(&fiber.Map{
+		"success": true,
+		"value":   sql.GetRoute(c.Query("specific"), c.Query("filter")),
+		"message": "Hello from the other side",
+	})
+	return nil
+}
+
+func routePos(c *fiber.Ctx) error {
 
 	c.JSON(&fiber.Map{
 		"success": true,
@@ -28,26 +35,17 @@ func ticketsGetlist(c *fiber.Ctx) error {
 	return nil
 }
 
-func ticketsPos(c *fiber.Ctx) error {
-
-	c.JSON(&fiber.Map{
-		"success": true,
-		"message": "Hello from the other side",
-	})
-	return nil
-}
-
-type updateTicket struct {
+type updateRoute struct {
 	Column    string `json:"Column"`
 	Value     string `json:"Value"`
 	Condition string `json:"Condition"`
 }
 
-func ticketUpdate(c *fiber.Ctx) error {
-	var device updateTicket
+func routeUpdate(c *fiber.Ctx) error {
+	var device updateRoute
 	c.BodyParser(&device)
 
-	sql.UpdateTickets(updateTicket.Column, updateTicket.Value, updateTicket.Condition)
+	sql.UpdateTickets(updateRoute.Column, updateRoute.Value, updateRoute.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Set ticket",
@@ -55,12 +53,12 @@ func ticketUpdate(c *fiber.Ctx) error {
 	return nil
 }
 
-func ticketDelete(c *fiber.Ctx) error {
+func routeDelete(c *fiber.Ctx) error {
 
-	var device updateTicket
+	var device updateRoute
 	c.BodyParser(&device)
 
-	sql.DeleteTickets(updateTicket.Condition)
+	sql.DeleteTickets(updateRoute.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Set passenger",

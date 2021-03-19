@@ -17,10 +17,9 @@ type Departus struct {
 	aircrew     string
 	free_places int
 	occupied    int
-	ticket_id   int
 }
 
-func AddDepartures(id_flight int, date time.Time, pilote int, copilote int, aircrew string, free_places int, occupied int, ticket_id int) {
+func AddDepartures(id_flight int, date time.Time, pilote int, copilote int, aircrew string, free_places int, occupied int) {
 
 	db, err := sql.Open("mysql", "root:passwd@tcp(172.21.0.2:3306)/aircraft")
 
@@ -32,7 +31,7 @@ func AddDepartures(id_flight int, date time.Time, pilote int, copilote int, airc
 
 	// perform a db.Query insert
 	insert, err := db.Query("INSERT INTO `Departus`(`id_fligth`, `date`, `pilote`, `copilote`, `aircrew`, `free_places`, `occupied`, `ticket_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-		id_flight, date, pilote, copilote, aircrew, free_places, occupied, ticket_id)
+		id_flight, date, pilote, copilote, aircrew, free_places, occupied)
 
 	//if there is an error inserting, handle it
 	if err != nil {
@@ -73,10 +72,10 @@ func GetDepartures(selector string, filter string) [][]string {
 	var tag Departus
 	for selecte.Next() {
 		selecte.Scan(&tag.id, &tag.id_flight, &tag.date, &tag.aircrew, &tag.copilote, &tag.pilote, &tag.free_places,
-			&tag.occupied, &tag.ticket_id)
+			&tag.occupied)
 		to_inject := []string{strconv.Itoa(tag.id), strconv.Itoa(tag.id_flight), tag.date.Format(time.UnixDate),
 			tag.aircrew, strconv.Itoa(tag.copilote), strconv.Itoa(tag.pilote), strconv.Itoa(tag.free_places),
-			strconv.Itoa(tag.occupied), strconv.Itoa(tag.ticket_id)}
+			strconv.Itoa(tag.occupied)}
 		return_val = append(return_val, to_inject)
 	}
 

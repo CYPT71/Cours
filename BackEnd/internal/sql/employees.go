@@ -78,3 +78,27 @@ func GetEmployees(selector string, filter string) [][]string {
 	return return_val
 
 }
+
+func UpdateEmployees(column string, new_value string, condition string) {
+
+	db, err := sql.Open("mysql", "root:passwd@tcp(172.21.0.2:3306)/aircraft")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	query := "UPDATE `Employees` SET " + column + " " + new_value + " WHERE " + condition
+	db.Query(query)
+
+}
+
+func DeleteEmployees(condition string) {
+	db, err := sql.Open("mysql", "root:passwd@tcp(172.21.0.2:3306)/aircraft")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	query := "DELETE FROM `Employees` WHERE " + condition
+
+	db.Query(query)
+
+}

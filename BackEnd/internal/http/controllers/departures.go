@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	// "gitrest/internal/domain"
 	"airfilgth/internal/sql"
 	"log"
 	"time"
@@ -13,6 +12,10 @@ func DeparturesBootstrap(app fiber.Router) {
 	app.Get("/", departuresGetlist)
 
 	app.Post("/", departuresSetFligth)
+
+	app.Patch("/", departuresUpdate)
+
+	app.Delete("/", departuresDelete)
 
 }
 
@@ -33,7 +36,6 @@ type departus struct {
 	Aircrew     string `json:"aircrew"`
 	Free_places int    `json:"free_paces"`
 	Occupied    int    `json:"occupied"`
-	Ticket_id   int    `json:"ticket_id"`
 }
 
 func departuresSetFligth(c *fiber.Ctx) error {
@@ -44,7 +46,38 @@ func departuresSetFligth(c *fiber.Ctx) error {
 		log.Print(err)
 	}
 
-	sql.AddDepartures(device.Id_flight, Date, device.Pilote, device.Copilote, device.Aircrew, device.Free_places, device.Occupied, device.Ticket_id)
+	sql.AddDepartures(device.Id_flight, Date, device.Pilote, device.Copilote, device.Aircrew, device.Free_places, device.Occupied)
+	c.JSON(&fiber.Map{
+		"success": true,
+		"message": "Set Departus",
+	})
+	return nil
+}
+
+type updatedepart struct {
+	Column    string `json:"Column"`
+	Value     string `json:"Value"`
+	Condition string `json:"Condition"`
+}
+
+func departuresUpdate(c *fiber.Ctx) error {
+	var device updatedepart
+	c.BodyParser(&device)
+
+	sql.UpdateDepartus(updatedepart.Column, updatedepart.Value, updatedepart.Condition)
+	c.JSON(&fiber.Map{
+		"success": true,
+		"message": "Set Departus",
+	})
+	return nil
+}
+
+func departuresDelete(c *fiber.Ctx) error {
+
+	var device updatedepart
+	c.BodyParser(&device)
+
+	sql.DeleteDepartus(updatedepart.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Set Departus",

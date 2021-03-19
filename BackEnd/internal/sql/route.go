@@ -73,3 +73,27 @@ func GetRoute(selector string, filter string) [][]string {
 	return return_val
 
 }
+
+func UpdateRoute(column string, new_value string, condition string) {
+
+	db, err := sql.Open("mysql", "root:passwd@tcp(172.21.0.2:3306)/aircraft")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	query := "UPDATE `Route` SET " + column + " " + new_value + " WHERE " + condition
+	db.Query(query)
+
+}
+
+func DeleteRoute(condition string) {
+	db, err := sql.Open("mysql", "root:passwd@tcp(172.21.0.2:3306)/aircraft")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	query := "DELETE FROM `Route` WHERE " + condition
+
+	db.Query(query)
+
+}

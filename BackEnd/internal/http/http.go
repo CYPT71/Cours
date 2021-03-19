@@ -23,22 +23,15 @@ func Run() {
 	app := fiber.New()
 
 	// Setup routes
-	//router.SetupRoutes(app, conf.Repository.Name)
-	// Group
-	//repo := app.Group("/")
-
 	controllers.DeparturesBootstrap(app.Group("/departures"))
 	controllers.DevicesBootstrap(app.Group("/devices"))
-	controllers.DevicesBootstrap(app.Group("/employees"))
-	controllers.DevicesBootstrap(app.Group("/fligths"))
-	controllers.DevicesBootstrap(app.Group("/passengers"))
-	controllers.DevicesBootstrap(app.Group("/tickets"))
-	controllers.DevicesBootstrap(app.Group("/route"))
-	controllers.DevicesBootstrap(app.Group("/pilote"))
-	controllers.DevicesBootstrap(app.Group("/cabincrews"))
-
-	// Commits
-	//repo.Get("/branches", controllers.Branches)
+	controllers.EmployeesBootstrap(app.Group("/employees"))
+	controllers.FligthsBootstrap(app.Group("/fligths"))
+	controllers.PassagersBootstrap(app.Group("/passengers"))
+	controllers.TicketsBootstrap(app.Group("/tickets"))
+	// controllers.Route(app.Group("/route"))
+	// controllers.(app.Group("/pilote"))
+	// controllers.DevicesBootstrap(app.Group("/cabincrews"))
 
 	// Setup CORS/CSRF
 	app.Use(middlewares.CORS())

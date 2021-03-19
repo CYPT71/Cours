@@ -11,6 +11,9 @@ func DevicesBootstrap(app fiber.Router) {
 	app.Get("/", devicesGetlist)
 	app.Post("/", devicesPost)
 
+	app.Patch("/", devicesUpdate)
+
+	app.Delete("/", devicesDelete)
 }
 
 func devicesGetlist(c *fiber.Ctx) error {
@@ -39,4 +42,35 @@ func devicesPost(c *fiber.Ctx) error {
 
 	return nil
 
+}
+
+type updateDevices struct {
+	Column    string `json:"Column"`
+	Value     string `json:"Value"`
+	Condition string `json:"Condition"`
+}
+
+func devicesUpdate(c *fiber.Ctx) error {
+	var device updateDevices
+	c.BodyParser(&device)
+
+	sql.UpdateDevice(updateDevices.Column, updateDevices.Value, updateDevices.Condition)
+	c.JSON(&fiber.Map{
+		"success": true,
+		"message": "Update Device",
+	})
+	return nil
+}
+
+func devicesDelete(c *fiber.Ctx) error {
+
+	var device updateDepart
+	c.BodyParser(&device)
+
+	sql.DeleteDepartus(updateDepart.Condition)
+	c.JSON(&fiber.Map{
+		"success": true,
+		"message": "Delete Device",
+	})
+	return nil
 }
