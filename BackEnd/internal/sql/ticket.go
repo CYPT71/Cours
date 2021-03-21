@@ -8,13 +8,6 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-type Tickets struct {
-	id            int
-	expire        time.Time
-	price         int
-	departures_id int
-}
-
 func AddTickets(expire time.Time, price int, departures_id int) {
 
 	db, err := sql.Open("mysql", "root:passwd@tcp(172.21.0.2:3306)/aircraft")

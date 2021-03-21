@@ -7,12 +7,6 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-type Device struct {
-	id       int
-	capacity int
-	types    string
-}
-
 func AddDevices(capacity int, types string) {
 
 	db, err := sql.Open("mysql", "root:passwd@tcp(172.21.0.2:3306)/aircraft")

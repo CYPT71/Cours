@@ -7,16 +7,6 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-type Passenger struct {
-	id         int
-	ticket_id  int
-	bank       string
-	profession string
-	name       string
-	first_name string
-	adress     string
-}
-
 func AddPassenger(profession string, ticket_id int, bank int, name string, first_name string, address string) {
 
 	db, err := sql.Open("mysql", "root:passwd@tcp(172.21.0.2:3306)/aircraft")
