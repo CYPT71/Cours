@@ -31,7 +31,7 @@ func departuresGetlist(c *fiber.Ctx) error {
 func departuresGetListNow(c *fiber.Ctx) error {
 	c.JSON(&fiber.Map{
 		"success": true,
-		"value":   sql_request.GetDepartures("", "date == Now()"),
+		"value":   sql_request.GetDepartures("", "date == CURRENT_DATE()"),
 		"message": "Departures for the date",
 	})
 	return nil
