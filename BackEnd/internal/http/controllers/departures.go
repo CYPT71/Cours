@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"airfilgth/internal/sql"
+	"airfilgth/internal/sql_request"
 	"log"
 	"time"
 
@@ -22,7 +22,7 @@ func DeparturesBootstrap(app fiber.Router) {
 func departuresGetlist(c *fiber.Ctx) error {
 	c.JSON(&fiber.Map{
 		"success": true,
-		"value":   sql.GetDepartures(c.Query("specific"), c.Query("filter")),
+		"value":   sql_request.GetDepartures(c.Query("specific"), c.Query("filter")),
 		"message": "Hello from the other side",
 	})
 	return nil
@@ -46,7 +46,7 @@ func departuresSetFligth(c *fiber.Ctx) error {
 		log.Print(err)
 	}
 
-	sql.AddDepartures(device.Id_flight, Date, device.Pilote, device.Copilote, device.Aircrew, device.Free_places, device.Occupied)
+	sql_request.AddDepartures(device.Id_flight, Date, device.Pilote, device.Copilote, device.Aircrew, device.Free_places, device.Occupied)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Set Departus",
@@ -64,7 +64,7 @@ func departuresUpdate(c *fiber.Ctx) error {
 	var device updatedepart
 	c.BodyParser(&device)
 
-	sql.UpdateDepartus(device.Column, device.Value, device.Condition)
+	sql_request.UpdateDepartus(device.Column, device.Value, device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Set Departus",
@@ -77,7 +77,7 @@ func departuresDelete(c *fiber.Ctx) error {
 	var device updatedepart
 	c.BodyParser(&device)
 
-	sql.DeleteDepartus(device.Condition)
+	sql_request.DeleteDepartus(device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Set Departus",

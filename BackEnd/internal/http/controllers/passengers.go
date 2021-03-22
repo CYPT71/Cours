@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"airfilgth/internal/sql"
+	"airfilgth/internal/sql_request"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -33,7 +33,7 @@ func passengerUpdate(c *fiber.Ctx) error {
 	var device UpdatePassenger
 	c.BodyParser(&device)
 
-	sql.UpdatePassenger(device.Column, device.Value, device.Condition)
+	sql_request.UpdatePassenger(device.Column, device.Value, device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Set passenger",
@@ -46,7 +46,7 @@ func passengerDelete(c *fiber.Ctx) error {
 	var device UpdatePassenger
 	c.BodyParser(&device)
 
-	sql.DeletePassenger(device.Condition)
+	sql_request.DeletePassenger(device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Set passenger",

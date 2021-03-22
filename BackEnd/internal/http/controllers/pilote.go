@@ -1,14 +1,14 @@
 package controllers
 
 import (
-	"airfilgth/internal/sql"
+	"airfilgth/internal/sql_request"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 func PiloteBootstrap(app fiber.Router) {
 	app.Get("/", piloteGetlist)
-
+	app.Get("/details", piloteGetlistDetails)
 	app.Post("/", pilotePos)
 
 	app.Patch("/", piloteUpdate)
@@ -20,9 +20,20 @@ func PiloteBootstrap(app fiber.Router) {
 func piloteGetlist(c *fiber.Ctx) error {
 	c.JSON(&fiber.Map{
 		"success": true,
-		"value":   sql.GetPilote(c.Query("specific"), c.Query("filter")),
+		"value":   sql_request.GetPilote(c.Query("specific"), c.Query("filter")),
 		"message": "Hello from the other side",
 	})
+	return nil
+}
+
+func piloteGetlistDetails(c *fiber.Ctx) error {
+	pilotes_info := sql_request.GetEmployees("", "`id` in (SELECT `staff_id` FROM `pilote`)")
+	c.JSON(&fiber.Map{
+		"succes":  true,
+		"value":   pilotes_info,
+		"message": "pilotes details info",
+	})
+
 	return nil
 }
 
@@ -45,7 +56,7 @@ func piloteUpdate(c *fiber.Ctx) error {
 	var device updatePilote
 	c.BodyParser(&device)
 
-	sql.UpdateTickets(device.Column, device.Value, device.Condition)
+	sql_request.UpdateTickets(device.Column, device.Value, device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Set ticket",
@@ -58,7 +69,7 @@ func piloteDelete(c *fiber.Ctx) error {
 	var device updatePilote
 	c.BodyParser(&device)
 
-	sql.DeleteTickets(device.Condition)
+	sql_request.DeleteTickets(device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Set passenger",

@@ -4,14 +4,13 @@ import (
 	// "gitrest/internal/domain"
 	// "airfilgth/internal/domain"
 
-	"airfilgth/internal/sql"
+	"airfilgth/internal/sql_request"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 func EmployeesBootstrap(app fiber.Router) {
 	app.Get("/", employeesGetlist)
-
 	app.Post("/", employeePost)
 
 	app.Patch("/", departuresUpdate)
@@ -24,7 +23,7 @@ func employeesGetlist(c *fiber.Ctx) error {
 
 	c.JSON(&fiber.Map{
 		"success": true,
-		"value":   sql.GetEmployees("", ""),
+		"value":   sql_request.GetEmployees("", ""),
 		"message": "Hello from the other side",
 	})
 	return nil
@@ -38,7 +37,7 @@ type EmployeesStruc struct {
 func employeePost(c *fiber.Ctx) error {
 	var device deviceStruc
 	c.BodyParser(&device)
-	sql.AddDevices(device.Capacity, device.Model_type)
+	sql_request.AddDevices(device.Capacity, device.Model_type)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "You added " + device.Model_type,
@@ -58,7 +57,7 @@ func employeesUpdate(c *fiber.Ctx) error {
 	var device updateEmployees
 	c.BodyParser(&device)
 
-	sql.UpdateEmployees(device.Column, device.Value, device.Condition)
+	sql_request.UpdateEmployees(device.Column, device.Value, device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Update Employees",
@@ -71,7 +70,7 @@ func employeesDelete(c *fiber.Ctx) error {
 	var device updateEmployees
 	c.BodyParser(&device)
 
-	sql.DeleteEmployees(device.Condition)
+	sql_request.DeleteEmployees(device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Delete Employees",

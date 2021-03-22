@@ -4,7 +4,7 @@ import (
 	// "gitrest/internal/domain"
 	// "airfilgth/internal/domain"
 
-	"airfilgth/internal/sql"
+	"airfilgth/internal/sql_request"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -37,7 +37,7 @@ func fligthUpdate(c *fiber.Ctx) error {
 	var device UpdateFligth
 	c.BodyParser(&device)
 
-	sql.UpdateFligth(device.Column, device.Value, device.Condition)
+	sql_request.UpdateFligth(device.Column, device.Value, device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Set Fligth",
@@ -50,7 +50,7 @@ func fligthDelete(c *fiber.Ctx) error {
 	var device UpdateFligth
 	c.BodyParser(&device)
 
-	sql.DeleteFligth(device.Condition)
+	sql_request.DeleteFligth(device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Set Fligth",

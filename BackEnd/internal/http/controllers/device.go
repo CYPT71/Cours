@@ -2,7 +2,7 @@ package controllers
 
 import (
 	// "gitrest/internal/domain"
-	"airfilgth/internal/sql"
+	"airfilgth/internal/sql_request"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -20,7 +20,7 @@ func devicesGetlist(c *fiber.Ctx) error {
 
 	c.JSON(&fiber.Map{
 		"success": true,
-		"value":   sql.GetDevices(c.Query("specific"), c.Query("filter")),
+		"value":   sql_request.GetDevices(c.Query("specific"), c.Query("filter")),
 		"message": "Hello from the other side",
 	})
 	return nil
@@ -34,7 +34,7 @@ type deviceStruc struct {
 func devicesPost(c *fiber.Ctx) error {
 	var device deviceStruc
 	c.BodyParser(&device)
-	sql.AddDevices(device.Capacity, device.Model_type)
+	sql_request.AddDevices(device.Capacity, device.Model_type)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "You added " + device.Model_type,
@@ -54,7 +54,7 @@ func devicesUpdate(c *fiber.Ctx) error {
 	var device updateDevices
 	c.BodyParser(&device)
 
-	sql.UpdateDevice(device.Column, device.Value, device.Condition)
+	sql_request.UpdateDevice(device.Column, device.Value, device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Update Device",
@@ -67,7 +67,7 @@ func devicesDelete(c *fiber.Ctx) error {
 	var device updateDevices
 	c.BodyParser(&device)
 
-	sql.DeleteDevice(device.Condition)
+	sql_request.DeleteDevice(device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Delete Device",

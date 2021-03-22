@@ -4,7 +4,7 @@ import (
 	// "gitrest/internal/domain"
 	// "airfilgth/internal/domain"
 
-	"airfilgth/internal/sql"
+	"airfilgth/internal/sql_request"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -47,7 +47,7 @@ func ticketUpdate(c *fiber.Ctx) error {
 	var device updateTicket
 	c.BodyParser(&device)
 
-	sql.UpdateTickets(device.Column, device.Value, device.Condition)
+	sql_request.UpdateTickets(device.Column, device.Value, device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Set ticket",
@@ -60,7 +60,7 @@ func ticketDelete(c *fiber.Ctx) error {
 	var device updateTicket
 	c.BodyParser(&device)
 
-	sql.DeleteTickets(device.Condition)
+	sql_request.DeleteTickets(device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Set passenger",

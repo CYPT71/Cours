@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"airfilgth/internal/sql"
+	"airfilgth/internal/sql_request"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -20,7 +20,7 @@ func RouteBootstrap(app fiber.Router) {
 func routeGetlist(c *fiber.Ctx) error {
 	c.JSON(&fiber.Map{
 		"success": true,
-		"value":   sql.GetRoute(c.Query("specific"), c.Query("filter")),
+		"value":   sql_request.GetRoute(c.Query("specific"), c.Query("filter")),
 		"message": "Hello from the other side",
 	})
 	return nil
@@ -45,7 +45,7 @@ func routeUpdate(c *fiber.Ctx) error {
 	var device updateRoute
 	c.BodyParser(&device)
 
-	sql.UpdateTickets(device.Column, device.Value, device.Condition)
+	sql_request.UpdateTickets(device.Column, device.Value, device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Set ticket",
@@ -58,7 +58,7 @@ func routeDelete(c *fiber.Ctx) error {
 	var device updateRoute
 	c.BodyParser(&device)
 
-	sql.DeleteTickets(device.Condition)
+	sql_request.DeleteTickets(device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Set passenger",
