@@ -37,6 +37,17 @@ func piloteGetlistDetails(c *fiber.Ctx) error {
 	return nil
 }
 
+func piloteGetlistRenewLissence(c *fiber.Ctx) error {
+	pilotes_info := sql_request.GetEmployees("", "`id` in (SELECT `staff_id` FROM `pilote` WHERE license <= DATEADD(month, 3, NOW())")
+	c.JSON(&fiber.Map{
+		"succes":  true,
+		"value":   pilotes_info,
+		"message": "pilotes details info",
+	})
+
+	return nil
+}
+
 func pilotePos(c *fiber.Ctx) error {
 
 	c.JSON(&fiber.Map{
