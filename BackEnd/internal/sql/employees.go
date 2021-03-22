@@ -7,6 +7,16 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+type Employees struct {
+	id              int
+	aicrew          int
+	ground          int
+	social_security int
+	name            string
+	first_name      string
+	adress          string
+}
+
 func AddEmployees(aicrew int, ground int, social_security int, name string, first_name string, address string) {
 
 	db, err := sql.Open("mysql", "root:passwd@tcp(172.21.0.2:3306)/aircraft")
@@ -45,7 +55,7 @@ func GetEmployees(selector string, filter string) [][]string {
 	}
 	query += "FROM Employees "
 	if filter != "" {
-		query += " WHERE `id` IN (" + filter + ")"
+		query += " WHERE " + filter
 	}
 
 	query += ";"

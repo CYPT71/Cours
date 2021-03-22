@@ -8,6 +8,13 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+type Pilote struct {
+	id       int
+	license  time.Time
+	among    time.Time
+	staff_id int
+}
+
 func AddPilote(license time.Time, among time.Time, staff_id int) {
 
 	db, err := sql.Open("mysql", "root:passwd@tcp(172.21.0.2:3306)/aircraft")
@@ -46,7 +53,7 @@ func GetPilote(selector string, filter string) [][]string {
 	}
 	query += "FROM Pilote "
 	if filter != "" {
-		query += " WHERE `id` IN (" + filter + ")"
+		query += " WHERE " + filter
 	}
 
 	query += ";"

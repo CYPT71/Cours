@@ -8,6 +8,17 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+type Departus struct {
+	id          int
+	id_flight   int
+	date        time.Time
+	pilote      int
+	copilote    int
+	aircrew     string
+	free_places int
+	occupied    int
+}
+
 func AddDepartures(id_flight int, date time.Time, pilote int, copilote int, aircrew string, free_places int, occupied int) {
 
 	db, err := sql.Open("mysql", "root:passwd@tcp(172.21.0.2:3306)/aircraft")
@@ -46,7 +57,7 @@ func GetDepartures(selector string, filter string) [][]string {
 	}
 	query += "FROM Departus "
 	if filter != "" {
-		query += " WHERE `id` IN (" + filter + ")"
+		query += " WHERE " + filter
 	}
 
 	query += ";"

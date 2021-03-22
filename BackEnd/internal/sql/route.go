@@ -7,6 +7,12 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+type Route struct {
+	id      int
+	origin  string
+	arrival string
+}
+
 func AddRoute(origin string, arrival string) {
 
 	db, err := sql.Open("mysql", "root:passwd@tcp(172.21.0.2:3306)/aircraft")
@@ -45,7 +51,7 @@ func GetRoute(selector string, filter string) [][]string {
 	}
 	query += "FROM Route "
 	if filter != "" {
-		query += " WHERE `id` IN (" + filter + ")"
+		query += " WHERE " + filter
 	}
 
 	query += ";"

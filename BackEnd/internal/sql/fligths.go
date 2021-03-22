@@ -8,6 +8,14 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+type Fligth struct {
+	id            int
+	id_departures int
+	ariaval       time.Time
+	id_route      int
+	id_device     int
+}
+
 func AddFligth(id_departures int, ariaval time.Time, id_route int, id_device int) {
 
 	db, err := sql.Open("mysql", "root:passwd@tcp(172.21.0.2:3306)/aircraft")
@@ -46,7 +54,7 @@ func GetFligth(selector string, filter string) [][]string {
 	}
 	query += "FROM Fligth "
 	if filter != "" {
-		query += " WHERE `id` IN (" + filter + ")"
+		query += " WHERE " + filter
 	}
 
 	query += ";"

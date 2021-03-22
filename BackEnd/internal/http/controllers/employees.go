@@ -24,6 +24,7 @@ func employeesGetlist(c *fiber.Ctx) error {
 
 	c.JSON(&fiber.Map{
 		"success": true,
+		"value":   sql.GetEmployees("", ""),
 		"message": "Hello from the other side",
 	})
 	return nil
