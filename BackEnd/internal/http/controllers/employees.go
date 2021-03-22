@@ -11,6 +11,7 @@ import (
 
 func EmployeesBootstrap(app fiber.Router) {
 	app.Get("/", employeesGetlist)
+	app.Get("/categories", employeesGetByCategories)
 	app.Post("/", employeePost)
 
 	app.Patch("/", departuresUpdate)
@@ -26,6 +27,20 @@ func employeesGetlist(c *fiber.Ctx) error {
 		"value":   sql_request.GetEmployees("", ""),
 		"message": "Hello from the other side",
 	})
+	return nil
+}
+
+func employeesGetByCategories(c *fiber.Ctx) error {
+	c.JSON(&fiber.Map{
+		"success": true,
+		"value": map[string]interface{}{
+			"Pilotes":      sql_request.GetEmployees("", "`id` in (SELECT `staff_id` FROM `pilote`)"),
+			"cabin crew":   sql_request.GetEmployees("", "`id` in (SELECT `staff_id` FROM `cabincrew`)"),
+			"ground staff": sql_request.GetEmployees("", "`id`  NOT in (SELECT `staff_id` FROM `pilote`) AND `id` NOT IN (SELECT `staff_id` FROM `cabincrew`)"),
+		},
+		"message": "personnel by categores",
+	})
+
 	return nil
 }
 

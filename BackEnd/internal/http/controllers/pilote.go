@@ -7,8 +7,8 @@ import (
 )
 
 func PiloteBootstrap(app fiber.Router) {
-	app.Get("/", piloteGetlist)
-	app.Get("/details", piloteGetlistDetails)
+	app.Get("/details", piloteGetlist)
+	app.Get("/", piloteGetlistDetails)
 	app.Post("/", pilotePos)
 
 	app.Patch("/", piloteUpdate)

@@ -11,11 +11,16 @@ var Config *Configuration
 
 type Configuration struct {
 	Server ServerConfiguration `yaml:"server"`
+	Mysql  MysqlConfiguration  `yaml:"mysql"`
 }
 
 type ServerConfiguration struct {
 	Port    string `yaml:"port"`
 	Address string `yaml:"address"`
+}
+
+type MysqlConfiguration struct {
+	Dns string `yaml:"dns"`
 }
 
 // Server,Repository initialize configuration
