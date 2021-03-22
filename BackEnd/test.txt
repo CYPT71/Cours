@@ -1,0 +1,57 @@
+package main
+
+import (
+	"database/sql"
+	"log"
+	"time"
+
+	_ "github.com/go-sql-driver/mysql"
+)
+
+type Tag struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+}
+
+type Pilote struct {
+	Id      int       `json:"id"`
+	License time.Time `json:"licence"`
+	Among   time.Time `json:"among"`
+	StaffId int       `json:"staff_id"`
+}
+
+func GetPilote(selector string, filter string) []map[string]interface{} {
+
+	db, err := sql.Open("mysql", "root:passwd@tcp(172.21.0.2:3306)/aircraft")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer db.Close()
+
+	query := "SELECT * from pilote"
+
+	selecte, err := db.Query(query)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	var return_val []map[string]interface{}
+	for selecte.Next() {
+		var tag Pilote
+		selecte.Scan(&tag.Id, &tag.License, &tag.StaffId, &tag.Among)
+		return_val = append(return_val, map[string]interface{}{
+			"id":       tag.Id,
+			"license":  tag.License.Format(time.UnixDate),
+			"Among":    tag.Among.Format(time.UnixDate),
+			"Staff id": tag.StaffId,
+		})
+
+	}
+	return return_val
+}
+
+func main() {
+	log.Println(GetPilote("", ""))
+}
