@@ -26,6 +26,15 @@ func routeGetlist(c *fiber.Ctx) error {
 	return nil
 }
 
+func DeservedCities(c *fiber.Ctx) error {
+	c.JSON(&fiber.Map{
+		"success": true,
+		"value":   sql_request.GetRoute("origin", ""),
+		"message": "deserved cities",
+	})
+	return nil
+}
+
 func routePos(c *fiber.Ctx) error {
 
 	c.JSON(&fiber.Map{

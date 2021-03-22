@@ -28,6 +28,15 @@ func departuresGetlist(c *fiber.Ctx) error {
 	return nil
 }
 
+func departuresGetListNow(c *fiber.Ctx) error {
+	c.JSON(&fiber.Map{
+		"success": true,
+		"value":   sql_request.GetDepartures("", "date == Now()"),
+		"message": "Departures for the date",
+	})
+	return nil
+}
+
 type departus struct {
 	Id_flight   int    `json:"id_flight"`
 	Date        string `json:"date"`
