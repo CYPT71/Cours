@@ -24,5 +24,5 @@ func countPassenger() map[string]int {
 }
 
 func RegularPassenger() {
-	log.Print(countPassenger())
+	countPassenger()
 }
