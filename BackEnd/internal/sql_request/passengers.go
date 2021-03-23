@@ -9,12 +9,12 @@ import (
 
 type Passenger struct {
 	Id         int    `json:"id"`
-	Ticket_id  int    `json:"ticket_id"`
-	Bank       string `json:"bank"`
-	Profession string `json:"profession"`
 	Name       string `json:"name"`
 	First_name string `json:"first_name"`
 	Address    string `json:"adress"`
+	Profession string `json:"profession"`
+	Bank       string `json:"bank"`
+	Ticket_id  int    `json:"ticket_id"`
 }
 
 func AddPassenger(profession string, ticket_id int, bank int, name string, first_name string, address string) {
@@ -73,7 +73,7 @@ func GetPassenger(selector string, filter string) []map[string]interface{} {
 
 	for selecte.Next() {
 		var tag Passenger
-		selecte.Scan(&tag.Id, &tag.Address, &tag.Bank, &tag.First_name, &tag.Name, &tag.Profession, &tag.Profession)
+		selecte.Scan(&tag.Id, &tag.Name, &tag.First_name, &tag.Address, &tag.Profession, &tag.Bank, &tag.Ticket_id)
 		return_val = append(return_val, map[string]interface{}{
 			"id":          tag.Id,
 			"Address":     tag.Address,

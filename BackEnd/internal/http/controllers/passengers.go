@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"airfilgth/internal/domain"
 	"airfilgth/internal/sql_request"
 
 	"github.com/gofiber/fiber/v2"
@@ -9,9 +10,22 @@ import (
 func PassagersBootstrap(app fiber.Router) {
 	app.Get("/", passagersGetlist)
 
+	app.Get("/regular", regularGetlist)
+
 	app.Patch("/", departuresUpdate)
 
 	app.Delete("/", departuresDelete)
+}
+
+func regularGetlist(c *fiber.Ctx) error {
+	domain.RegularPassenger()
+	c.JSON(&fiber.Map{
+		"success": true,
+
+		"message": "Hello from the other side",
+	})
+
+	return nil
 }
 
 func passagersGetlist(c *fiber.Ctx) error {
