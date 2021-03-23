@@ -13,29 +13,6 @@ type Device struct {
 	Type     string `json:"type"`
 }
 
-func AddDevices(capacity int, types string) {
-
-	db, err := sql.Open("mysql", "root:passwd@tcp(172.21.0.2:3306)/aircraft")
-
-	if err != nil {
-		panic(err.Error())
-	}
-
-	defer db.Close()
-
-	// perform a db.Query insert
-	insert, err := db.Query("INSERT INTO `device` (`capacity`, `type`) VALUES (? , ?)", capacity, types)
-
-	//if there is an error inserting, handle it
-	if err != nil {
-		panic(err.Error())
-	}
-
-	// be careful deferring Queries if you are using transactions
-	defer insert.Close()
-
-}
-
 func GetDevices(selector string, filter string) []map[string]interface{} {
 
 	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
@@ -75,6 +52,29 @@ func GetDevices(selector string, filter string) []map[string]interface{} {
 	}
 
 	return return_val
+
+}
+
+func AddDevices(capacity int, types string) {
+
+	db, err := sql.Open("mysql", "root:passwd@tcp(172.21.0.2:3306)/aircraft")
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer db.Close()
+
+	// perform a db.Query insert
+	insert, err := db.Query("INSERT INTO `device` (`capacity`, `type`) VALUES (? , ?)", capacity, types)
+
+	//if there is an error inserting, handle it
+	if err != nil {
+		panic(err.Error())
+	}
+
+	// be careful deferring Queries if you are using transactions
+	defer insert.Close()
 
 }
 

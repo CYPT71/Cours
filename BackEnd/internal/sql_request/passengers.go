@@ -3,19 +3,18 @@ package sql_request
 import (
 	"airfilgth/internal/utils"
 	"database/sql"
-	"strconv"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
 type Passenger struct {
-	id         int
-	ticket_id  int
-	bank       string
-	profession string
-	name       string
-	first_name string
-	adress     string
+	Id         int    `json:"id"`
+	Ticket_id  int    `json:"ticket_id"`
+	Bank       string `json:"bank"`
+	Profession string `json:"profession"`
+	Name       string `json:"name"`
+	First_name string `json:"first_name"`
+	Address    string `json:"adress"`
 }
 
 func AddPassenger(profession string, ticket_id int, bank int, name string, first_name string, address string) {
@@ -42,7 +41,7 @@ func AddPassenger(profession string, ticket_id int, bank int, name string, first
 
 }
 
-func GetPassenger(selector string, filter string) [][]string {
+func GetPassenger(selector string, filter string) []map[string]interface{} {
 
 	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
 	if err != nil {
@@ -57,7 +56,7 @@ func GetPassenger(selector string, filter string) [][]string {
 	} else {
 		query += "* "
 	}
-	query += "FROM Passenger "
+	query += "FROM passenger "
 	if filter != "" {
 		query += " WHERE " + filter
 	}
@@ -70,13 +69,20 @@ func GetPassenger(selector string, filter string) [][]string {
 		panic(err.Error())
 	}
 
-	var return_val [][]string
-	var tag Passenger
+	var return_val []map[string]interface{}
+
 	for selecte.Next() {
-		selecte.Scan(&tag.id, &tag.adress, &tag.bank, &tag.profession, &tag.ticket_id, &tag.first_name)
-		to_inject := []string{strconv.Itoa(tag.id), tag.adress, strconv.Itoa(tag.ticket_id), tag.bank,
-			tag.name, tag.first_name}
-		return_val = append(return_val, to_inject)
+		var tag Passenger
+		selecte.Scan(&tag.Id, &tag.Address, &tag.Bank, &tag.First_name, &tag.Name, &tag.Profession, &tag.Profession)
+		return_val = append(return_val, map[string]interface{}{
+			"id":          tag.Id,
+			"Address":     tag.Address,
+			"Bank":        tag.Bank,
+			"First Name":  tag.First_name,
+			"Name":        tag.Name,
+			"Proffession": tag.Profession,
+			"Ticket id":   tag.Ticket_id,
+		})
 	}
 
 	return return_val

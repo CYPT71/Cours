@@ -18,6 +18,7 @@ func passagersGetlist(c *fiber.Ctx) error {
 
 	c.JSON(&fiber.Map{
 		"success": true,
+		"value":   sql_request.GetPassenger("", ""),
 		"message": "Hello from the other side",
 	})
 	return nil

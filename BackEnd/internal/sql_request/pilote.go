@@ -11,32 +11,8 @@ import (
 type Pilote struct {
 	Id      int       `json:"id"`
 	License time.Time `json:"licence"`
-	StaffId int       `json:"staff_id"`
 	Among   time.Time `json:"among"`
-}
-
-func AddPilote(license time.Time, among time.Time, staff_id int) {
-
-	db, err := sql.Open("mysql", "root:passwd@tcp(172.21.0.2:3306)/aircraft")
-
-	if err != nil {
-		panic(err.Error())
-	}
-
-	defer db.Close()
-
-	// perform a db.Query insert
-	insert, err := db.Query("INSERT INTO `Pilote`(`licence`, `among`, `staff_id`) VALUES  VALUES (?, ?, ?)",
-		license, among, staff_id)
-
-	//if there is an error inserting, handle it
-	if err != nil {
-		panic(err.Error())
-	}
-
-	// be careful deferring Queries if you are using transactions
-	defer insert.Close()
-
+	StaffId int       `json:"staff_id"`
 }
 
 func GetPilote(selector string, filter string) []map[string]interface{} {
@@ -52,11 +28,11 @@ func GetPilote(selector string, filter string) []map[string]interface{} {
 	if selector != "" {
 		query += selector
 	} else {
-		query += "*"
+		query += "* "
 	}
-	query += " FROM pilote "
+	query += "FROM pilote "
 	if filter != "" {
-		query += " WHERE " + filter
+		query += "WHERE " + filter
 	}
 
 	query += ";"
@@ -79,7 +55,32 @@ func GetPilote(selector string, filter string) []map[string]interface{} {
 		})
 
 	}
+
 	return return_val
+
+}
+
+func AddPilote(license time.Time, among time.Time, staff_id int) {
+
+	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer db.Close()
+
+	// perform a db.Query insert
+	insert, err := db.Query("INSERT INTO `pilote`(`licence`, `among`, `staff_id`) VALUES  VALUES (?, ?, ?)",
+		license, among, staff_id)
+
+	//if there is an error inserting, handle it
+	if err != nil {
+		panic(err.Error())
+	}
+
+	// be careful deferring Queries if you are using transactions
+	defer insert.Close()
 
 }
 
