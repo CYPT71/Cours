@@ -1,7 +1,7 @@
 package sql_request
 
 import (
-	"airfilgth/internal/utils"
+	"airflight/internal/utils"
 	"database/sql"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -16,7 +16,7 @@ type Employees struct {
 	Adress         string `json:"address"`
 }
 
-func AddEmployees(aicrew int, ground int, social_security int, name string, first_name string, address string) {
+func AddEmployees(Aicrew int, Ground int, Social_security int, Name string, First_name string, Address string) {
 
 	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
 
@@ -28,7 +28,7 @@ func AddEmployees(aicrew int, ground int, social_security int, name string, firs
 
 	// perform a db.Query insert
 	insert, err := db.Query("INSERT INTO `employees`(`aircrew`, `ground`, `social_security`, `name`, `first_name`, `address`) VALUES (?, ?, ?, ?, ?, ?)",
-		aicrew, ground, social_security, name, first_name, address)
+		Aicrew, Ground, Social_security, Name, First_name, Address)
 
 	//if there is an error inserting, handle it
 	if err != nil {
@@ -96,7 +96,7 @@ func UpdateEmployees(column string, new_value string, condition string) {
 	}
 
 	defer db.Close()
-	query := "UPDATE `Employees` SET " + column + " " + new_value + " WHERE " + condition
+	query := "UPDATE `employees` SET " + column + " " + new_value + " WHERE " + condition
 	db.Query(query)
 
 }
@@ -108,7 +108,7 @@ func DeleteEmployees(condition string) {
 	}
 
 	defer db.Close()
-	query := "DELETE FROM `Employees` WHERE " + condition
+	query := "DELETE FROM `employees` WHERE " + condition
 
 	db.Query(query)
 

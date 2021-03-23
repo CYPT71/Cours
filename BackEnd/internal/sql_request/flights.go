@@ -3,17 +3,20 @@ package sql_request
 import (
 	"airflight/internal/utils"
 	"database/sql"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
-type Route struct {
-	Id      int
-	Origin  string
-	Arrival string
+type Flight struct {
+	Id            int
+	Id_departures int
+	Arrival       time.Time
+	Id_route      int
+	Id_device     int
 }
 
-func AddRoute(Origin string, Arrival string) {
+func AddFlight(Id_departures int, Arrival time.Time, Id_route int, Id_device int) {
 
 	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
 
@@ -24,8 +27,8 @@ func AddRoute(Origin string, Arrival string) {
 	defer db.Close()
 
 	// perform a db.Query insert
-	insert, err := db.Query("INSERT INTO `route`(`origin`, `arrival`) VALUES (?, ?)",
-		Origin, Arrival)
+	insert, err := db.Query("INSERT INTO `flight`(`id_departures`, `arrival`, `id_route`, `id_device`) VALUES (?, ?, ?, ?)",
+		Id_departures, Arrival, Id_route, Id_device)
 
 	//if there is an error inserting, handle it
 	if err != nil {
@@ -37,7 +40,7 @@ func AddRoute(Origin string, Arrival string) {
 
 }
 
-func GetRoute(selector string, filter string) []map[string]interface{} {
+func GetFlight(selector string, filter string) []map[string]interface{} {
 
 	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
 	if err != nil {
@@ -52,7 +55,7 @@ func GetRoute(selector string, filter string) []map[string]interface{} {
 	} else {
 		query += "* "
 	}
-	query += "FROM `route` "
+	query += "FROM `flight` "
 	if filter != "" {
 		query += " WHERE " + filter
 	}
@@ -66,16 +69,18 @@ func GetRoute(selector string, filter string) []map[string]interface{} {
 	}
 
 	var return_val []map[string]interface{}
-	var tag Route
 	for selecte.Next() {
-		selecte.Scan(&tag.Id, &tag.Origin, &tag.Arrival)
+		var tag Flight
+		selecte.Scan(&tag.Id, &tag.Id_departures, &tag.Arrival, &tag.Id_route, &tag.Id_device)
 		if err != nil {
 			panic(err.Error()) // proper error handling instead of panic in your app
 		}
 		return_val = append(return_val, map[string]interface{}{
-			"Id":      tag.Id,
-			"Origin":  tag.Origin,
-			"Arrival": tag.Arrival,
+			"Id":             tag.Id,
+			"Id_departurees": tag.Id_departures,
+			"Arrival":        tag.Arrival.Format(time.UnixDate),
+			"Id_route":       tag.Id_route,
+			"Id_device":      tag.Id_device,
 		})
 	}
 
@@ -83,7 +88,7 @@ func GetRoute(selector string, filter string) []map[string]interface{} {
 
 }
 
-func UpdateRoute(column string, new_value string, condition string) {
+func UpdateFlight(column string, new_value string, condition string) {
 
 	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
 	if err != nil {
@@ -92,12 +97,12 @@ func UpdateRoute(column string, new_value string, condition string) {
 
 	defer db.Close()
 
-	query := "UPDATE `route` SET " + column + " " + new_value + " WHERE " + condition
+	query := "UPDATE `flight` SET " + column + " " + new_value + " WHERE " + condition
 	db.Query(query)
 
 }
 
-func DeleteRoute(condition string) {
+func DeleteFlight(condition string) {
 	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
 	if err != nil {
 		panic(err.Error())
@@ -105,7 +110,7 @@ func DeleteRoute(condition string) {
 
 	defer db.Close()
 
-	query := "DELETE FROM `route` WHERE " + condition
+	query := "DELETE FROM `flight` WHERE " + condition
 
 	db.Query(query)
 

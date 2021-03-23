@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"airfilgth/internal/domain"
-	"airfilgth/internal/sql_request"
+	"airflight/internal/domain"
+	"airflight/internal/sql_request"
 
 	"github.com/gofiber/fiber/v2"
 )

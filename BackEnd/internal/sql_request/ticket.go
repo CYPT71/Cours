@@ -1,22 +1,21 @@
 package sql_request
 
 import (
-	"airfilgth/internal/utils"
+	"airflight/internal/utils"
 	"database/sql"
-	"strconv"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
 type Tickets struct {
-	id            int
-	expire        time.Time
-	price         int
-	departures_id int
+	Id            int
+	Expire        time.Time
+	Price         int
+	Departures_id int
 }
 
-func AddTickets(expire time.Time, price int, departures_id int) {
+func AddTickets(Expire time.Time, Price int, Departures_id int) {
 
 	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
 
@@ -27,8 +26,8 @@ func AddTickets(expire time.Time, price int, departures_id int) {
 	defer db.Close()
 
 	// perform a db.Query insert
-	insert, err := db.Query("INSERT INTO `Tickets`(`expire`, `price`, `departures_id`) VALUES (?, ?, ?)",
-		expire, price, departures_id)
+	insert, err := db.Query("INSERT INTO `tickets`(`expire`, `price`, `departures_id`) VALUES (?, ?, ?)",
+		Expire, Price, Departures_id)
 
 	//if there is an error inserting, handle it
 	if err != nil {
@@ -40,7 +39,7 @@ func AddTickets(expire time.Time, price int, departures_id int) {
 
 }
 
-func GetTickets(selector string, filter string) [][]string {
+func GetTickets(selector string, filter string) []map[string]interface{} {
 
 	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
 	if err != nil {
@@ -55,7 +54,7 @@ func GetTickets(selector string, filter string) [][]string {
 	} else {
 		query += "* "
 	}
-	query += "FROM Tickets "
+	query += "FROM `tickets` "
 	if filter != "" {
 
 		query += " WHERE " + filter
@@ -69,12 +68,19 @@ func GetTickets(selector string, filter string) [][]string {
 		return nil
 	}
 
-	var return_val [][]string
-	var tag Tickets
+	var return_val []map[string]interface{}
 	for selecte.Next() {
-		selecte.Scan(&tag.id, &tag.expire, &tag.price)
-		to_inject := []string{strconv.Itoa(tag.id), tag.expire.Format(time.UnixDate), strconv.Itoa(tag.price)}
-		return_val = append(return_val, to_inject)
+		var tag Tickets
+		selecte.Scan(&tag.Id, &tag.Expire, &tag.Price)
+		if err != nil {
+			panic(err.Error()) // proper error handling instead of panic in your app
+		}
+		return_val = append(return_val, map[string]interface{}{
+			"Id":            tag.Id,
+			"Expire":        tag.Expire,
+			"Price":         tag.Price,
+			"Departures_id": tag.Departures_id,
+		})
 	}
 
 	return return_val
@@ -89,7 +95,7 @@ func UpdateTickets(column string, new_value string, condition string) {
 
 	defer db.Close()
 
-	query := "UPDATE `Tickets` SET " + column + " " + new_value + " WHERE " + condition
+	query := "UPDATE `tickets` SET " + column + " " + new_value + " WHERE " + condition
 	db.Query(query)
 
 }
@@ -100,7 +106,7 @@ func DeleteTickets(condition string) {
 		panic(err.Error())
 	}
 
-	query := "DELETE FROM `Tickets` WHERE " + condition
+	query := "DELETE FROM `tickets` WHERE " + condition
 
 	db.Query(query)
 

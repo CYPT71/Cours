@@ -1,14 +1,14 @@
 package sql_request
 
 import (
-	"airfilgth/internal/utils"
+	"airflight/internal/utils"
 	"database/sql"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
-type Departus struct {
+type Departures struct {
 	Id          int
 	Date        time.Time
 	Pilote      int
@@ -32,7 +32,7 @@ func GetDepartures(selector string, filter string) []map[string]interface{} {
 	} else {
 		query += "* "
 	}
-	query += "FROM departures "
+	query += "FROM `departures` "
 	if filter != "" {
 		query += " WHERE " + filter
 	}
@@ -46,14 +46,14 @@ func GetDepartures(selector string, filter string) []map[string]interface{} {
 	}
 
 	var return_val []map[string]interface{}
-	var tag Departus
 	for selecte.Next() {
+		var tag Departures
 		selecte.Scan(&tag.Id, &tag.Date, &tag.Pilote, &tag.Copilote, &tag.Aircrew, &tag.Free_places, &tag.Occupied)
 		if err != nil {
 			panic(err.Error()) // proper error handling instead of panic in your app
 		}
 		return_val = append(return_val, map[string]interface{}{
-			"id":         tag.Id,
+			"Id":         tag.Id,
 			"Pilote":     tag.Pilote,
 			"Copilote":   tag.Copilote,
 			"Aircrew":    tag.Aircrew,
@@ -66,7 +66,7 @@ func GetDepartures(selector string, filter string) []map[string]interface{} {
 
 }
 
-func AddDepartures(id_flight int, date time.Time, pilote int, copilote int, aircrew string, free_places int, occupied int) {
+func AddDepartures(Id_flight int, Date time.Time, Pilote int, Copilote int, Aircrew string, Free_places int, Occupied int) {
 
 	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
 
@@ -77,8 +77,8 @@ func AddDepartures(id_flight int, date time.Time, pilote int, copilote int, airc
 	defer db.Close()
 
 	// perform a db.Query insert
-	insert, err := db.Query("INSERT INTO `departures`(`id_fligth`, `date`, `pilote`, `copilote`, `aircrew`, `free_places`, `occupied`, `ticket_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-		id_flight, date, pilote, copilote, aircrew, free_places, occupied)
+	insert, err := db.Query("INSERT INTO `departures`(`id_flight`, `date`, `pilote`, `copilote`, `aircrew`, `free_places`, `occupied`, `ticket_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+		Id_flight, Date, Pilote, Copilote, Aircrew, Free_places, Occupied)
 
 	//if there is an error inserting, handle it
 	if err != nil {
@@ -90,7 +90,7 @@ func AddDepartures(id_flight int, date time.Time, pilote int, copilote int, airc
 
 }
 
-func UpdateDepartus(column string, new_value string, condition string) {
+func UpdateDepartures(column string, new_value string, condition string) {
 
 	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
 	if err != nil {
@@ -104,7 +104,7 @@ func UpdateDepartus(column string, new_value string, condition string) {
 
 }
 
-func DeleteDepartus(condition string) {
+func DeleteDepartures(condition string) {
 	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
 	if err != nil {
 		panic(err.Error())

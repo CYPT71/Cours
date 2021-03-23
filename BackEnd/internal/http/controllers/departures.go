@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"airfilgth/internal/sql_request"
+	"airflight/internal/sql_request"
 	"log"
 	"time"
 
@@ -37,7 +37,7 @@ func departuresGetListNow(c *fiber.Ctx) error {
 	return nil
 }
 
-type departus struct {
+type departures struct {
 	Id_flight   int    `json:"id_flight"`
 	Date        string `json:"date"`
 	Pilote      int    `json:"pilote"`
@@ -48,7 +48,7 @@ type departus struct {
 }
 
 func departuresSetFligth(c *fiber.Ctx) error {
-	var device departus
+	var device departures
 	c.BodyParser(&device)
 	Date, err := time.Parse("2006-01-02 15:04", device.Date)
 	if err != nil {
@@ -73,7 +73,7 @@ func departuresUpdate(c *fiber.Ctx) error {
 	var device updatedepart
 	c.BodyParser(&device)
 
-	sql_request.UpdateDepartus(device.Column, device.Value, device.Condition)
+	sql_request.UpdateDepartures(device.Column, device.Value, device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Set Departus",
@@ -86,7 +86,7 @@ func departuresDelete(c *fiber.Ctx) error {
 	var device updatedepart
 	c.BodyParser(&device)
 
-	sql_request.DeleteDepartus(device.Condition)
+	sql_request.DeleteDepartures(device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Set Departus",

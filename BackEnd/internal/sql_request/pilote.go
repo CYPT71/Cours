@@ -1,7 +1,7 @@
 package sql_request
 
 import (
-	"airfilgth/internal/utils"
+	"airflight/internal/utils"
 	"database/sql"
 	"time"
 
@@ -9,10 +9,10 @@ import (
 )
 
 type Pilote struct {
-	Id      int       `json:"id"`
-	License time.Time `json:"licence"`
-	Among   time.Time `json:"among"`
-	StaffId int       `json:"staff_id"`
+	Id       int       `json:"Id"`
+	License  time.Time `json:"Licence"`
+	Among    time.Time `json:"Among"`
+	Staff_Id int       `json:"Staff_id"`
 }
 
 func GetPilote(selector string, filter string) []map[string]interface{} {
@@ -30,7 +30,7 @@ func GetPilote(selector string, filter string) []map[string]interface{} {
 	} else {
 		query += "* "
 	}
-	query += "FROM pilote "
+	query += "FROM `pilote` "
 	if filter != "" {
 		query += "WHERE " + filter
 	}
@@ -46,14 +46,16 @@ func GetPilote(selector string, filter string) []map[string]interface{} {
 	var return_val []map[string]interface{}
 	for selecte.Next() {
 		var tag Pilote
-		selecte.Scan(&tag.Id, &tag.License, &tag.Among, &tag.StaffId)
+		selecte.Scan(&tag.Id, &tag.License, &tag.Among, &tag.Staff_Id)
+		if err != nil {
+			panic(err.Error()) // proper error handling instead of panic in your app
+		}
 		return_val = append(return_val, map[string]interface{}{
-			"id":       tag.Id,
-			"license":  tag.License.Format(time.UnixDate),
+			"Id":       tag.Id,
+			"License":  tag.License.Format(time.UnixDate),
 			"Among":    tag.Among.Format(time.UnixDate),
-			"Staff id": tag.StaffId,
+			"Staff id": tag.Staff_Id,
 		})
-
 	}
 
 	return return_val

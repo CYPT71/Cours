@@ -1,7 +1,7 @@
 package domain
 
 import (
-	"airfilgth/internal/sql_request"
+	"airflight/internal/sql_request"
 	"log"
 )
 

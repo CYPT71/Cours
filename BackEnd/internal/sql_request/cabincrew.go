@@ -1,22 +1,21 @@
 package sql_request
 
 import (
-	"airfilgth/internal/utils"
+	"airflight/internal/utils"
 	"database/sql"
-	"strconv"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
 type CabinCrew struct {
-	id       int
-	fonction string
-	among    time.Time
-	staff_id int
+	Id       int
+	Among    time.Time
+	Fonction string
+	Staff_id int
 }
 
-func AddCabinCrew(fonction string, among time.Time, staff_id int) {
+func AddCabincrew(Among time.Time, Fonction string, Staff_id int) {
 
 	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
 
@@ -27,8 +26,8 @@ func AddCabinCrew(fonction string, among time.Time, staff_id int) {
 	defer db.Close()
 
 	// perform a db.Query insert
-	insert, err := db.Query("INSERT INTO `cabincrew`(`fonction`, `among`, `staff_id`) VALUES  VALUES (?, ?, ?)",
-		fonction, among, staff_id)
+	insert, err := db.Query("INSERT INTO `cabincrew`(`among`, `fonction`, `staff_id`) VALUES  VALUES (?, ?, ?)",
+		Among, Fonction, Staff_id)
 
 	//if there is an error inserting, handle it
 	if err != nil {
@@ -40,7 +39,7 @@ func AddCabinCrew(fonction string, among time.Time, staff_id int) {
 
 }
 
-func GetCabinCrew(selector string, filter string) [][]string {
+func GetCabincrew(selector string, filter string) []map[string]interface{} {
 
 	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
 	if err != nil {
@@ -48,6 +47,7 @@ func GetCabinCrew(selector string, filter string) [][]string {
 	}
 
 	defer db.Close()
+
 	query := "SELECT "
 	if selector != "" {
 		query += selector
@@ -67,19 +67,26 @@ func GetCabinCrew(selector string, filter string) [][]string {
 		panic(err.Error())
 	}
 
-	var return_val [][]string
-	var tag CabinCrew
+	var return_val []map[string]interface{}
 	for selecte.Next() {
-		selecte.Scan(&tag.id, &tag.fonction, &tag.among, &tag.staff_id)
-		to_inject := []string{strconv.Itoa(tag.id), tag.fonction, tag.among.Format(time.UnixDate), strconv.Itoa(tag.staff_id)}
-		return_val = append(return_val, to_inject)
+		var tag CabinCrew
+		selecte.Scan(&tag.Id, &tag.Among, &tag.Fonction, &tag.Staff_id)
+		if err != nil {
+			panic(err.Error()) // proper error handling instead of panic in your app
+		}
+		return_val = append(return_val, map[string]interface{}{
+			"Id":       tag.Id,
+			"Among":    tag.Among.Format(time.UnixDate),
+			"Fonction": tag.Fonction,
+			"Staff id": tag.Staff_id,
+		})
 	}
 
 	return return_val
 
 }
 
-func UpdateCabinCrew(column string, new_value string, condition string) {
+func UpdateCabincrew(column string, new_value string, condition string) {
 
 	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
 	if err != nil {
@@ -93,7 +100,7 @@ func UpdateCabinCrew(column string, new_value string, condition string) {
 
 }
 
-func DeleteCabinCrew(condition string) {
+func DeleteCabincrew(condition string) {
 	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
 	if err != nil {
 		panic(err.Error())

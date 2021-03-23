@@ -2,15 +2,15 @@ package controllers
 
 import (
 	// "gitrest/internal/domain"
-	// "airfilgth/internal/domain"
+	// "airflight/internal/domain"
 
-	"airfilgth/internal/sql_request"
+	"airflight/internal/sql_request"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 func FligthsBootstrap(app fiber.Router) {
-	app.Get("/", fligthsGetlist)
+	app.Get("/", flightsGetlist)
 
 	app.Patch("/", departuresUpdate)
 
@@ -18,42 +18,43 @@ func FligthsBootstrap(app fiber.Router) {
 
 }
 
-func fligthsGetlist(c *fiber.Ctx) error {
+func flightsGetlist(c *fiber.Ctx) error {
 
 	c.JSON(&fiber.Map{
 		"success": true,
+		"value":   sql_request.GetFlight(c.Query("selector"), c.Query("filter")),
 		"message": "Hello from the other side",
 	})
 	return nil
 }
 
-type UpdateFligth struct {
+type UpdateFlight struct {
 	Column    string `json:"Column"`
 	Value     string `json:"Value"`
 	Condition string `json:"Condition"`
 }
 
-func fligthUpdate(c *fiber.Ctx) error {
-	var device UpdateFligth
+func flightUpdate(c *fiber.Ctx) error {
+	var device UpdateFlight
 	c.BodyParser(&device)
 
-	sql_request.UpdateFligth(device.Column, device.Value, device.Condition)
+	sql_request.UpdateFlight(device.Column, device.Value, device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
-		"message": "Set Fligth",
+		"message": "Set Flight",
 	})
 	return nil
 }
 
-func fligthDelete(c *fiber.Ctx) error {
+func flightDelete(c *fiber.Ctx) error {
 
-	var device UpdateFligth
+	var device UpdateFlight
 	c.BodyParser(&device)
 
-	sql_request.DeleteFligth(device.Condition)
+	sql_request.DeleteFlight(device.Condition)
 	c.JSON(&fiber.Map{
 		"success": true,
-		"message": "Set Fligth",
+		"message": "Set Flight",
 	})
 	return nil
 }

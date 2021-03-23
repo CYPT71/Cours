@@ -1,7 +1,7 @@
 package main
 
 import (
-	"airfilgth/internal/http"
+	"airflight/internal/http"
 )
 
 func main() {

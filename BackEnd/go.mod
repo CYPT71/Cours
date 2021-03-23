@@ -1,4 +1,4 @@
-module airfilgth
+module airflight
 
 go 1.16
 

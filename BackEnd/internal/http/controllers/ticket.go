@@ -2,9 +2,9 @@ package controllers
 
 import (
 	// "gitrest/internal/domain"
-	// "airfilgth/internal/domain"
+	// "airflight/internal/domain"
 
-	"airfilgth/internal/sql_request"
+	"airflight/internal/sql_request"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -23,6 +23,7 @@ func ticketsGetlist(c *fiber.Ctx) error {
 
 	c.JSON(&fiber.Map{
 		"success": true,
+		"value":   sql_request.GetTickets(c.Query("selector"), c.Query("filter")),
 		"message": "Hello from the other side",
 	})
 	return nil

@@ -1,7 +1,7 @@
 package sql_request
 
 import (
-	"airfilgth/internal/utils"
+	"airflight/internal/utils"
 	"database/sql"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -27,7 +27,7 @@ func GetDevices(selector string, filter string) []map[string]interface{} {
 	} else {
 		query += "* "
 	}
-	query += "FROM device "
+	query += "FROM `device` "
 	if filter != "" {
 		query += " WHERE " + filter
 	}
@@ -57,7 +57,7 @@ func GetDevices(selector string, filter string) []map[string]interface{} {
 
 func AddDevices(capacity int, types string) {
 
-	db, err := sql.Open("mysql", "root:passwd@tcp(172.21.0.2:3306)/aircraft")
+	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
 
 	if err != nil {
 		panic(err.Error())

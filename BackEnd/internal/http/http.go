@@ -9,10 +9,10 @@ import (
 
 	"github.com/ansrivas/fiberprometheus/v2"
 
-	"airfilgth/internal/http/controllers"
-	"airfilgth/internal/utils"
+	"airflight/internal/http/controllers"
+	"airflight/internal/utils"
 
-	"airfilgth/internal/http/middlewares"
+	"airflight/internal/http/middlewares"
 )
 
 func Run() {
@@ -27,12 +27,12 @@ func Run() {
 	controllers.DeparturesBootstrap(app.Group("/departures"))
 	controllers.DevicesBootstrap(app.Group("/devices"))
 	controllers.EmployeesBootstrap(app.Group("/employees"))
-	controllers.FligthsBootstrap(app.Group("/fligths"))
+	controllers.FligthsBootstrap(app.Group("/flights"))
 	controllers.PassagersBootstrap(app.Group("/passengers"))
 	controllers.TicketsBootstrap(app.Group("/tickets"))
 	controllers.RouteBootstrap(app.Group("/route"))
 	controllers.PiloteBootstrap(app.Group("/pilote"))
-	controllers.DevicesBootstrap(app.Group("/cabincrews"))
+	controllers.DevicesBootstrap(app.Group("/cabincrew"))
 
 	// Setup CORS/CSRF
 	app.Use(middlewares.CORS())

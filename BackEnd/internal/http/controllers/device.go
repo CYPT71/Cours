@@ -2,7 +2,7 @@ package controllers
 
 import (
 	// "gitrest/internal/domain"
-	"airfilgth/internal/sql_request"
+	"airflight/internal/sql_request"
 
 	"github.com/gofiber/fiber/v2"
 )

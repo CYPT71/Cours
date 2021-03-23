@@ -1,7 +1,7 @@
 package sql_request
 
 import (
-	"airfilgth/internal/utils"
+	"airflight/internal/utils"
 	"database/sql"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -17,7 +17,7 @@ type Passenger struct {
 	Ticket_id  int    `json:"ticket_id"`
 }
 
-func AddPassenger(profession string, ticket_id int, bank int, name string, first_name string, address string) {
+func AddPassenger(Name string, First_name string, Address string, Profession string, Bank int, Ticket_id int) {
 
 	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
 
@@ -28,8 +28,8 @@ func AddPassenger(profession string, ticket_id int, bank int, name string, first
 	defer db.Close()
 
 	// perform a db.Query insert
-	insert, err := db.Query("INSERT INTO `Passenger`(`name`, `first_name`, `adress`, `profession`, `bank`, `ticket_id`) VALUES (?, ?, ?, ?, ?, ?)",
-		name, first_name, address, profession, bank, ticket_id)
+	insert, err := db.Query("INSERT INTO `passenger`(`name`, `first_name`, `adress`, `profession`, `bank`, `ticket_id`) VALUES (?, ?, ?, ?, ?, ?)",
+		Name, First_name, Address, Profession, Bank, Ticket_id)
 
 	//if there is an error inserting, handle it
 	if err != nil {
@@ -56,7 +56,7 @@ func GetPassenger(selector string, filter string) []map[string]interface{} {
 	} else {
 		query += "* "
 	}
-	query += "FROM passenger "
+	query += "FROM `passenger` "
 	if filter != "" {
 		query += " WHERE " + filter
 	}
@@ -74,6 +74,9 @@ func GetPassenger(selector string, filter string) []map[string]interface{} {
 	for selecte.Next() {
 		var tag Passenger
 		selecte.Scan(&tag.Id, &tag.Name, &tag.First_name, &tag.Address, &tag.Profession, &tag.Bank, &tag.Ticket_id)
+		if err != nil {
+			panic(err.Error()) // proper error handling instead of panic in your app
+		}
 		return_val = append(return_val, map[string]interface{}{
 			"id":          tag.Id,
 			"Address":     tag.Address,
@@ -98,7 +101,7 @@ func UpdatePassenger(column string, new_value string, condition string) {
 
 	defer db.Close()
 
-	query := "UPDATE `Passenger` SET " + column + " " + new_value + " WHERE " + condition
+	query := "UPDATE `passenger` SET " + column + " " + new_value + " WHERE " + condition
 	db.Query(query)
 
 }
@@ -111,7 +114,7 @@ func DeletePassenger(condition string) {
 
 	defer db.Close()
 
-	query := "DELETE FROM `Passenger` WHERE " + condition
+	query := "DELETE FROM `passenger` WHERE " + condition
 
 	db.Query(query)
 
