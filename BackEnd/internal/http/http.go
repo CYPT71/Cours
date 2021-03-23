@@ -46,7 +46,7 @@ func Run() {
 	app.Use(pprof.New())
 
 	// Prometheus Endpoint
-	prometheus := fiberprometheus.New("gitrest")
+	prometheus := fiberprometheus.New("airflight")
 	prometheus.RegisterAt(app, "/metrics")
 	app.Use(prometheus.Middleware)
 
