@@ -70,7 +70,7 @@ func GetTickets(selector string, filter string) []map[string]interface{} {
 	var return_val []map[string]interface{}
 	for selecte.Next() {
 		var tag Tickets
-		selecte.Scan(&tag.Id, &tag.Expire, &tag.Price)
+		selecte.Scan(&tag.Id, &tag.Expire, &tag.Price, &tag.Departures_id)
 		if err != nil {
 			panic(err.Error()) // proper error handling instead of panic in your app
 		}
@@ -114,7 +114,7 @@ func DeleteTickets(condition string) {
 func TotalSales() int {
 
 	type Sales struct {
-		prices int
+		Price int
 	}
 	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
 	if err != nil {
@@ -123,7 +123,7 @@ func TotalSales() int {
 
 	defer db.Close()
 
-	query := "SELECT SUM(prices)  AS `total` FROM tickets;"
+	query := "SELECT SUM(price)  AS `total` FROM tickets;"
 
 	selecte, err := db.Query(query)
 
@@ -133,9 +133,9 @@ func TotalSales() int {
 	var result int
 	for selecte.Next() {
 		var tag Sales
-		selecte.Scan(&tag.prices)
+		selecte.Scan(&tag.Price)
 
-		result = tag.prices
+		result = tag.Price
 
 	}
 

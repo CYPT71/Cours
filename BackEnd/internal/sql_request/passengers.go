@@ -206,11 +206,7 @@ func MostRegularProfession() []map[string]interface{} {
 
 	defer db.Close()
 
-	query := `SELECT profession, MAX(regular) \"passengers\" FROM (SELECT profession, COUNT(profession) AS \"regular\" FROM passenger
-
-			GROUP BY profession) as tab1
-	
-			GROUP BY profession DESC;`
+	query := "SELECT profession, MAX(regular) \"passengers\" FROM (SELECT profession, COUNT(profession) AS \"regular\" FROM passenger GROUP BY profession) as tab1 GROUP BY profession ORDER BY profession DESC;"
 	selecte, err := db.Query(query)
 
 	if err != nil {

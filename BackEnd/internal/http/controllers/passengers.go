@@ -33,7 +33,7 @@ func getRegularProfession(c *fiber.Ctx) error {
 	// domain.RegularPassenger()
 	c.JSON(&fiber.Map{
 		"success": true,
-		"value":   sql_request.ListPassengerperFlight(),
+		"value":   sql_request.MostRegularProfession(),
 		"message": "Hello from the other side",
 	})
 

@@ -2,4 +2,4 @@ server:
   port: "3002"
   address: "0.0.0.0"
 mysql:
-  dns: "root:passwd@tcp(127.0.0.1:6603)/aircraft"
+  dns: "root@tcp(127.0.0.1:3306)/aircraft"
