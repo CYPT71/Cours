@@ -123,7 +123,7 @@ func DeletePassenger(condition string) {
 
 func ListPassengerperFlight() []map[string]interface{} {
 	type queryIdRoute struct {
-		IdRoute int    `json:"id_rotue"`
+		IdRoute int    `json:"id_route"`
 		Origin  string `json:"Origin"`
 	}
 	type passengers struct {
@@ -139,7 +139,7 @@ func ListPassengerperFlight() []map[string]interface{} {
 
 	defer db.Close()
 
-	query := "SELECT id_rotue from flight"
+	query := "SELECT id_route from flight"
 	selecte, err := db.Query(query)
 
 	if err != nil {
