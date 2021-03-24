@@ -122,16 +122,16 @@ func DeletePassenger(condition string) {
 }
 
 func ListPassengerperFlight() []map[string]interface{} {
-	type queryIdRoute struct {
-		IdRoute int    `json:"id_route"`
-		Origin  string `json:"Origin"`
+	type QueryIdRoute struct {
+		IdRoute int `json:"id_route"`
 	}
-	type passengers struct {
+	type Passengers struct {
 		Name      string `json:"name"`
 		FirstName string `json:"first_name"`
-		Address   string `json:"address"`
+		Address   string `json:"adress"`
 		TicketId  string `json:"ticket_id"`
 	}
+
 	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
 	if err != nil {
 		panic(err.Error())
@@ -158,16 +158,18 @@ func ListPassengerperFlight() []map[string]interface{} {
 	var result []map[string]interface{}
 
 	for selecte.Next() {
-		var idsRoute queryIdRoute
-		selecte.Scan(&idsRoute.IdRoute, &idsRoute.Origin)
+		var idsRoute QueryIdRoute
+		selecte.Scan(&idsRoute.IdRoute)
+		query := "SELECT name, first_name, adress, ticket_id FROM flight JOIN tickets ON tickets.departures_id = flight.id_departures JOIN passenger ON passenger.ticket_id = tickets.id WHERE id_route = " + strconv.Itoa(idsRoute.IdRoute)
 
-		query := "SELECT name, first_name, address, ticket_id FROM flight JOIN tickets ON tickets.departures_id = flight.id_departures JOIN passenger ON passenger.ticket_id = tickets.id WHERE id_route = " + strconv.Itoa(idsRoute.IdRoute)
-		sub_select, err := db.Query(query)
-
+		select_sub, err := db.Query(query)
+		if err != nil {
+			panic(err.Error())
+		}
 		var passenger []map[string]interface{}
-		for sub_select.Next() {
-			var getInfo passengers
-			sub_select.Scan(&getInfo.Name, &getInfo.FirstName, &getInfo.Address, &getInfo.TicketId)
+		for select_sub.Next() {
+			var getInfo Passengers
+			select_sub.Scan(&getInfo.Name, &getInfo.FirstName, &getInfo.Address, &getInfo.TicketId)
 			passenger = append(passenger, map[string]interface{}{
 				"Name":       getInfo.Name,
 				"First Name": getInfo.FirstName,
@@ -179,8 +181,9 @@ func ListPassengerperFlight() []map[string]interface{} {
 		if err != nil {
 			panic(err.Error())
 		}
+
 		result = append(result, map[string]interface{}{
-			"Origin":    idsRoute.Origin,
+			"Origin":    GetRoute("", "`id` ="+strconv.Itoa(idsRoute.IdRoute))[0]["Origin"],
 			"Passenger": passenger,
 		})
 
