@@ -8,7 +8,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func CabinCrewBootstrap(app fiber.Router) {
+func CabincrewBootstrap(app fiber.Router) {
 	app.Get("/", cabincrewGetlist)
 	app.Post("/", cabincrewPost)
 

@@ -32,7 +32,7 @@ func Run() {
 	controllers.TicketsBootstrap(app.Group("/tickets"))
 	controllers.RouteBootstrap(app.Group("/route"))
 	controllers.PiloteBootstrap(app.Group("/pilote"))
-	controllers.DevicesBootstrap(app.Group("/cabincrew"))
+	controllers.CabincrewBootstrap(app.Group("/cabincrew"))
 
 	// Setup CORS/CSRF
 	app.Use(middlewares.CORS())
