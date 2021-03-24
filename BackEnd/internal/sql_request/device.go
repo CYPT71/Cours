@@ -104,3 +104,38 @@ func DeleteDevice(condition string) {
 	db.Query(query)
 
 }
+
+func DeviveHours() []map[string]interface{} {
+
+	type devicehoursStruct struct {
+		Types       string
+		FlightHours string
+	}
+
+	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer db.Close()
+
+	query := "SELECT type, SEC_TO_TIME(SUM(TIME_TO_SEC(among))) AS \"flight hours\" FROM pilote JOIN departures ON pilote.id = departures.pilote JOIN flight ON departures.id = flight.id_departures JOIN device ON device.id = flight.id_device GROUP BY device.id;"
+
+	selecte, err := db.Query(query)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	var return_val []map[string]interface{}
+	for selecte.Next() {
+		var tag devicehoursStruct
+		selecte.Scan(&tag.Types, &tag.FlightHours)
+		return_val = append(return_val, map[string]interface{}{
+			"type":         tag.Types,
+			"flight hours": tag.FlightHours,
+		})
+	}
+
+	return return_val
+}
