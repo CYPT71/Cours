@@ -11,7 +11,7 @@ func PiloteBootstrap(app fiber.Router) {
 	app.Get("/details", piloteGetlist)
 	app.Get("/", piloteGetlistDetails)
 
-	app.Get("/", piloteArrivalByCapitain)
+	app.Get("/:name", piloteArrivalByCapitain)
 
 	app.Get("/flightHours", piloteGetAmong)
 
