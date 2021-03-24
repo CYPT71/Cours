@@ -9,11 +9,9 @@ import (
 func PassagersBootstrap(app fiber.Router) {
 	app.Get("/", passagersGetlist)
 
-	app.Get("/regular", regularGetlist)
+	app.Get("/regular", getRegularProfession)
 
 	app.Get("/perFlight", getPassengerPerFlight)
-
-	app.Get("/MostRegularProfession", getRegularProfession)
 
 	app.Patch("/", departuresUpdate)
 
@@ -36,17 +34,6 @@ func getRegularProfession(c *fiber.Ctx) error {
 	c.JSON(&fiber.Map{
 		"success": true,
 		"value":   sql_request.ListPassengerperFlight(),
-		"message": "Hello from the other side",
-	})
-
-	return nil
-}
-
-func regularGetlist(c *fiber.Ctx) error {
-	// domain.RegularPassenger()
-	c.JSON(&fiber.Map{
-		"success": true,
-
 		"message": "Hello from the other side",
 	})
 
