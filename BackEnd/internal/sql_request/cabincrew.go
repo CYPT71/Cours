@@ -3,19 +3,18 @@ package sql_request
 import (
 	"airflight/internal/utils"
 	"database/sql"
-	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
 type CabinCrew struct {
 	Id       int
-	Among    time.Time
+	Among    string
 	Fonction string
 	Staff_id int
 }
 
-func AddCabincrew(Among time.Time, Fonction string, Staff_id int) {
+func AddCabincrew(Among string, Fonction string, Staff_id int) {
 
 	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
 
@@ -76,7 +75,7 @@ func GetCabincrew(selector string, filter string) []map[string]interface{} {
 		}
 		return_val = append(return_val, map[string]interface{}{
 			"Id":       tag.Id,
-			"Among":    tag.Among.Format(time.UnixDate),
+			"Among":    tag.Among,
 			"Fonction": tag.Fonction,
 			"Staff id": tag.Staff_id,
 		})

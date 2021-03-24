@@ -113,3 +113,87 @@ func DeletePilote(condition string) {
 	db.Query(query)
 
 }
+
+func GetPiloteAmong() []map[string]interface{} {
+	type PiloteDetails struct {
+		Name      string
+		FirstName string
+		Among     string
+	}
+	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer db.Close()
+
+	query := "SELECT name, first_name, among FROM pilote JOIN employees ON pilote.staff_id = employees.id JOIN departures ON pilote.id = departures.pilote;"
+
+	selecte, err := db.Query(query)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	var return_val []map[string]interface{}
+	for selecte.Next() {
+		var tag PiloteDetails
+		selecte.Scan(&tag.Name, &tag.FirstName, &tag.Among)
+		if err != nil {
+			panic(err.Error()) // proper error handling instead of panic in your app
+		}
+		return_val = append(return_val, map[string]interface{}{
+			"Name":       tag.Name,
+			"First Name": tag.FirstName,
+			"Among":      tag.Among,
+		})
+
+	}
+
+	return return_val
+}
+
+func GetPiloteDestination(name string) []map[string]interface{} {
+
+	type PiloteRoute struct {
+		Name      string
+		FirstName string
+		Depart    string
+		Arrival   string
+	}
+
+	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer db.Close()
+
+	query := "SELECT name, first_name, route.origin, route.arrival FROM pilote JOIN employees ON pilote.staff_id = employees.id JOIN departures ON pilote.id = departures.pilote JOIN flight ON departures.id = flight.id_departures 	JOIN route ON route.id = flight.id_route WHERE name = \"" + name + "\";"
+
+	selecte, err := db.Query(query)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	var result []map[string]interface{}
+
+	for selecte.Next() {
+		var tag PiloteRoute
+		selecte.Scan(&tag.Name, &tag.FirstName, &tag.Depart, &tag.Arrival)
+		if err != nil {
+			panic(err.Error()) // proper error handling instead of panic in your app
+		}
+		result = append(result, map[string]interface{}{
+			"Name":       tag.Name,
+			"First Name": tag.FirstName,
+			"Depart":     tag.Depart,
+			"Arrival":    tag.Arrival,
+		})
+	}
+
+	return result
+
+}

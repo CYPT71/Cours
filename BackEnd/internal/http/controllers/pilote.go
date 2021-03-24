@@ -10,12 +10,35 @@ import (
 func PiloteBootstrap(app fiber.Router) {
 	app.Get("/details", piloteGetlist)
 	app.Get("/", piloteGetlistDetails)
+
+	app.Get("/", piloteArrivalByCapitain)
+
+	app.Get("/flightHours", piloteGetAmong)
+
 	app.Post("/", pilotePos)
 
 	app.Patch("/", piloteUpdate)
 
 	app.Delete("/:name", piloteDelete)
 
+}
+
+func piloteGetAmong(c *fiber.Ctx) error {
+	c.JSON(&fiber.Map{
+		"success": true,
+		"value":   sql_request.GetPiloteAmong(),
+		"message": "Hello from the other side",
+	})
+	return nil
+}
+
+func piloteArrivalByCapitain(c *fiber.Ctx) error {
+	c.JSON(&fiber.Map{
+		"success": true,
+		"value":   sql_request.GetPiloteDestination(c.Params("name")),
+		"message": "Hello from the other side",
+	})
+	return nil
 }
 
 func piloteGetlist(c *fiber.Ctx) error {

@@ -3,7 +3,6 @@ package controllers
 import (
 	// "gitrest/internal/domain"
 	"airflight/internal/sql_request"
-	"time"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -36,9 +35,7 @@ type cabincrewtruc struct {
 func cabincrewPost(c *fiber.Ctx) error {
 	var cabincrew cabincrewtruc
 	c.BodyParser(&cabincrew)
-	layout := "2006-01-02 15:04:05"
-	Among, _ := time.Parse(cabincrew.Among, layout)
-	sql_request.AddCabincrew(Among, cabincrew.Fonction, cabincrew.Staff_id)
+	sql_request.AddCabincrew(cabincrew.Among, cabincrew.Fonction, cabincrew.Staff_id)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "You added " + cabincrew.Fonction,

@@ -3,14 +3,13 @@ package sql_request
 import (
 	"airflight/internal/utils"
 	"database/sql"
-	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
 type Departures struct {
 	Id          int
-	Date        time.Time
+	Date        string
 	Pilote      int
 	Copilote    int
 	Aircrew     string
@@ -66,7 +65,7 @@ func GetDepartures(selector string, filter string) []map[string]interface{} {
 
 }
 
-func AddDepartures(Id_flight int, Date time.Time, Pilote int, Copilote int, Aircrew string, Free_places int, Occupied int) {
+func AddDepartures(Id_flight int, Date string, Pilote int, Copilote int, Aircrew string, Free_places int, Occupied int) {
 
 	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
 

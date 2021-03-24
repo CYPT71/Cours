@@ -3,19 +3,18 @@ package sql_request
 import (
 	"airflight/internal/utils"
 	"database/sql"
-	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
 type Tickets struct {
 	Id            int
-	Expire        time.Time
+	Expire        string
 	Price         int
 	Departures_id int
 }
 
-func AddTickets(Expire time.Time, Price int, Departures_id int) {
+func AddTickets(Expire string, Price int, Departures_id int) {
 
 	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
 

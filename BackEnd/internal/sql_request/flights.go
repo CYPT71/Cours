@@ -4,7 +4,6 @@ import (
 	"airflight/internal/utils"
 	"database/sql"
 	"log"
-	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -12,12 +11,12 @@ import (
 type Flight struct {
 	Id            int
 	Id_departures int
-	Arrival       time.Time
+	Arrival       string
 	Id_route      int
 	Id_device     int
 }
 
-func AddFlight(Id_departures int, Arrival time.Time, Id_route int, Id_device int) {
+func AddFlight(Id_departures int, Arrival string, Id_route int, Id_device int) {
 
 	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
 
@@ -81,7 +80,7 @@ func GetFlight(selector string, filter string) []map[string]interface{} {
 		return_val = append(return_val, map[string]interface{}{
 			"Id":             tag.Id,
 			"Id_departurees": tag.Id_departures,
-			"Arrival":        tag.Arrival.Format(time.UnixDate),
+			"Arrival":        tag.Arrival,
 			"Id_route":       tag.Id_route,
 			"Id_device":      tag.Id_device,
 		})

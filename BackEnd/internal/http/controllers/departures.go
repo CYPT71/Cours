@@ -2,8 +2,6 @@ package controllers
 
 import (
 	"airflight/internal/sql_request"
-	"log"
-	"time"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -50,12 +48,8 @@ type departures struct {
 func departuresSetFligth(c *fiber.Ctx) error {
 	var device departures
 	c.BodyParser(&device)
-	Date, err := time.Parse("2006-01-02 15:04", device.Date)
-	if err != nil {
-		log.Print(err)
-	}
 
-	sql_request.AddDepartures(device.Id_flight, Date, device.Pilote, device.Copilote, device.Aircrew, device.Free_places, device.Occupied)
+	sql_request.AddDepartures(device.Id_flight, device.Date, device.Pilote, device.Copilote, device.Aircrew, device.Free_places, device.Occupied)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Set Departus",
