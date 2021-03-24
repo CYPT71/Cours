@@ -2,7 +2,6 @@ package domain
 
 import (
 	"airflight/internal/sql_request"
-	"log"
 )
 
 type counter struct {
@@ -16,7 +15,7 @@ func countPassenger() map[string]int {
 	count := make(map[string]int)
 	for i := range passenger {
 		passenger := passenger[i]["Name"].(string) + " " + passenger[i]["First Name"].(string)
-		log.Print(passenger)
+		// log.Print(passenger)
 		count[passenger] += 1
 	}
 

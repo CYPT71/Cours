@@ -3,6 +3,7 @@ package sql_request
 import (
 	"airflight/internal/utils"
 	"database/sql"
+	"log"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -62,6 +63,8 @@ func GetFlight(selector string, filter string) []map[string]interface{} {
 
 	query += ";"
 
+	log.Print(query)
+
 	selecte, err := db.Query(query)
 
 	if err != nil {
@@ -113,5 +116,41 @@ func DeleteFlight(condition string) {
 	query := "DELETE FROM `flight` WHERE " + condition
 
 	db.Query(query)
+
+}
+
+func GetFlightByCity(city string) []map[string]interface{} {
+	type deviceType struct {
+		types string
+	}
+
+	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer db.Close()
+
+	query := "SELECT device.type FROM flight JOIN route ON route.id = flight.id_route JOIN device ON device.id = flight.id_device WHERE route.arrival = \"" + city + "\";"
+
+	selecte, err := db.Query(query)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	var return_val []map[string]interface{}
+	for selecte.Next() {
+		var tag deviceType
+		selecte.Scan(&tag.types)
+		if err != nil {
+			panic(err.Error()) // proper error handling instead of panic in your app
+		}
+		return_val = append(return_val, map[string]interface{}{
+			"device ": tag.types,
+		})
+	}
+
+	return return_val
 
 }

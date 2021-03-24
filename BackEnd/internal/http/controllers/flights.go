@@ -22,11 +22,9 @@ func FligthsBootstrap(app fiber.Router) {
 
 func cityGetFLight(c *fiber.Ctx) error {
 
-	filter := "`id` IN SELECT `id_departures` FROM flight(`id_route` IN (SELECT id FROM `route` WHERE `origin` = " + c.Params("city") + " or `arival` = " + c.Params("city") + ")"
-
 	c.JSON(&fiber.Map{
 		"success": true,
-		"value":   sql_request.GetFlight("", filter),
+		"value":   sql_request.GetFlightByCity(c.Params("city")),
 		"message": "Hello from the other side",
 	})
 

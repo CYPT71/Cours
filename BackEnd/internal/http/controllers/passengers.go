@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"airflight/internal/domain"
 	"airflight/internal/sql_request"
 
 	"github.com/gofiber/fiber/v2"
@@ -20,7 +19,7 @@ func PassagersBootstrap(app fiber.Router) {
 }
 
 func getPassengerPerFlight(c *fiber.Ctx) error {
-	domain.RegularPassenger()
+	// domain.RegularPassenger()
 	c.JSON(&fiber.Map{
 		"success": true,
 		"value":   sql_request.ListPassengerperFlight(),
@@ -31,7 +30,7 @@ func getPassengerPerFlight(c *fiber.Ctx) error {
 }
 
 func regularGetlist(c *fiber.Ctx) error {
-	domain.RegularPassenger()
+	// domain.RegularPassenger()
 	c.JSON(&fiber.Map{
 		"success": true,
 
