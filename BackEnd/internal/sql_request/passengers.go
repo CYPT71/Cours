@@ -3,6 +3,7 @@ package sql_request
 import (
 	"airflight/internal/utils"
 	"database/sql"
+	"strconv"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -117,5 +118,74 @@ func DeletePassenger(condition string) {
 	query := "DELETE FROM `passenger` WHERE " + condition
 
 	db.Query(query)
+
+}
+
+func ListPassengerperFlight() []map[string]interface{} {
+	type queryIdRoute struct {
+		IdRoute int    `json:"id_rotue"`
+		Origin  string `json:"Origin"`
+	}
+	type passengers struct {
+		Name      string `json:"name"`
+		FirstName string `json:"first_name"`
+		Address   string `json:"address"`
+		TicketId  string `json:"ticket_id"`
+	}
+	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer db.Close()
+
+	query := "SELECT id_rotue from flight"
+	selecte, err := db.Query(query)
+
+	if err != nil {
+		panic(err.Error())
+	}
+	/*
+		SELECT name, first_name, address, ticket_id FROM flight
+
+		JOIN tickets ON tickets.departures_id = flight.id_departures
+
+		JOIN passenger ON passenger.ticket_id = tickets.id
+
+		WHERE id_route = 35;
+
+	*/
+	var result []map[string]interface{}
+
+	for selecte.Next() {
+		var idsRoute queryIdRoute
+		selecte.Scan(&idsRoute.IdRoute, &idsRoute.Origin)
+
+		query := "SELECT name, first_name, address, ticket_id FROM flight JOIN tickets ON tickets.departures_id = flight.id_departures JOIN passenger ON passenger.ticket_id = tickets.id WHERE id_route = " + strconv.Itoa(idsRoute.IdRoute)
+		sub_select, err := db.Query(query)
+
+		var passenger []map[string]interface{}
+		for sub_select.Next() {
+			var getInfo passengers
+			sub_select.Scan(&getInfo.Name, &getInfo.FirstName, &getInfo.Address, &getInfo.TicketId)
+			passenger = append(passenger, map[string]interface{}{
+				"Name":       getInfo.Name,
+				"First Name": getInfo.FirstName,
+				"address":    getInfo.Address,
+				"ticket id":  getInfo.TicketId,
+			})
+		}
+
+		if err != nil {
+			panic(err.Error())
+		}
+		result = append(result, map[string]interface{}{
+			"Origin":    idsRoute.Origin,
+			"Passenger": passenger,
+		})
+
+	}
+
+	return result
 
 }

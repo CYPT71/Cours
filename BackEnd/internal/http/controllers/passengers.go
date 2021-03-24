@@ -12,9 +12,22 @@ func PassagersBootstrap(app fiber.Router) {
 
 	app.Get("/regular", regularGetlist)
 
+	app.Get("/perFlight", getPassengerPerFlight)
+
 	app.Patch("/", departuresUpdate)
 
 	app.Delete("/", departuresDelete)
+}
+
+func getPassengerPerFlight(c *fiber.Ctx) error {
+	domain.RegularPassenger()
+	c.JSON(&fiber.Map{
+		"success": true,
+		"value":   sql_request.ListPassengerperFlight(),
+		"message": "Hello from the other side",
+	})
+
+	return nil
 }
 
 func regularGetlist(c *fiber.Ctx) error {
