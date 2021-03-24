@@ -192,3 +192,44 @@ func ListPassengerperFlight() []map[string]interface{} {
 	return result
 
 }
+
+func MostRegularProfession() []map[string]interface{} {
+	type RegularProfession struct {
+		Profession string
+		Count      int
+	}
+
+	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer db.Close()
+
+	query := `SELECT profession, MAX(regular) \"passengers\" FROM (SELECT profession, COUNT(profession) AS \"regular\" FROM passenger
+
+			GROUP BY profession) as tab1
+	
+			GROUP BY profession DESC;`
+	selecte, err := db.Query(query)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	var result []map[string]interface{}
+
+	for selecte.Next() {
+		var idsRoute RegularProfession
+		selecte.Scan(&idsRoute.Profession, &idsRoute.Count)
+
+		result = append(result, map[string]interface{}{
+			"Profession": idsRoute.Profession,
+			"Count":      idsRoute.Count,
+		})
+
+	}
+
+	return result
+
+}

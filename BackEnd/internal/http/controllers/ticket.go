@@ -12,11 +12,22 @@ import (
 func TicketsBootstrap(app fiber.Router) {
 	app.Get("/", ticketsGetlist)
 
+	app.Get("/total", ticketGetTotal)
+
 	app.Put("/", ticketsPos)
 
 	app.Patch("/", ticketUpdate)
 
 	app.Delete("/", ticketDelete)
+}
+
+func ticketGetTotal(c *fiber.Ctx) error {
+	c.JSON(&fiber.Map{
+		"success": true,
+		"value":   sql_request.TotalSales(),
+		"message": "Hello from the other side",
+	})
+	return nil
 }
 
 func ticketsGetlist(c *fiber.Ctx) error {

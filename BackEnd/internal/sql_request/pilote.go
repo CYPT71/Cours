@@ -197,3 +197,39 @@ func GetPiloteDestination(name string) []map[string]interface{} {
 	return result
 
 }
+
+/*func GetAverageFlight() {
+	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer db.Close()
+
+	query := ""
+
+	selecte, err := db.Query(query)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	var result []map[string]interface{}
+
+	for selecte.Next() {
+		var tag PiloteRoute
+		selecte.Scan(&tag.Name, &tag.FirstName, &tag.Depart, &tag.Arrival)
+		if err != nil {
+			panic(err.Error()) // proper error handling instead of panic in your app
+		}
+		result = append(result, map[string]interface{}{
+			"Name":       tag.Name,
+			"First Name": tag.FirstName,
+			"Depart":     tag.Depart,
+			"Arrival":    tag.Arrival,
+		})
+	}
+
+	return result
+
+}*/

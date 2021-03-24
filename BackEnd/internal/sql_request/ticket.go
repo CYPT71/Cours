@@ -110,3 +110,34 @@ func DeleteTickets(condition string) {
 	db.Query(query)
 
 }
+
+func TotalSales() int {
+
+	type Sales struct {
+		prices int
+	}
+	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer db.Close()
+
+	query := "SELECT SUM(prices)  AS `total` FROM tickets;"
+
+	selecte, err := db.Query(query)
+
+	if err != nil {
+		return -1
+	}
+	var result int
+	for selecte.Next() {
+		var tag Sales
+		selecte.Scan(&tag.prices)
+
+		result = tag.prices
+
+	}
+
+	return result
+}
