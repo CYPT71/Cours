@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"airflight/internal/sql_request"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -13,7 +14,7 @@ func PiloteBootstrap(app fiber.Router) {
 
 	app.Patch("/", piloteUpdate)
 
-	app.Delete("/", piloteDelete)
+	app.Delete("/:name", piloteDelete)
 
 }
 
@@ -50,6 +51,21 @@ func piloteGetlistRenewLissence(c *fiber.Ctx) error {
 
 func pilotePos(c *fiber.Ctx) error {
 
+	type addPilote struct {
+		Licence  string `json:"licence"`
+		Among    string `json:"among"`
+		Staff_id int    `json:"staff_id"`
+	}
+	var pilote addPilote
+	c.BodyParser(&pilote)
+
+	layout := "2006-01-02 15:04:05"
+
+	licence, _ := time.Parse(pilote.Licence, layout)
+
+	among, _ := time.Parse(pilote.Among, layout)
+
+	sql_request.AddPilote(licence, among, pilote.Staff_id)
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Hello from the other side",
@@ -57,13 +73,13 @@ func pilotePos(c *fiber.Ctx) error {
 	return nil
 }
 
-type updatePilote struct {
-	Column    string `json:"Column"`
-	Value     string `json:"Value"`
-	Condition string `json:"Condition"`
-}
-
 func piloteUpdate(c *fiber.Ctx) error {
+	type updatePilote struct {
+		Column    string `json:"Column"`
+		Value     string `json:"Value"`
+		Condition string `json:"Condition"`
+	}
+
 	var device updatePilote
 	c.BodyParser(&device)
 
@@ -77,10 +93,7 @@ func piloteUpdate(c *fiber.Ctx) error {
 
 func piloteDelete(c *fiber.Ctx) error {
 
-	var device updatePilote
-	c.BodyParser(&device)
-
-	sql_request.DeleteTickets(device.Condition)
+	sql_request.DeleteTickets(c.Params("name"))
 	c.JSON(&fiber.Map{
 		"success": true,
 		"message": "Set passenger",
