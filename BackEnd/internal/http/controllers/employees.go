@@ -21,7 +21,7 @@ func EmployeesBootstrap(app fiber.Router) {
 }
 
 func employeesGetlist(c *fiber.Ctx) error {
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
@@ -38,7 +38,7 @@ func employeesGetlist(c *fiber.Ctx) error {
 }
 
 func employeesGetByCategories(c *fiber.Ctx) error {
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
@@ -71,7 +71,7 @@ func employeePost(c *fiber.Ctx) error {
 	var employees deviceStruc
 	c.BodyParser(&employees)
 	sql_request.AddDevices(employees.Capacity, employees.Model_type)
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
@@ -99,7 +99,7 @@ func employeesUpdate(c *fiber.Ctx) error {
 	c.BodyParser(&employees)
 
 	sql_request.UpdateEmployees(employees.Column, employees.Value, employees.Condition)
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
@@ -120,7 +120,7 @@ func employeesDelete(c *fiber.Ctx) error {
 	c.BodyParser(&employees)
 
 	sql_request.DeleteEmployees(employees.Condition)
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,

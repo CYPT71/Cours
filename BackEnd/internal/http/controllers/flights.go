@@ -21,7 +21,7 @@ func FligthsBootstrap(app fiber.Router) {
 }
 
 func cityGetFLight(c *fiber.Ctx) error {
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
@@ -39,7 +39,7 @@ func cityGetFLight(c *fiber.Ctx) error {
 }
 
 func flightsGetlist(c *fiber.Ctx) error {
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
@@ -66,7 +66,7 @@ func flightUpdate(c *fiber.Ctx) error {
 	c.BodyParser(&device)
 
 	sql_request.UpdateFlight(device.Column, device.Value, device.Condition)
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
@@ -87,7 +87,7 @@ func flightDelete(c *fiber.Ctx) error {
 	c.BodyParser(&device)
 
 	sql_request.DeleteFlight(device.Condition)
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,

@@ -18,7 +18,7 @@ func CabincrewBootstrap(app fiber.Router) {
 }
 
 func cabincrewGetlist(c *fiber.Ctx) error {
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
@@ -41,7 +41,7 @@ type cabincrewtruc struct {
 }
 
 func cabincrewPost(c *fiber.Ctx) error {
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
@@ -72,7 +72,7 @@ func cabincrewUpdate(c *fiber.Ctx) error {
 
 	sql_request.UpdateCabincrew(cabincrew.Column, cabincrew.Value, cabincrew.Condition)
 
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
@@ -94,7 +94,7 @@ func cabincrewDelete(c *fiber.Ctx) error {
 
 	sql_request.DeleteCabincrew(cabincrew.Condition)
 
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,

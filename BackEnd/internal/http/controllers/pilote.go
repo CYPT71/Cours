@@ -24,7 +24,7 @@ func PiloteBootstrap(app fiber.Router) {
 
 func piloteGetAmong(c *fiber.Ctx) error {
 
-	name := if_token(c)
+	name := ifToken(c)
 
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
@@ -43,7 +43,7 @@ func piloteGetAmong(c *fiber.Ctx) error {
 
 func piloteArrivalByCapitain(c *fiber.Ctx) error {
 
-	name := if_token(c)
+	name := ifToken(c)
 
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
@@ -63,7 +63,7 @@ func piloteArrivalByCapitain(c *fiber.Ctx) error {
 
 func piloteGetlist(c *fiber.Ctx) error {
 
-	name := if_token(c)
+	name := ifToken(c)
 
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
@@ -83,7 +83,7 @@ func piloteGetlist(c *fiber.Ctx) error {
 func piloteGetlistDetails(c *fiber.Ctx) error {
 	pilotes_info := sql_request.GetEmployees("", "`id` in (SELECT `staff_id` FROM `pilote`)")
 
-	name := if_token(c)
+	name := ifToken(c)
 
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
@@ -103,7 +103,7 @@ func piloteGetlistDetails(c *fiber.Ctx) error {
 func piloteGetlistRenewLissence(c *fiber.Ctx) error {
 	pilotes_info := sql_request.GetEmployees("", "`id` in (SELECT `staff_id` FROM `pilote` WHERE licence <= DATE_ADD(CURRENT_DATE(), INTERVAL 3 MONTH))")
 
-	name := if_token(c)
+	name := ifToken(c)
 
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
@@ -132,7 +132,7 @@ func pilotePos(c *fiber.Ctx) error {
 
 	sql_request.AddPilote(pilote.Licence, pilote.Among, pilote.Staff_id)
 
-	name := if_token(c)
+	name := ifToken(c)
 
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
@@ -160,7 +160,7 @@ func piloteUpdate(c *fiber.Ctx) error {
 
 	sql_request.UpdateTickets(device.Column, device.Value, device.Condition)
 
-	name := if_token(c)
+	name := ifToken(c)
 
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
@@ -180,7 +180,7 @@ func piloteDelete(c *fiber.Ctx) error {
 
 	sql_request.DeleteTickets(c.Params("name"))
 
-	name := if_token(c)
+	name := ifToken(c)
 
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{

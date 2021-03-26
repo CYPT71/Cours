@@ -18,7 +18,7 @@ func DeparturesBootstrap(app fiber.Router) {
 }
 
 func departuresGetlist(c *fiber.Ctx) error {
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
@@ -35,7 +35,7 @@ func departuresGetlist(c *fiber.Ctx) error {
 }
 
 func departuresGetListNow(c *fiber.Ctx) error {
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
@@ -67,7 +67,7 @@ func departuresSetFligth(c *fiber.Ctx) error {
 
 	sql_request.AddDepartures(device.Id_flight, device.Date, device.Pilote, device.Copilote, device.Aircrew, device.Free_places, device.Occupied)
 
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
@@ -93,7 +93,7 @@ func departuresUpdate(c *fiber.Ctx) error {
 	c.BodyParser(&device)
 
 	sql_request.UpdateDepartures(device.Column, device.Value, device.Condition)
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
@@ -114,7 +114,7 @@ func departuresDelete(c *fiber.Ctx) error {
 	c.BodyParser(&device)
 
 	sql_request.DeleteDepartures(device.Condition)
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,

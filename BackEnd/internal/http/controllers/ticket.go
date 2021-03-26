@@ -22,7 +22,7 @@ func TicketsBootstrap(app fiber.Router) {
 }
 
 func ticketGetTotal(c *fiber.Ctx) error {
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
@@ -39,7 +39,7 @@ func ticketGetTotal(c *fiber.Ctx) error {
 }
 
 func ticketsGetlist(c *fiber.Ctx) error {
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
@@ -56,7 +56,7 @@ func ticketsGetlist(c *fiber.Ctx) error {
 }
 
 func ticketsPos(c *fiber.Ctx) error {
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
@@ -82,7 +82,7 @@ func ticketUpdate(c *fiber.Ctx) error {
 	c.BodyParser(&device)
 
 	sql_request.UpdateTickets(device.Column, device.Value, device.Condition)
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
@@ -103,7 +103,7 @@ func ticketDelete(c *fiber.Ctx) error {
 	c.BodyParser(&device)
 
 	sql_request.DeleteTickets(device.Condition)
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,

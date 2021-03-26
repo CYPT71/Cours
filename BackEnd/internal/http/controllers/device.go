@@ -18,7 +18,7 @@ func DevicesBootstrap(app fiber.Router) {
 }
 
 func devicesGetlist(c *fiber.Ctx) error {
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
@@ -35,7 +35,7 @@ func devicesGetlist(c *fiber.Ctx) error {
 }
 
 func devicesTimes(c *fiber.Ctx) error {
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
@@ -60,7 +60,7 @@ func devicesPost(c *fiber.Ctx) error {
 	var device deviceStruc
 	c.BodyParser(&device)
 	sql_request.AddDevices(device.Capacity, device.Model_type)
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
@@ -87,7 +87,7 @@ func devicesUpdate(c *fiber.Ctx) error {
 	c.BodyParser(&device)
 
 	sql_request.UpdateDevice(device.Column, device.Value, device.Condition)
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
@@ -108,7 +108,7 @@ func devicesDelete(c *fiber.Ctx) error {
 	c.BodyParser(&device)
 
 	sql_request.DeleteDevice(device.Condition)
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,

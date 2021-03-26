@@ -20,7 +20,7 @@ func PassagersBootstrap(app fiber.Router) {
 
 func getPassengerPerFlight(c *fiber.Ctx) error {
 	// domain.RegularPassenger()
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
@@ -38,7 +38,7 @@ func getPassengerPerFlight(c *fiber.Ctx) error {
 
 func getRegularProfession(c *fiber.Ctx) error {
 	// domain.RegularPassenger()
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
@@ -55,7 +55,7 @@ func getRegularProfession(c *fiber.Ctx) error {
 }
 
 func passagersGetlist(c *fiber.Ctx) error {
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
@@ -82,7 +82,7 @@ func passengerUpdate(c *fiber.Ctx) error {
 	c.BodyParser(&device)
 
 	sql_request.UpdatePassenger(device.Column, device.Value, device.Condition)
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
@@ -103,7 +103,7 @@ func passengerDelete(c *fiber.Ctx) error {
 	c.BodyParser(&device)
 
 	sql_request.DeletePassenger(device.Condition)
-	name := if_token(c)
+	name := ifToken(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
