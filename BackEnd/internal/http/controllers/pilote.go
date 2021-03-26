@@ -32,8 +32,8 @@ func piloteGetAmong(c *fiber.Ctx) error {
 	} else {
 		c.JSON(&fiber.Map{
 			"success": true,
-			"value":   sql_request.GetPiloteAmong(),
-			"message": "Hello from the other side",
+			"Captain": sql_request.GetPiloteAmong(),
+			"message": "Hours of flight of a captain",
 		})
 	}
 	return nil
@@ -49,8 +49,8 @@ func piloteArrivalByCapitain(c *fiber.Ctx) error {
 	} else {
 		c.JSON(&fiber.Map{
 			"success": true,
-			"value":   sql_request.GetPiloteDestination(c.Params("name")),
-			"message": "Hello from the other side",
+			"captain": sql_request.GetPiloteDestination(c.Params("name")),
+			"message": "List of destinations served by a captain",
 		})
 	}
 
@@ -67,8 +67,8 @@ func piloteGetlist(c *fiber.Ctx) error {
 	} else {
 		c.JSON(&fiber.Map{
 			"success": true,
-			"value":   sql_request.GetPilote(c.Query("specific"), c.Query("filter")),
-			"message": "Hello from the other side",
+			"List":    sql_request.GetPilote(c.Query("specific"), c.Query("filter")),
+			"message": "List of pilots",
 		})
 	}
 	return nil
@@ -105,7 +105,7 @@ func piloteGetlistRenewLissence(c *fiber.Ctx) error {
 		c.JSON(&fiber.Map{
 			"succes":  true,
 			"value":   pilotes_info,
-			"message": "pilotes details info",
+			"message": "License renewal",
 		})
 	}
 	return nil
@@ -132,7 +132,7 @@ func pilotePos(c *fiber.Ctx) error {
 	} else {
 		c.JSON(&fiber.Map{
 			"success": true,
-			"message": "Hello from the other side",
+			"message": "Pilote added",
 		})
 	}
 	return nil
@@ -158,7 +158,7 @@ func piloteUpdate(c *fiber.Ctx) error {
 	} else {
 		c.JSON(&fiber.Map{
 			"success": true,
-			"message": "Set ticket",
+			"message": "Update ticket",
 		})
 	}
 	return nil
@@ -176,7 +176,7 @@ func piloteDelete(c *fiber.Ctx) error {
 	} else {
 		c.JSON(&fiber.Map{
 			"success": true,
-			"message": "Set passenger",
+			"message": "Delete passenger",
 		})
 	}
 	return nil

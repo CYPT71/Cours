@@ -12,7 +12,7 @@ type Passenger struct {
 	Id         int    `json:"id"`
 	Name       string `json:"name"`
 	First_name string `json:"first_name"`
-	Address    string `json:"adress"`
+	Address    string `json:"address"`
 	Profession string `json:"profession"`
 	Bank       string `json:"bank"`
 	Ticket_id  int    `json:"ticket_id"`
@@ -29,7 +29,7 @@ func AddPassenger(Name string, First_name string, Address string, Profession str
 	defer db.Close()
 
 	// perform a db.Query insert
-	insert, err := db.Query("INSERT INTO `passenger`(`name`, `first_name`, `adress`, `profession`, `bank`, `ticket_id`) VALUES (?, ?, ?, ?, ?, ?)",
+	insert, err := db.Query("INSERT INTO `passenger`(`name`, `first_name`, `address`, `profession`, `bank`, `ticket_id`) VALUES (?, ?, ?, ?, ?, ?)",
 		Name, First_name, Address, Profession, Bank, Ticket_id)
 
 	//if there is an error inserting, handle it
@@ -128,7 +128,7 @@ func ListPassengerperFlight() []map[string]interface{} {
 	type Passengers struct {
 		Name      string `json:"name"`
 		FirstName string `json:"first_name"`
-		Address   string `json:"adress"`
+		Address   string `json:"address"`
 		TicketId  string `json:"ticket_id"`
 	}
 
@@ -160,7 +160,7 @@ func ListPassengerperFlight() []map[string]interface{} {
 	for selecte.Next() {
 		var idsRoute QueryIdRoute
 		selecte.Scan(&idsRoute.IdRoute)
-		query := "SELECT name, first_name, adress, ticket_id FROM flight JOIN tickets ON tickets.departures_id = flight.id_departures JOIN passenger ON passenger.ticket_id = tickets.id WHERE id_route = " + strconv.Itoa(idsRoute.IdRoute)
+		query := "SELECT name, first_name, address, ticket_id FROM `flight` JOIN `tickets` ON tickets.departures_id = flight.id_departures JOIN `passenger` ON passenger.ticket_id = tickets.id WHERE id_route = " + strconv.Itoa(idsRoute.IdRoute)
 
 		select_sub, err := db.Query(query)
 		if err != nil {
@@ -206,7 +206,7 @@ func MostRegularProfession() []map[string]interface{} {
 
 	defer db.Close()
 
-	query := "SELECT profession, MAX(regular) \"passengers\" FROM (SELECT profession, COUNT(profession) AS \"regular\" FROM passenger GROUP BY profession) as tab1 GROUP BY profession ORDER BY profession DESC;"
+	query := "SELECT profession, MAX(regular) \"passengers\" FROM (SELECT profession, COUNT(profession) AS \"regular\" FROM `passenger` GROUP BY profession) as tab1 GROUP BY profession ORDER BY profession DESC;"
 	selecte, err := db.Query(query)
 
 	if err != nil {

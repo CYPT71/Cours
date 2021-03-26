@@ -13,7 +13,7 @@ type Employees struct {
 	SocialSecurity int    `json:"social_security"`
 	Name           string `json:"name"`
 	FirstName      string `json:"first_name"`
-	Adress         string `json:"address"`
+	Address        string `json:"address"`
 }
 
 func AddEmployees(Aicrew int, Ground int, Social_security int, Name string, First_name string, Address string) {
@@ -71,7 +71,7 @@ func GetEmployees(selector string, filter string) []map[string]interface{} {
 	for results.Next() {
 		var tag Employees
 
-		err = results.Scan(&tag.Id, &tag.Salary, &tag.SocialSecurity, &tag.Name, &tag.FirstName, &tag.Adress)
+		err = results.Scan(&tag.Id, &tag.Salary, &tag.SocialSecurity, &tag.Name, &tag.FirstName, &tag.Address)
 		if err != nil {
 			panic(err.Error()) // proper error handling instead of panic in your app
 		}
@@ -81,7 +81,7 @@ func GetEmployees(selector string, filter string) []map[string]interface{} {
 			"first name":      tag.FirstName,
 			"social security": tag.SocialSecurity,
 		})
-		//log.Print(tag.Id, tag.Salary, tag.SocialSecurity, tag.Name, tag.FirstName, tag.Adress)
+		//log.Print(tag.Id, tag.Salary, tag.SocialSecurity, tag.Name, tag.FirstName, tag.Address)
 	}
 
 	return return_val

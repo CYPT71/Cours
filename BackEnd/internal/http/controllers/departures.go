@@ -27,8 +27,8 @@ func departuresGetlist(c *fiber.Ctx) error {
 	} else {
 		c.JSON(&fiber.Map{
 			"success": true,
-			"value":   sql_request.GetDepartures(c.Query("specific"), c.Query("filter")),
-			"message": "Hello from the other side",
+			"Liste":   sql_request.GetDepartures(c.Query("specific"), c.Query("filter")),
+			"message": "List of departures of Sup airline",
 		})
 	}
 	return nil
@@ -76,16 +76,16 @@ func departuresSetFligth(c *fiber.Ctx) error {
 	} else {
 		c.JSON(&fiber.Map{
 			"success": true,
-			"message": "Set Departus",
+			"message": "Set Departures",
 		})
 	}
 	return nil
 }
 
 type updatedepart struct {
-	Column    string `json:"Column"`
-	Value     string `json:"Value"`
-	Condition string `json:"Condition"`
+	Column    string `json:"column"`
+	Value     string `json:"value"`
+	Condition string `json:"condition"`
 }
 
 func departuresUpdate(c *fiber.Ctx) error {
@@ -102,7 +102,7 @@ func departuresUpdate(c *fiber.Ctx) error {
 	} else {
 		c.JSON(&fiber.Map{
 			"success": true,
-			"message": "Set Departus",
+			"message": "Update Departures",
 		})
 	}
 	return nil
@@ -123,7 +123,7 @@ func departuresDelete(c *fiber.Ctx) error {
 	} else {
 		c.JSON(&fiber.Map{
 			"success": true,
-			"message": "Set Departus",
+			"message": "Delete Departures",
 		})
 	}
 	return nil

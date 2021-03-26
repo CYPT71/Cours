@@ -9,10 +9,10 @@ import (
 )
 
 type Pilote struct {
-	Id       int       `json:"Id"`
-	License  time.Time `json:"Licence"`
-	Among    time.Time `json:"Among"`
-	Staff_Id int       `json:"Staff_id"`
+	Id       int       `json:"id"`
+	License  time.Time `json:"licence"`
+	Among    time.Time `json:"among"`
+	Staff_Id int       `json:"staff_id"`
 }
 
 func GetPilote(selector string, filter string) []map[string]interface{} {
@@ -128,7 +128,7 @@ func GetPiloteAmong() []map[string]interface{} {
 
 	defer db.Close()
 
-	query := "SELECT name, first_name, among FROM pilote JOIN employees ON pilote.staff_id = employees.id JOIN departures ON pilote.id = departures.pilote;"
+	query := "SELECT name, first_name, among FROM `pilote` JOIN `employees` ON pilote.staff_id = employees.id JOIN `departures` ON pilote.id = departures.pilote;"
 
 	selecte, err := db.Query(query)
 
@@ -170,7 +170,7 @@ func GetPiloteDestination(name string) []map[string]interface{} {
 
 	defer db.Close()
 
-	query := "SELECT name, first_name, route.origin, route.arrival FROM pilote JOIN employees ON pilote.staff_id = employees.id JOIN departures ON pilote.id = departures.pilote JOIN flight ON departures.id = flight.id_departures 	JOIN route ON route.id = flight.id_route WHERE name = \"" + name + "\";"
+	query := "SELECT name, first_name, route.origin, route.arrival FROM `pilote` JOIN `employees` ON pilote.staff_id = employees.id JOIN `departures` ON pilote.id = departures.pilote JOIN `flight` ON departures.id = flight.id_departures JOIN `route` ON route.id = flight.id_route WHERE name = \"" + name + "\";"
 
 	selecte, err := db.Query(query)
 

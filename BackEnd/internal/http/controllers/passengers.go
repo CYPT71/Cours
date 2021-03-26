@@ -28,9 +28,9 @@ func getPassengerPerFlight(c *fiber.Ctx) error {
 		})
 	} else {
 		c.JSON(&fiber.Map{
-			"success": true,
-			"value":   sql_request.ListPassengerperFlight(),
-			"message": "Hello from the other side",
+			"success":   true,
+			"Passenger": sql_request.ListPassengerperFlight(),
+			"message":   "List of passengers per flight",
 		})
 	}
 	return nil
@@ -48,7 +48,7 @@ func getRegularProfession(c *fiber.Ctx) error {
 		c.JSON(&fiber.Map{
 			"success": true,
 			"value":   sql_request.MostRegularProfession(),
-			"message": "Hello from the other side",
+			"message": "List of regularity of professions",
 		})
 	}
 	return nil
@@ -64,8 +64,8 @@ func passagersGetlist(c *fiber.Ctx) error {
 	} else {
 		c.JSON(&fiber.Map{
 			"success": true,
-			"value":   sql_request.GetPassenger("", ""),
-			"message": "Hello from the other side",
+			"List":    sql_request.GetPassenger("", ""),
+			"message": "List of passengers",
 		})
 	}
 	return nil
@@ -91,7 +91,7 @@ func passengerUpdate(c *fiber.Ctx) error {
 	} else {
 		c.JSON(&fiber.Map{
 			"success": true,
-			"message": "Set passenger",
+			"message": "Update passenger",
 		})
 	}
 	return nil
@@ -112,7 +112,7 @@ func passengerDelete(c *fiber.Ctx) error {
 	} else {
 		c.JSON(&fiber.Map{
 			"success": true,
-			"message": "Set passenger",
+			"message": "Delete passenger",
 		})
 	}
 	return nil

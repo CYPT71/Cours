@@ -27,8 +27,8 @@ func devicesGetlist(c *fiber.Ctx) error {
 	} else {
 		c.JSON(&fiber.Map{
 			"success": true,
-			"value":   sql_request.GetDevices(c.Query("specific"), c.Query("filter")),
-			"message": "Hello from the other side",
+			"List":    sql_request.GetDevices(c.Query("specific"), c.Query("filter")),
+			"message": "List of avaiables flights",
 		})
 	}
 	return nil
@@ -45,7 +45,7 @@ func devicesTimes(c *fiber.Ctx) error {
 		c.JSON(&fiber.Map{
 			"success": true,
 			"value":   sql_request.DeviveHours(),
-			"message": "Hello from the other side",
+			"message": "flight hours per flight",
 		})
 	}
 	return nil
@@ -77,9 +77,9 @@ func devicesPost(c *fiber.Ctx) error {
 }
 
 type updateDevices struct {
-	Column    string `json:"Column"`
-	Value     string `json:"Value"`
-	Condition string `json:"Condition"`
+	Column    string `json:"column"`
+	Value     string `json:"value"`
+	Condition string `json:"condition"`
 }
 
 func devicesUpdate(c *fiber.Ctx) error {

@@ -31,8 +31,8 @@ func ticketGetTotal(c *fiber.Ctx) error {
 	} else {
 		c.JSON(&fiber.Map{
 			"success": true,
-			"value":   sql_request.TotalSales(),
-			"message": "Hello from the other side",
+			"Total":   sql_request.TotalSales(),
+			"message": "Total sales",
 		})
 	}
 	return nil
@@ -48,8 +48,8 @@ func ticketsGetlist(c *fiber.Ctx) error {
 	} else {
 		c.JSON(&fiber.Map{
 			"success": true,
-			"value":   sql_request.GetTickets(c.Query("selector"), c.Query("filter")),
-			"message": "Hello from the other side",
+			"List":    sql_request.GetTickets(c.Query("selector"), c.Query("filter")),
+			"message": "List of tickets",
 		})
 	}
 	return nil
@@ -65,7 +65,7 @@ func ticketsPos(c *fiber.Ctx) error {
 	} else {
 		c.JSON(&fiber.Map{
 			"success": true,
-			"message": "Hello from the other side",
+			"message": "Ticket added",
 		})
 	}
 	return nil
@@ -91,7 +91,7 @@ func ticketUpdate(c *fiber.Ctx) error {
 	} else {
 		c.JSON(&fiber.Map{
 			"success": true,
-			"message": "Set ticket",
+			"message": "Update ticket",
 		})
 	}
 	return nil
@@ -112,7 +112,7 @@ func ticketDelete(c *fiber.Ctx) error {
 	} else {
 		c.JSON(&fiber.Map{
 			"success": true,
-			"message": "Set passenger",
+			"message": "Delete ticket",
 		})
 	}
 	return nil

@@ -130,7 +130,7 @@ func GetFlightByCity(city string) []map[string]interface{} {
 
 	defer db.Close()
 
-	query := "SELECT device.type FROM flight JOIN route ON route.id = flight.id_route JOIN device ON device.id = flight.id_device WHERE route.arrival = \"" + city + "\";"
+	query := "SELECT device.type FROM `flight` JOIN `route` ON route.id = flight.id_route JOIN `device` ON device.id = flight.id_device WHERE route.arrival = \"" + city + "\";"
 
 	selecte, err := db.Query(query)
 

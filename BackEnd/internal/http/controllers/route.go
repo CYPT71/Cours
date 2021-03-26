@@ -27,8 +27,8 @@ func routeGetlist(c *fiber.Ctx) error {
 	} else {
 		c.JSON(&fiber.Map{
 			"success": true,
-			"value":   sql_request.GetRoute(c.Query("specific"), c.Query("filter")),
-			"message": "Hello from the other side",
+			"List":    sql_request.GetRoute(c.Query("specific"), c.Query("filter")),
+			"message": "List of travels",
 		})
 	}
 	return nil
@@ -45,7 +45,7 @@ func DeservedCities(c *fiber.Ctx) error {
 		c.JSON(&fiber.Map{
 			"success": true,
 			"value":   sql_request.GetRoute("origin", ""),
-			"message": "deserved cities",
+			"message": "desserved cities",
 		})
 	}
 	return nil
@@ -61,7 +61,7 @@ func routePos(c *fiber.Ctx) error {
 	} else {
 		c.JSON(&fiber.Map{
 			"success": true,
-			"message": "Hello from the other side",
+			"message": "Route added",
 		})
 	}
 	return nil
@@ -87,7 +87,7 @@ func routeUpdate(c *fiber.Ctx) error {
 	} else {
 		c.JSON(&fiber.Map{
 			"success": true,
-			"message": "Set ticket",
+			"message": "Update ticket",
 		})
 	}
 	return nil
@@ -108,7 +108,7 @@ func routeDelete(c *fiber.Ctx) error {
 	} else {
 		c.JSON(&fiber.Map{
 			"success": true,
-			"message": "Set passenger",
+			"message": "Delete passenger",
 		})
 	}
 	return nil

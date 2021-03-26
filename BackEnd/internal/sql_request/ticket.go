@@ -123,7 +123,7 @@ func TotalSales() int {
 
 	defer db.Close()
 
-	query := "SELECT SUM(price)  AS `total` FROM tickets;"
+	query := "SELECT SUM(price)  AS `total` FROM `tickets`;"
 
 	selecte, err := db.Query(query)
 

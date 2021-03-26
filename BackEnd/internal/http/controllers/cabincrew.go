@@ -27,8 +27,8 @@ func cabincrewGetlist(c *fiber.Ctx) error {
 	} else {
 		c.JSON(&fiber.Map{
 			"success": true,
-			"value":   sql_request.GetCabincrew(c.Query("specific"), c.Query("filter")),
-			"message": "Hello from the other side",
+			"List":    sql_request.GetCabincrew(c.Query("specific"), c.Query("filter")),
+			"message": "List of members of the cabincrew",
 		})
 	}
 	return nil
@@ -61,9 +61,9 @@ func cabincrewPost(c *fiber.Ctx) error {
 }
 
 type updatecabincrew struct {
-	Column    string `json:"Column"`
-	Value     string `json:"Value"`
-	Condition string `json:"Condition"`
+	Column    string `json:"column"`
+	Value     string `json:"value"`
+	Condition string `json:"condition"`
 }
 
 func cabincrewUpdate(c *fiber.Ctx) error {

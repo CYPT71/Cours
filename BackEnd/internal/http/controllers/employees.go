@@ -30,8 +30,8 @@ func employeesGetlist(c *fiber.Ctx) error {
 	} else {
 		c.JSON(&fiber.Map{
 			"success": true,
-			"value":   sql_request.GetEmployees("", ""),
-			"message": "Hello from the other side",
+			"List":    sql_request.GetEmployees("", ""),
+			"message": "List of employees",
 		})
 	}
 	return nil
@@ -60,14 +60,17 @@ func employeesGetByCategories(c *fiber.Ctx) error {
 }
 
 type EmployeesStruc struct {
-	Capacity   int    `json:"capacity"`
-	Model_type string `json:"model_type"`
+	Salary          int    `json:"salary"`
+	Social_security int    `json:"social_security"`
+	Name            string `json:"name"`
+	First_name      string `json:"first_name"`
+	Address         string `json:"address"`
 }
 
 func employeePost(c *fiber.Ctx) error {
-	var device deviceStruc
-	c.BodyParser(&device)
-	sql_request.AddDevices(device.Capacity, device.Model_type)
+	var employees deviceStruc
+	c.BodyParser(&employees)
+	sql_request.AddDevices(employees.Capacity, employees.Model_type)
 	name := if_token(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
@@ -78,7 +81,7 @@ func employeePost(c *fiber.Ctx) error {
 
 		c.JSON(&fiber.Map{
 			"success": true,
-			"message": "You added " + device.Model_type,
+			"message": "You added ",
 		})
 	}
 	return nil
@@ -92,10 +95,10 @@ type updateEmployees struct {
 }
 
 func employeesUpdate(c *fiber.Ctx) error {
-	var device updateEmployees
-	c.BodyParser(&device)
+	var employees updateEmployees
+	c.BodyParser(&employees)
 
-	sql_request.UpdateEmployees(device.Column, device.Value, device.Condition)
+	sql_request.UpdateEmployees(employees.Column, employees.Value, employees.Condition)
 	name := if_token(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{
@@ -113,10 +116,10 @@ func employeesUpdate(c *fiber.Ctx) error {
 
 func employeesDelete(c *fiber.Ctx) error {
 
-	var device updateEmployees
-	c.BodyParser(&device)
+	var employees updateEmployees
+	c.BodyParser(&employees)
 
-	sql_request.DeleteEmployees(device.Condition)
+	sql_request.DeleteEmployees(employees.Condition)
 	name := if_token(c)
 	if name == "" {
 		c.Status(401).JSON(&fiber.Map{

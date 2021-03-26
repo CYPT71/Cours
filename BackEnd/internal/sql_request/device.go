@@ -119,7 +119,7 @@ func DeviveHours() []map[string]interface{} {
 
 	defer db.Close()
 
-	query := "SELECT type, SEC_TO_TIME(SUM(TIME_TO_SEC(among))) AS \"flight hours\" FROM pilote JOIN departures ON pilote.id = departures.pilote JOIN flight ON departures.id = flight.id_departures JOIN device ON device.id = flight.id_device GROUP BY device.id;"
+	query := "SELECT type, SEC_TO_TIME(SUM(TIME_TO_SEC(among))) AS \"flight hours\" FROM `pilote` JOIN `departures` ON pilote.id = departures.pilote JOIN `flight` ON departures.id = flight.id_departures JOIN `device` ON device.id = flight.id_device GROUP BY device.id;"
 
 	selecte, err := db.Query(query)
 
