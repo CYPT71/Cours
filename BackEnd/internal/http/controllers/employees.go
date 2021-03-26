@@ -23,7 +23,7 @@ func EmployeesBootstrap(app fiber.Router) {
 func employeesGetlist(c *fiber.Ctx) error {
 	name := if_token(c)
 	if name == "" {
-		c.JSON(&fiber.Map{
+		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
 		})
@@ -40,7 +40,7 @@ func employeesGetlist(c *fiber.Ctx) error {
 func employeesGetByCategories(c *fiber.Ctx) error {
 	name := if_token(c)
 	if name == "" {
-		c.JSON(&fiber.Map{
+		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
 		})
@@ -70,7 +70,7 @@ func employeePost(c *fiber.Ctx) error {
 	sql_request.AddDevices(device.Capacity, device.Model_type)
 	name := if_token(c)
 	if name == "" {
-		c.JSON(&fiber.Map{
+		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
 		})
@@ -98,7 +98,7 @@ func employeesUpdate(c *fiber.Ctx) error {
 	sql_request.UpdateEmployees(device.Column, device.Value, device.Condition)
 	name := if_token(c)
 	if name == "" {
-		c.JSON(&fiber.Map{
+		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
 		})
@@ -119,7 +119,7 @@ func employeesDelete(c *fiber.Ctx) error {
 	sql_request.DeleteEmployees(device.Condition)
 	name := if_token(c)
 	if name == "" {
-		c.JSON(&fiber.Map{
+		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
 		})

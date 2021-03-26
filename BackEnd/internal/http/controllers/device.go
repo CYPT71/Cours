@@ -20,7 +20,7 @@ func DevicesBootstrap(app fiber.Router) {
 func devicesGetlist(c *fiber.Ctx) error {
 	name := if_token(c)
 	if name == "" {
-		c.JSON(&fiber.Map{
+		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
 		})
@@ -37,7 +37,7 @@ func devicesGetlist(c *fiber.Ctx) error {
 func devicesTimes(c *fiber.Ctx) error {
 	name := if_token(c)
 	if name == "" {
-		c.JSON(&fiber.Map{
+		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
 		})
@@ -62,7 +62,7 @@ func devicesPost(c *fiber.Ctx) error {
 	sql_request.AddDevices(device.Capacity, device.Model_type)
 	name := if_token(c)
 	if name == "" {
-		c.JSON(&fiber.Map{
+		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
 		})
@@ -89,7 +89,7 @@ func devicesUpdate(c *fiber.Ctx) error {
 	sql_request.UpdateDevice(device.Column, device.Value, device.Condition)
 	name := if_token(c)
 	if name == "" {
-		c.JSON(&fiber.Map{
+		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
 		})
@@ -110,7 +110,7 @@ func devicesDelete(c *fiber.Ctx) error {
 	sql_request.DeleteDevice(device.Condition)
 	name := if_token(c)
 	if name == "" {
-		c.JSON(&fiber.Map{
+		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
 		})

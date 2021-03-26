@@ -22,7 +22,7 @@ func getPassengerPerFlight(c *fiber.Ctx) error {
 	// domain.RegularPassenger()
 	name := if_token(c)
 	if name == "" {
-		c.JSON(&fiber.Map{
+		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
 		})
@@ -40,7 +40,7 @@ func getRegularProfession(c *fiber.Ctx) error {
 	// domain.RegularPassenger()
 	name := if_token(c)
 	if name == "" {
-		c.JSON(&fiber.Map{
+		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
 		})
@@ -57,7 +57,7 @@ func getRegularProfession(c *fiber.Ctx) error {
 func passagersGetlist(c *fiber.Ctx) error {
 	name := if_token(c)
 	if name == "" {
-		c.JSON(&fiber.Map{
+		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
 		})
@@ -84,7 +84,7 @@ func passengerUpdate(c *fiber.Ctx) error {
 	sql_request.UpdatePassenger(device.Column, device.Value, device.Condition)
 	name := if_token(c)
 	if name == "" {
-		c.JSON(&fiber.Map{
+		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
 		})
@@ -105,7 +105,7 @@ func passengerDelete(c *fiber.Ctx) error {
 	sql_request.DeletePassenger(device.Condition)
 	name := if_token(c)
 	if name == "" {
-		c.JSON(&fiber.Map{
+		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
 		})

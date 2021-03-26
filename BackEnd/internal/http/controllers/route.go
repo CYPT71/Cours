@@ -18,29 +18,52 @@ func RouteBootstrap(app fiber.Router) {
 }
 
 func routeGetlist(c *fiber.Ctx) error {
-	c.JSON(&fiber.Map{
-		"success": true,
-		"value":   sql_request.GetRoute(c.Query("specific"), c.Query("filter")),
-		"message": "Hello from the other side",
-	})
+	name := if_token(c)
+	if name == "" {
+		c.Status(401).JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success": true,
+			"value":   sql_request.GetRoute(c.Query("specific"), c.Query("filter")),
+			"message": "Hello from the other side",
+		})
+	}
 	return nil
 }
 
 func DeservedCities(c *fiber.Ctx) error {
-	c.JSON(&fiber.Map{
-		"success": true,
-		"value":   sql_request.GetRoute("origin", ""),
-		"message": "deserved cities",
-	})
+	name := if_token(c)
+	if name == "" {
+		c.Status(401).JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success": true,
+			"value":   sql_request.GetRoute("origin", ""),
+			"message": "deserved cities",
+		})
+	}
 	return nil
 }
 
 func routePos(c *fiber.Ctx) error {
-
-	c.JSON(&fiber.Map{
-		"success": true,
-		"message": "Hello from the other side",
-	})
+	name := if_token(c)
+	if name == "" {
+		c.Status(401).JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success": true,
+			"message": "Hello from the other side",
+		})
+	}
 	return nil
 }
 
@@ -57,7 +80,7 @@ func routeUpdate(c *fiber.Ctx) error {
 	sql_request.UpdateTickets(device.Column, device.Value, device.Condition)
 	name := if_token(c)
 	if name == "" {
-		c.JSON(&fiber.Map{
+		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
 		})
@@ -78,7 +101,7 @@ func routeDelete(c *fiber.Ctx) error {
 	sql_request.DeleteTickets(device.Condition)
 	name := if_token(c)
 	if name == "" {
-		c.JSON(&fiber.Map{
+		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
 		})

@@ -18,21 +18,36 @@ func DeparturesBootstrap(app fiber.Router) {
 }
 
 func departuresGetlist(c *fiber.Ctx) error {
-
-	c.JSON(&fiber.Map{
-		"success": true,
-		"value":   sql_request.GetDepartures(c.Query("specific"), c.Query("filter")),
-		"message": "Hello from the other side",
-	})
+	name := if_token(c)
+	if name == "" {
+		c.Status(401).JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success": true,
+			"value":   sql_request.GetDepartures(c.Query("specific"), c.Query("filter")),
+			"message": "Hello from the other side",
+		})
+	}
 	return nil
 }
 
 func departuresGetListNow(c *fiber.Ctx) error {
-	c.JSON(&fiber.Map{
-		"success": true,
-		"value":   sql_request.GetDepartures("", "date == CURRENT_DATE()"),
-		"message": "Departures for the date",
-	})
+	name := if_token(c)
+	if name == "" {
+		c.Status(401).JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success": true,
+			"value":   sql_request.GetDepartures("", "date == CURRENT_DATE()"),
+			"message": "Departures for the date",
+		})
+	}
 	return nil
 }
 
@@ -54,7 +69,7 @@ func departuresSetFligth(c *fiber.Ctx) error {
 
 	name := if_token(c)
 	if name == "" {
-		c.JSON(&fiber.Map{
+		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
 		})
@@ -80,7 +95,7 @@ func departuresUpdate(c *fiber.Ctx) error {
 	sql_request.UpdateDepartures(device.Column, device.Value, device.Condition)
 	name := if_token(c)
 	if name == "" {
-		c.JSON(&fiber.Map{
+		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
 		})
@@ -101,7 +116,7 @@ func departuresDelete(c *fiber.Ctx) error {
 	sql_request.DeleteDepartures(device.Condition)
 	name := if_token(c)
 	if name == "" {
-		c.JSON(&fiber.Map{
+		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
 		})

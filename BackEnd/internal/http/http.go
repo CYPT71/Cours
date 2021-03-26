@@ -36,6 +36,8 @@ func Run() {
 	controllers.PiloteBootstrap(app.Group("/pilote"))
 	controllers.CabincrewBootstrap(app.Group("/cabincrew"))
 
+	controllers.GetTokenLogin(app.Group("/login"))
+
 	// Setup CORS/CSRF
 	app.Use(middlewares.CORS())
 	app.Use(middlewares.CSRF())

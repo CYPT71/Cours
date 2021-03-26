@@ -22,7 +22,7 @@ func getToken(c *fiber.Ctx) error {
 	/// FwZa3PjGN1hrD1mk/71Pxj/pAXdh5fC4bxV2eSu00OPKxfFw0WSCPEujaP4pSsVxw9SD+1Y5pvxFnffoeLPSxJyY0HPrrKGOvBRwnfwLBa51HMPS5C/DCj6WQodpyHCiEWfNUZmJZ0lLfBWP+cPQJ5L4I1MiyjYdU3N5X+HNhgkYbcPSzJNAOdW+FeXi8SdvBLIcOqGWuWO3uffKFlBH9I0AjiSxYeAywidZZ2yzMdBMGYKLr2eDaQ7NdblF5aCRh+EFs7U+24414RFhKVNGmYMYvGsTKDJy4gg7wooB8gp3rftG3iseproRQ0tOhA/j8t9mci4vxefmkWWwXy119Q==
 
 	claims := token.Claims.(jwt.MapClaims)
-	claims["name"] = "John Doe"
+	claims["name"] = "Cortney Knorr"
 	claims["admin"] = true
 
 	t, err := token.SignedString([]byte("FwZa3PjGN1hrD1mk/71Pxj/pAXdh5fC4bxV2eSu00OPKxfFw0WSCPEujaP4pSsVxw9SD+1Y5pvxFnffoeLPSxJyY0HPrrKGOvBRwnfwLBa51HMPS5C/DCj6WQodpyHCiEWfNUZmJZ0lLfBWP+cPQJ5L4I1MiyjYdU3N5X+HNhgkYbcPSzJNAOdW+FeXi8SdvBLIcOqGWuWO3uffKFlBH9I0AjiSxYeAywidZZ2yzMdBMGYKLr2eDaQ7NdblF5aCRh+EFs7U+24414RFhKVNGmYMYvGsTKDJy4gg7wooB8gp3rftG3iseproRQ0tOhA/j8t9mci4vxefmkWWwXy119Q=="))
@@ -35,8 +35,8 @@ func getToken(c *fiber.Ctx) error {
 }
 
 func if_token(c *fiber.Ctx) string {
-	user := c.Locals("user").(*jwt.Token)
-	claims := user.Claims.(jwt.MapClaims)
-	name := claims["name"].(string)
-	return name
+	// user := c.Locals("user").(*jwt.Token)
+	// claims := user.Claims.(jwt.MapClaims)
+	// name := claims["name"].(string)
+	return "name"
 }
