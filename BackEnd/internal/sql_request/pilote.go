@@ -3,16 +3,15 @@ package sql_request
 import (
 	"airflight/internal/utils"
 	"database/sql"
-	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
 type Pilote struct {
-	Id       int       `json:"id"`
-	License  time.Time `json:"licence"`
-	Among    time.Time `json:"among"`
-	Staff_Id int       `json:"staff_id"`
+	Id       int    `json:"id"`
+	License  string `json:"licence"`
+	Among    string `json:"among"`
+	Staff_Id int    `json:"staff_id"`
 }
 
 func GetPilote(selector string, filter string) []map[string]interface{} {
@@ -52,8 +51,8 @@ func GetPilote(selector string, filter string) []map[string]interface{} {
 		}
 		return_val = append(return_val, map[string]interface{}{
 			"Id":       tag.Id,
-			"License":  tag.License.Format(time.UnixDate),
-			"Among":    tag.Among.Format(time.UnixDate),
+			"License":  tag.License,
+			"Among":    tag.Among,
 			"Staff id": tag.Staff_Id,
 		})
 	}
