@@ -1,7 +1,9 @@
 package controllers
 
 import (
-	"github.com/form3tech-oss/jwt-go"
+	"log"
+
+	jwt "github.com/form3tech-oss/jwt-go"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -35,7 +37,12 @@ func getToken(c *fiber.Ctx) error {
 }
 
 func if_token(c *fiber.Ctx) string {
-	// user := c.Locals("user").(*jwt.Token)
+
+	user := c.Locals("user")
+
+	log.Print(user)
+
+	log.Print(user)
 	// claims := user.Claims.(jwt.MapClaims)
 	// name := claims["name"].(string)
 	return "name"

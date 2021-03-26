@@ -13,6 +13,8 @@ import (
 	"airflight/internal/utils"
 
 	"airflight/internal/http/middlewares"
+
+	jwtware "github.com/gofiber/jwt/v2"
 )
 
 func Run() {
@@ -34,6 +36,8 @@ func Run() {
 	controllers.PiloteBootstrap(app.Group("/pilote"))
 	controllers.CabincrewBootstrap(app.Group("/cabincrew"))
 
+	controllers.GetTokenLogin(app.Group("/login"))
+
 	// Setup CORS/CSRF
 	app.Use(middlewares.CORS())
 	app.Use(middlewares.CSRF())
@@ -44,6 +48,10 @@ func Run() {
 
 	// Pprof - Profiling (Remove for production environment)
 	app.Use(pprof.New())
+
+	app.Use(jwtware.New(jwtware.Config{
+		SigningKey: []byte("FwZa3PjGN1hrD1mk/71Pxj/pAXdh5fC4bxV2eSu00OPKxfFw0WSCPEujaP4pSsVxw9SD+1Y5pvxFnffoeLPSxJyY0HPrrKGOvBRwnfwLBa51HMPS5C/DCj6WQodpyHCiEWfNUZmJZ0lLfBWP+cPQJ5L4I1MiyjYdU3N5X+HNhgkYbcPSzJNAOdW+FeXi8SdvBLIcOqGWuWO3uffKFlBH9I0AjiSxYeAywidZZ2yzMdBMGYKLr2eDaQ7NdblF5aCRh+EFs7U+24414RFhKVNGmYMYvGsTKDJy4gg7wooB8gp3rftG3iseproRQ0tOhA/j8t9mci4vxefmkWWwXy119Q=="),
+	}))
 
 	// Prometheus Endpoint
 	prometheus := fiberprometheus.New("airflight")
