@@ -22,30 +22,52 @@ func TicketsBootstrap(app fiber.Router) {
 }
 
 func ticketGetTotal(c *fiber.Ctx) error {
-	c.JSON(&fiber.Map{
-		"success": true,
-		"value":   sql_request.TotalSales(),
-		"message": "Hello from the other side",
-	})
+	name := if_token(c)
+	if name == "" {
+		c.JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success": true,
+			"value":   sql_request.TotalSales(),
+			"message": "Hello from the other side",
+		})
+	}
 	return nil
 }
 
 func ticketsGetlist(c *fiber.Ctx) error {
-
-	c.JSON(&fiber.Map{
-		"success": true,
-		"value":   sql_request.GetTickets(c.Query("selector"), c.Query("filter")),
-		"message": "Hello from the other side",
-	})
+	name := if_token(c)
+	if name == "" {
+		c.JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success": true,
+			"value":   sql_request.GetTickets(c.Query("selector"), c.Query("filter")),
+			"message": "Hello from the other side",
+		})
+	}
 	return nil
 }
 
 func ticketsPos(c *fiber.Ctx) error {
-
-	c.JSON(&fiber.Map{
-		"success": true,
-		"message": "Hello from the other side",
-	})
+	name := if_token(c)
+	if name == "" {
+		c.JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success": true,
+			"message": "Hello from the other side",
+		})
+	}
 	return nil
 }
 
@@ -60,10 +82,18 @@ func ticketUpdate(c *fiber.Ctx) error {
 	c.BodyParser(&device)
 
 	sql_request.UpdateTickets(device.Column, device.Value, device.Condition)
-	c.JSON(&fiber.Map{
-		"success": true,
-		"message": "Set ticket",
-	})
+	name := if_token(c)
+	if name == "" {
+		c.JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success": true,
+			"message": "Set ticket",
+		})
+	}
 	return nil
 }
 
@@ -73,9 +103,17 @@ func ticketDelete(c *fiber.Ctx) error {
 	c.BodyParser(&device)
 
 	sql_request.DeleteTickets(device.Condition)
-	c.JSON(&fiber.Map{
-		"success": true,
-		"message": "Set passenger",
-	})
+	name := if_token(c)
+	if name == "" {
+		c.JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success": true,
+			"message": "Set passenger",
+		})
+	}
 	return nil
 }

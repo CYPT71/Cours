@@ -62,7 +62,7 @@ func GetPilote(selector string, filter string) []map[string]interface{} {
 
 }
 
-func AddPilote(license time.Time, among time.Time, staff_id int) {
+func AddPilote(license string, among string, staff_id int) {
 
 	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
 

@@ -8,6 +8,7 @@ import (
 )
 
 func CabincrewBootstrap(app fiber.Router) {
+
 	app.Get("/", cabincrewGetlist)
 	app.Post("/", cabincrewPost)
 
@@ -17,12 +18,19 @@ func CabincrewBootstrap(app fiber.Router) {
 }
 
 func cabincrewGetlist(c *fiber.Ctx) error {
-
-	c.JSON(&fiber.Map{
-		"success": true,
-		"value":   sql_request.GetCabincrew(c.Query("specific"), c.Query("filter")),
-		"message": "Hello from the other side",
-	})
+	name := if_token(c)
+	if name == "" {
+		c.JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success": true,
+			"value":   sql_request.GetCabincrew(c.Query("specific"), c.Query("filter")),
+			"message": "Hello from the other side",
+		})
+	}
 	return nil
 }
 
@@ -33,14 +41,21 @@ type cabincrewtruc struct {
 }
 
 func cabincrewPost(c *fiber.Ctx) error {
-	var cabincrew cabincrewtruc
-	c.BodyParser(&cabincrew)
-	sql_request.AddCabincrew(cabincrew.Among, cabincrew.Fonction, cabincrew.Staff_id)
-	c.JSON(&fiber.Map{
-		"success": true,
-		"message": "You added " + cabincrew.Fonction,
-	})
-
+	name := if_token(c)
+	if name == "" {
+		c.JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		var cabincrew cabincrewtruc
+		c.BodyParser(&cabincrew)
+		sql_request.AddCabincrew(cabincrew.Among, cabincrew.Fonction, cabincrew.Staff_id)
+		c.JSON(&fiber.Map{
+			"success": true,
+			"message": "You added " + cabincrew.Fonction,
+		})
+	}
 	return nil
 
 }
@@ -56,10 +71,19 @@ func cabincrewUpdate(c *fiber.Ctx) error {
 	c.BodyParser(&cabincrew)
 
 	sql_request.UpdateCabincrew(cabincrew.Column, cabincrew.Value, cabincrew.Condition)
-	c.JSON(&fiber.Map{
-		"success": true,
-		"message": "Update cabincrew",
-	})
+
+	name := if_token(c)
+	if name == "" {
+		c.JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success": true,
+			"message": "Update cabincrew",
+		})
+	}
 	return nil
 }
 
@@ -69,9 +93,20 @@ func cabincrewDelete(c *fiber.Ctx) error {
 	c.BodyParser(&cabincrew)
 
 	sql_request.DeleteCabincrew(cabincrew.Condition)
-	c.JSON(&fiber.Map{
-		"success": true,
-		"message": "Delete cabincrew",
-	})
+
+	name := if_token(c)
+	if name == "" {
+		c.JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+
+		c.JSON(&fiber.Map{
+			"success": true,
+			"message": "Delete cabincrew",
+		})
+
+	}
 	return nil
 }

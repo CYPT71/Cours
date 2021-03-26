@@ -55,10 +55,18 @@ func routeUpdate(c *fiber.Ctx) error {
 	c.BodyParser(&device)
 
 	sql_request.UpdateTickets(device.Column, device.Value, device.Condition)
-	c.JSON(&fiber.Map{
-		"success": true,
-		"message": "Set ticket",
-	})
+	name := if_token(c)
+	if name == "" {
+		c.JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success": true,
+			"message": "Set ticket",
+		})
+	}
 	return nil
 }
 
@@ -68,9 +76,17 @@ func routeDelete(c *fiber.Ctx) error {
 	c.BodyParser(&device)
 
 	sql_request.DeleteTickets(device.Condition)
-	c.JSON(&fiber.Map{
-		"success": true,
-		"message": "Set passenger",
-	})
+	name := if_token(c)
+	if name == "" {
+		c.JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success": true,
+			"message": "Set passenger",
+		})
+	}
 	return nil
 }

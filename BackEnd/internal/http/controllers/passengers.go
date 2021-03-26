@@ -20,33 +20,54 @@ func PassagersBootstrap(app fiber.Router) {
 
 func getPassengerPerFlight(c *fiber.Ctx) error {
 	// domain.RegularPassenger()
-	c.JSON(&fiber.Map{
-		"success": true,
-		"value":   sql_request.ListPassengerperFlight(),
-		"message": "Hello from the other side",
-	})
-
+	name := if_token(c)
+	if name == "" {
+		c.JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success": true,
+			"value":   sql_request.ListPassengerperFlight(),
+			"message": "Hello from the other side",
+		})
+	}
 	return nil
 }
 
 func getRegularProfession(c *fiber.Ctx) error {
 	// domain.RegularPassenger()
-	c.JSON(&fiber.Map{
-		"success": true,
-		"value":   sql_request.MostRegularProfession(),
-		"message": "Hello from the other side",
-	})
-
+	name := if_token(c)
+	if name == "" {
+		c.JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success": true,
+			"value":   sql_request.MostRegularProfession(),
+			"message": "Hello from the other side",
+		})
+	}
 	return nil
 }
 
 func passagersGetlist(c *fiber.Ctx) error {
-
-	c.JSON(&fiber.Map{
-		"success": true,
-		"value":   sql_request.GetPassenger("", ""),
-		"message": "Hello from the other side",
-	})
+	name := if_token(c)
+	if name == "" {
+		c.JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success": true,
+			"value":   sql_request.GetPassenger("", ""),
+			"message": "Hello from the other side",
+		})
+	}
 	return nil
 }
 
@@ -61,10 +82,18 @@ func passengerUpdate(c *fiber.Ctx) error {
 	c.BodyParser(&device)
 
 	sql_request.UpdatePassenger(device.Column, device.Value, device.Condition)
-	c.JSON(&fiber.Map{
-		"success": true,
-		"message": "Set passenger",
-	})
+	name := if_token(c)
+	if name == "" {
+		c.JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success": true,
+			"message": "Set passenger",
+		})
+	}
 	return nil
 }
 
@@ -74,9 +103,17 @@ func passengerDelete(c *fiber.Ctx) error {
 	c.BodyParser(&device)
 
 	sql_request.DeletePassenger(device.Condition)
-	c.JSON(&fiber.Map{
-		"success": true,
-		"message": "Set passenger",
-	})
+	name := if_token(c)
+	if name == "" {
+		c.JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success": true,
+			"message": "Set passenger",
+		})
+	}
 	return nil
 }

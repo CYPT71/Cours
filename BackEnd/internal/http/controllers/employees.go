@@ -21,25 +21,40 @@ func EmployeesBootstrap(app fiber.Router) {
 }
 
 func employeesGetlist(c *fiber.Ctx) error {
-
-	c.JSON(&fiber.Map{
-		"success": true,
-		"value":   sql_request.GetEmployees("", ""),
-		"message": "Hello from the other side",
-	})
+	name := if_token(c)
+	if name == "" {
+		c.JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success": true,
+			"value":   sql_request.GetEmployees("", ""),
+			"message": "Hello from the other side",
+		})
+	}
 	return nil
 }
 
 func employeesGetByCategories(c *fiber.Ctx) error {
-	c.JSON(&fiber.Map{
-		"success": true,
-		"value": map[string]interface{}{
-			"Pilotes":      sql_request.GetEmployees("", "`id` in (SELECT `staff_id` FROM `pilote`)"),
-			"cabin crew":   sql_request.GetEmployees("", "`id` in (SELECT `staff_id` FROM `cabincrew`)"),
-			"ground staff": sql_request.GetEmployees("", "`id`  NOT in (SELECT `staff_id` FROM `pilote`) AND `id` NOT IN (SELECT `staff_id` FROM `cabincrew`)"),
-		},
-		"message": "personnel by categores",
-	})
+	name := if_token(c)
+	if name == "" {
+		c.JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success": true,
+			"value": map[string]interface{}{
+				"Pilotes":      sql_request.GetEmployees("", "`id` in (SELECT `staff_id` FROM `pilote`)"),
+				"cabin crew":   sql_request.GetEmployees("", "`id` in (SELECT `staff_id` FROM `cabincrew`)"),
+				"ground staff": sql_request.GetEmployees("", "`id`  NOT in (SELECT `staff_id` FROM `pilote`) AND `id` NOT IN (SELECT `staff_id` FROM `cabincrew`)"),
+			},
+			"message": "personnel by categores",
+		})
+	}
 
 	return nil
 }
@@ -53,11 +68,19 @@ func employeePost(c *fiber.Ctx) error {
 	var device deviceStruc
 	c.BodyParser(&device)
 	sql_request.AddDevices(device.Capacity, device.Model_type)
-	c.JSON(&fiber.Map{
-		"success": true,
-		"message": "You added " + device.Model_type,
-	})
+	name := if_token(c)
+	if name == "" {
+		c.JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
 
+		c.JSON(&fiber.Map{
+			"success": true,
+			"message": "You added " + device.Model_type,
+		})
+	}
 	return nil
 
 }
@@ -73,10 +96,18 @@ func employeesUpdate(c *fiber.Ctx) error {
 	c.BodyParser(&device)
 
 	sql_request.UpdateEmployees(device.Column, device.Value, device.Condition)
-	c.JSON(&fiber.Map{
-		"success": true,
-		"message": "Update Employees",
-	})
+	name := if_token(c)
+	if name == "" {
+		c.JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success": true,
+			"message": "Update Employees",
+		})
+	}
 	return nil
 }
 
@@ -86,9 +117,17 @@ func employeesDelete(c *fiber.Ctx) error {
 	c.BodyParser(&device)
 
 	sql_request.DeleteEmployees(device.Condition)
-	c.JSON(&fiber.Map{
-		"success": true,
-		"message": "Delete Employees",
-	})
+	name := if_token(c)
+	if name == "" {
+		c.JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success": true,
+			"message": "Delete Employees",
+		})
+	}
 	return nil
 }

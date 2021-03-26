@@ -13,6 +13,8 @@ import (
 	"airflight/internal/utils"
 
 	"airflight/internal/http/middlewares"
+
+	jwtware "github.com/gofiber/jwt/v2"
 )
 
 func Run() {
@@ -23,7 +25,7 @@ func Run() {
 	// Create fiber app
 	app := fiber.New()
 
-	// Setup routes
+	// Setup routes"
 	controllers.DeparturesBootstrap(app.Group("/departures"))
 	controllers.DevicesBootstrap(app.Group("/devices"))
 	controllers.EmployeesBootstrap(app.Group("/employees"))
@@ -41,7 +43,9 @@ func Run() {
 	app.Use(logger.New())
 	// Setup Limiter - Need to be configured before
 	// app.Use(limiter.New())
-
+	app.Use(jwtware.New(jwtware.Config{
+		SigningKey: []byte("FwZa3PjGN1hrD1mk/71Pxj/pAXdh5fC4bxV2eSu00OPKxfFw0WSCPEujaP4pSsVxw9SD+1Y5pvxFnffoeLPSxJyY0HPrrKGOvBRwnfwLBa51HMPS5C/DCj6WQodpyHCiEWfNUZmJZ0lLfBWP+cPQJ5L4I1MiyjYdU3N5X+HNhgkYbcPSzJNAOdW+FeXi8SdvBLIcOqGWuWO3uffKFlBH9I0AjiSxYeAywidZZ2yzMdBMGYKLr2eDaQ7NdblF5aCRh+EFs7U+24414RFhKVNGmYMYvGsTKDJy4gg7wooB8gp3rftG3iseproRQ0tOhA/j8t9mci4vxefmkWWwXy119Q=="),
+	}))
 	// Pprof - Profiling (Remove for production environment)
 	app.Use(pprof.New())
 
