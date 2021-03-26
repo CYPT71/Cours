@@ -27,7 +27,7 @@ func departuresGetlist(c *fiber.Ctx) error {
 	} else {
 		c.JSON(&fiber.Map{
 			"success": true,
-			"Liste":   sql_request.GetDepartures(c.Query("specific"), c.Query("filter")),
+			"List":    sql_request.GetDepartures(c.Query("specific"), c.Query("filter")),
 			"message": "List of departures of Sup airline",
 		})
 	}
