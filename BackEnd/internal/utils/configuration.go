@@ -15,8 +15,9 @@ type Configuration struct {
 }
 
 type ServerConfiguration struct {
-	Port    string `yaml:"port"`
-	Address string `yaml:"address"`
+	Port      string `yaml:"port"`
+	Address   string `yaml:"address"`
+	SecretKey string `yaml:"secretKey"`
 }
 
 type MysqlConfiguration struct {
