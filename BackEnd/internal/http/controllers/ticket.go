@@ -14,7 +14,7 @@ func TicketsBootstrap(app fiber.Router) {
 
 	app.Get("/total", ticketGetTotal)
 
-	app.Put("/", ticketsPos)
+	app.Post("/", ticketsPos)
 
 	app.Patch("/", ticketUpdate)
 

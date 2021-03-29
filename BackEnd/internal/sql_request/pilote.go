@@ -9,7 +9,7 @@ import (
 
 type Pilote struct {
 	Id       int    `json:"id"`
-	License  string `json:"licence"`
+	License  string `json:"license"`
 	Among    string `json:"among"`
 	Staff_Id int    `json:"staff_id"`
 }
@@ -71,8 +71,11 @@ func AddPilote(license string, among string, staff_id int) {
 
 	defer db.Close()
 
+	if license == "" || among == "" {
+		return
+	}
 	// perform a db.Query insert
-	insert, err := db.Query("INSERT INTO `pilote`(`licence`, `among`, `staff_id`) VALUES  VALUES (?, ?, ?)",
+	insert, err := db.Query("INSERT INTO `pilote`(`license`, `among`, `staff_id`) VALUES (?, ?, ?)",
 		license, among, staff_id)
 
 	//if there is an error inserting, handle it

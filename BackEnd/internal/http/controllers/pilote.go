@@ -101,7 +101,7 @@ func piloteGetlistDetails(c *fiber.Ctx) error {
 }
 
 func piloteGetlistRenewLissence(c *fiber.Ctx) error {
-	pilotes_info := sql_request.GetEmployees("", "`id` in (SELECT `staff_id` FROM `pilote` WHERE licence <= DATE_ADD(CURRENT_DATE(), INTERVAL 3 MONTH))")
+	pilotes_info := sql_request.GetEmployees("", "`id` in (SELECT `staff_id` FROM `pilote` WHERE license <= DATE_ADD(CURRENT_DATE(), INTERVAL 3 MONTH))")
 
 	name := ifToken(c)
 
@@ -123,14 +123,20 @@ func piloteGetlistRenewLissence(c *fiber.Ctx) error {
 func pilotePos(c *fiber.Ctx) error {
 
 	type addPilote struct {
-		Licence  string `json:"licence"`
+		License  string `json:"license"`
 		Among    string `json:"among"`
 		Staff_id int    `json:"staff_id"`
 	}
 	var pilote addPilote
 	c.BodyParser(&pilote)
 
-	sql_request.AddPilote(pilote.Licence, pilote.Among, pilote.Staff_id)
+	if pilote.License == "" || pilote.Among == "" || pilote.Staff_id == 0 {
+		c.Status(401).JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	}
+	sql_request.AddPilote(pilote.License, pilote.Among, pilote.Staff_id)
 
 	name := ifToken(c)
 
