@@ -6,98 +6,76 @@
 \begin{document}
 
     \maketitle
-
-    \section{SQL table}
-        On part sur 5 tables 
-           \,\, employees, flights and device, customer and ticket
-
-        la table employees avec 
+    \section{introduction}
         
-            \begin{itemize}
-                \centering
-                \item id $\Rightarrow$ identifiant unique 
-                \item aircrew $\Rightarrow$ Boolean représantant si c'est une Otesse de bord
-                \item ground staff $\Rightarrow$ Booleab représantant le reste des employés
-                \item social security number $\Rightarrow$ Numéro de sécurité social
-                \item name $\Rightarrow$ nom de l'employé 
-                \item first name $\Rightarrow$ prénom de l'employé
-                \item address $\Rightarrow$ adresse de l'employé
-                \item role id $\Rightarrow$ L'id du rôle et de c'est spécification
-            \end{itemize}
-        
-        Pilote 
-            \begin{itemize}
-                \centering
-                \item id $\Rightarrow$ identifiant unique 
-                \item license $\Rightarrow$ License de vole 
-            \end{itemize}
-        
-        CabinCrew 
-            \begin{itemize}
-                \centering
-                \item id $\Rightarrow$ identifiant unique
-                \item among fligth $\Rightarrow$ nombre d'heure de vole
-                \item fonction $\Rightarrow$ fonction du membre
-            \end{itemize}
-                
-        \.\\
-        La table device avec         
-            \begin{itemize}
-                \centering
-                \item id $\Rightarrow$ identifiant de l'avion
-                \item type $\Rightarrow$ type de l'avion
-                \item capacity $\Rightarrow$ L a capacité de l'avion                
-            \end{itemize}
-        
-        la tabe route
-            \begin{itemize}
-                \centering
-                \item id 
-                \item city origin
-                \item city arrival
-            \end{itemize}
-        
-        la table flights
-            \begin{itemize}
-                \centering
-                \item id
-                \item valid period
-            \end{itemize}
-        
-        la table departus
-            \begin{itemize}
-                \centering
-                \item id 
-                \item id flight 
-                \item date $\Rightarrow$ departures time
-                \item pilote $\Rightarrow$ pilote identifiant
-                \item copilote $\Rightarrow$ copilote identifiant
-                \item Otesse $\Rightarrow$ Nombre et id otesse
-                \item free places
-                \item number of occupied places
-                \item ticket id
-            \end{itemize}
-
-        La table passenger 
-            \begin{itemize}
-                \centering
-                \item id 
-                \item name
-                \item address
-                \item profession
-                \item bank 
-                \item reservations
-            \end{itemize}
-        la table ticket 
-            \begin{itemize}
-                \centering
-                \item id 
-                \item date
-                \item price
-            \end{itemize}
-            
+    In this document we will see how we proced the task and why we make the golang chose for programming, after that we will speak about the tools we use.
 
 
+    The projet is on our github in two part, first part is purlly the backend and maybe in the future the front end in two separates files. \newline\newline
 
+    The seconde part is functionnal, it permit to create table, fill it and run it. We have also put a docker file to create the mysql server and PhpMyAdmin.
+   
+    
+    \section{Backend Part}
+
+    We choose golang for the backend because is more efficency and fastest than python. 
+
+    We enter in the Backend file witch contains files and folders.
+
+    The .air.toml we see is a config file for auto reload the API.
+
+    The config.yaml is the config file for the API.
+
+    The file go.mod and go.sum is for the golang modules.
+
+    We see a directory named internal.
+
+        In internal
+
+    we see three directories
+        \begin{enumerate}
+            \item http
+            \item sql request
+            \item utils
+        \end{enumerate}
+
+    the utils is for loadding configuration into the server \newline\newline
+
+    the folder http contains two directories and one file " http.go ". The file is like the main file for running the API.  
+
+    The folder middlewares contain securty constrain and controllers all the handler for the API. \newline\newline
+
+    Back to the sql request folder, it contains just all the code for making request to the data base. \newline\newline
+
+    Each tables have it handler and it sql request file. \newline
+    
+    \section{Request Possibillity}
+
+    \begin{itemize}
+        \item List of company aircraft
+        \item List of Sup Air Line pilots
+        \item List of personnel by category
+        \item List of passengers per flight
+        \item List of flights to a given city
+        \item List of departures for the day
+        \item List of cities served by Sup Air Line
+        \item List of destinations served by a captain
+        \item List of pilots whose license must be renewed
+        \item Lists of regular passengers who fly more than 2 flights / month
+        \item Professions with the most regular passengers
+        \item Number of hours worked by a captain
+        \item Number of flight hours of each aircraft
+        \item Number of passengers transported by plane over a given period
+        \item Number of passengers carried over a given period
+        \item Number of tickets sold per day / week / month
+        \item Total sales
+        \item Average flights per pilot
+        \item Most profitable destinations (high occupancy rate)
+        \item Average occupancy rate by plane / flight / destination
+        \item Which pilots fly to their city
+        \item Create Data for all tables
+        \item Update Data for all tables
+        \item Delete Data for all tables 
+    \end{itemize}
 
 \end{document}
