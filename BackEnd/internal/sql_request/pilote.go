@@ -201,6 +201,50 @@ func GetPiloteDestination(name string) []map[string]interface{} {
 }
 
 /*func GetAverageFlight() {
+db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
+if err != nil {
+	panic(err.Error())
+}
+
+defer db.Close()
+
+query := ""
+
+selecte, err := db.Query(query)
+
+if err != nil {
+	panic(err.Error())
+}
+
+var result []map[string]interface{}
+
+for selecte.Next() {
+	var tag PiloteRoute
+	selecte.Scan(&tag.Name, &tag.FirstName, &tag.Depart, &tag.Arrival)
+	if err != nil {
+		panic(err.Error()) // proper error handling instead of panic in your app
+	}
+	result = append(result, map[string]interface{}{
+		"Name":       tag.Name,
+		"First Name": tag.FirstName,
+		"Depart":     tag.Depart,
+		"Arrival":    tag.Arrival,
+	})
+}
+
+return result
+
+
+}*/
+
+func CityOfThePilot() []map[string]interface{} {
+
+	type PilotByArrival struct {
+		Name         string
+		FirstName    string
+		RouteArrival string
+	}
+
 	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
 	if err != nil {
 		panic(err.Error())
@@ -208,7 +252,22 @@ func GetPiloteDestination(name string) []map[string]interface{} {
 
 	defer db.Close()
 
-	query := ""
+	query := `
+		SELECT 
+			name, 
+			first_name, 
+			route.arrival 
+		FROM 
+			pilote 
+				JOIN employees 
+					ON pilote.staff_id = employees.id 
+				JOIN departures 
+					ON pilote.id = departures.pilote 
+				JOIN flight 
+					ON departures.id = flight.id_departures 
+				JOIN route 
+					ON route.id = flight.id_route 
+		WHERE employees.address LIKE CONCAT("%", route.arrival, "%")`
 
 	selecte, err := db.Query(query)
 
@@ -219,19 +278,16 @@ func GetPiloteDestination(name string) []map[string]interface{} {
 	var result []map[string]interface{}
 
 	for selecte.Next() {
-		var tag PiloteRoute
-		selecte.Scan(&tag.Name, &tag.FirstName, &tag.Depart, &tag.Arrival)
+		var tag PilotByArrival
+		selecte.Scan(&tag.Name, &tag.FirstName, &tag.RouteArrival)
 		if err != nil {
 			panic(err.Error()) // proper error handling instead of panic in your app
 		}
 		result = append(result, map[string]interface{}{
 			"Name":       tag.Name,
 			"First Name": tag.FirstName,
-			"Depart":     tag.Depart,
-			"Arrival":    tag.Arrival,
+			"Arrival":    tag.RouteArrival,
 		})
 	}
-
 	return result
-
-}*/
+}

@@ -10,16 +10,36 @@ func PiloteBootstrap(app fiber.Router) {
 	app.Get("/details", piloteGetlist)
 	app.Get("/", piloteGetlistDetails)
 
-	app.Get("/:name", piloteArrivalByCapitain)
-
 	app.Get("/flightHours", piloteGetAmong)
+
+	app.Get("/pilotArrival", pilotByArrival)
+
+	app.Get("/:name", piloteArrivalByCapitain)
 
 	app.Post("/", pilotePos)
 
 	app.Patch("/", piloteUpdate)
 
 	app.Delete("/:name", piloteDelete)
+}
 
+func pilotByArrival(c *fiber.Ctx) error {
+
+	name := ifToken(c)
+
+	if name == "" {
+		c.Status(401).JSON(&fiber.Map{
+			"success": false,
+			"message": "Unauthorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success": true,
+			"List":    sql_request.CityOfThePilot(),
+			"message": "Which pilots flies to their cities",
+		})
+	}
+	return nil
 }
 
 func piloteGetAmong(c *fiber.Ctx) error {
@@ -35,7 +55,7 @@ func piloteGetAmong(c *fiber.Ctx) error {
 		c.JSON(&fiber.Map{
 			"success": true,
 			"value":   sql_request.GetPiloteAmong(),
-			"message": "Hello from the other side",
+			"message": "Flight hours",
 		})
 	}
 	return nil
@@ -54,7 +74,7 @@ func piloteArrivalByCapitain(c *fiber.Ctx) error {
 		c.JSON(&fiber.Map{
 			"success": true,
 			"value":   sql_request.GetPiloteDestination(c.Params("name")),
-			"message": "Hello from the other side",
+			"message": "destinations served by a captain",
 		})
 	}
 
@@ -73,8 +93,8 @@ func piloteGetlist(c *fiber.Ctx) error {
 	} else {
 		c.JSON(&fiber.Map{
 			"success": true,
-			"value":   sql_request.GetPilote(c.Query("specific"), c.Query("filter")),
-			"message": "Hello from the other side",
+			"List":    sql_request.GetPilote(c.Query("specific"), c.Query("filter")),
+			"message": "List of pilots",
 		})
 	}
 	return nil
@@ -148,7 +168,7 @@ func pilotePos(c *fiber.Ctx) error {
 	} else {
 		c.JSON(&fiber.Map{
 			"success": true,
-			"message": "Hello from the other side",
+			"message": "You added a pilot",
 		})
 	}
 	return nil

@@ -21,7 +21,12 @@ func Run() {
 	conf := utils.GetConfig()
 
 	// Create fiber app
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		Prefork:       true,
+		ServerHeader:  "Air Crash",
+		StrictRouting: true,
+		ProxyHeader:   "Sup Info AirLine",
+	})
 
 	// Setup routes
 	controllers.DeparturesBootstrap(app.Group("/departures"))

@@ -141,3 +141,86 @@ func TotalSales() int {
 
 	return result
 }
+
+func SoldsPer(interval string) []map[string]interface{} {
+
+	type Solds struct {
+		Number string
+		Date   string
+	}
+
+	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer db.Close()
+
+	var query string
+
+	switch interval {
+	default:
+		query = `
+		SELECT
+			COUNT(tickets.id) as "Number",
+			date_format(tickets.expire, '%Y-%m') as "month"
+		FROM
+			tickets
+		GROUP by month
+	
+		ORDER BY Number DESC;`
+		break
+	case "month":
+		query = `
+			SELECT
+				COUNT(tickets.id) AS "Number",
+				date_format(tickets.expire, '%Y-%m') as "month"
+			FROM
+				tickets
+			GROUP by month
+		
+			ORDER BY Number DESC;`
+	case "day":
+		query = `
+			SELECT
+    			COUNT(tickets.id) as "Number",
+    			date_format(tickets.expire, '%Y-%m-%d') as "month"
+			FROM
+    			tickets
+			GROUP by month
+
+			ORDER BY Number DESC;`
+	case "week":
+		query = `
+			SELECT
+				COUNT(tickets.id) AS "Number",
+				STR_TO_DATE(CONCAT(YEARWEEK(tickets.expire),' Monday'), '%X%V %W') AS "week" 
+			FROM
+				tickets
+			GROUP by STR_TO_DATE(CONCAT(YEARWEEK(tickets.expire),' Monday'), '%X%V %W')
+
+			ORDER BY STR_TO_DATE(CONCAT(YEARWEEK(tickets.expire), ' Monday'), '%X%V %W') DESC`
+
+	}
+
+	selecte, err := db.Query(query)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	var result []map[string]interface{}
+
+	for selecte.Next() {
+		var tag Solds
+		selecte.Scan(&tag.Number, &tag.Date)
+		if err != nil {
+			panic(err.Error()) // proper error handling instead of panic in your app
+		}
+		result = append(result, map[string]interface{}{
+			"Number": tag.Number,
+			"Date":   tag.Date,
+		})
+	}
+	return result
+}

@@ -153,3 +153,60 @@ func GetFlightByCity(city string) []map[string]interface{} {
 	return return_val
 
 }
+
+func OccupancyRate() []map[string]interface{} {
+
+	type OccupancyRate struct {
+		Arrival   string
+		Occupancy int
+	}
+
+	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer db.Close()
+
+	query := `
+		SELECT
+			route.arrival,
+			COUNT(route.arrival) AS "Occupancy rate"
+		FROM
+			departures
+			JOIN tickets 
+				ON tickets.departures_id = departures.id
+			JOIN passenger 
+				ON passenger.ticket_id = tickets.id
+			JOIN flight 
+				ON flight.id_departures = departures.id
+			JOIN route 
+				ON route.id = flight.id_route
+		GROUP BY
+			route.arrival
+		ORDER BY
+			COUNT(route.arrival)
+		DESC
+			;`
+
+	selecte, err := db.Query(query)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	var result []map[string]interface{}
+
+	for selecte.Next() {
+		var tag OccupancyRate
+		selecte.Scan(&tag.Arrival, &tag.Occupancy)
+		if err != nil {
+			panic(err.Error()) // proper error handling instead of panic in your app
+		}
+		result = append(result, map[string]interface{}{
+			"Arrival":        tag.Arrival,
+			"Occupancy Rate": tag.Occupancy,
+		})
+	}
+	return result
+}

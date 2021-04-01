@@ -12,6 +12,8 @@ import (
 func FligthsBootstrap(app fiber.Router) {
 	app.Get("/", flightsGetlist)
 
+	app.Get("/occupancyRate", occupancyRate)
+
 	app.Get("/:city", cityGetFLight)
 
 	app.Patch("/", departuresUpdate)
@@ -35,6 +37,23 @@ func cityGetFLight(c *fiber.Ctx) error {
 		})
 	}
 
+	return nil
+}
+
+func occupancyRate(c *fiber.Ctx) error {
+	name := ifToken(c)
+	if name == "" {
+		c.Status(401).JSON(&fiber.Map{
+			"success": false,
+			"message": "Unauthorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success":        true,
+			"Occupancy Rate": sql_request.OccupancyRate(),
+			"message":        "Most profitable destinations",
+		})
+	}
 	return nil
 }
 
