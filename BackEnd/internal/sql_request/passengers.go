@@ -229,3 +229,55 @@ func MostRegularProfession() []map[string]interface{} {
 	return result
 
 }
+
+func MostRegularPassenger() []map[string]interface{} {
+
+	type MostRegular struct {
+		Name          string
+		FirstName     string
+		NumberTickets int
+	}
+
+	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer db.Close()
+
+	query := `
+		SELECT
+			passenger.name,
+			passenger.first_name,
+			COUNT(tickets.id) as "c"
+		FROM passenger
+
+			JOIN tickets 
+				ON tickets.id = passenger.ticket_id
+
+		GROUP BY date_format(tickets.expire, '%Y-%m'), passenger.name, passenger.first_name
+
+		HAVING c >= 2;`
+
+	selecte, err := db.Query(query)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	var result []map[string]interface{}
+
+	for selecte.Next() {
+		var tag MostRegular
+		selecte.Scan(&tag.Name, &tag.FirstName, &tag.NumberTickets)
+		if err != nil {
+			panic(err.Error()) // proper error handling instead of panic in your app
+		}
+		result = append(result, map[string]interface{}{
+			"Name":                                 tag.Name,
+			"First Name":                           tag.FirstName,
+			"highest Number of tickets in a month": tag.NumberTickets,
+		})
+	}
+	return result
+}

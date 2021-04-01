@@ -166,9 +166,7 @@ func SoldsPer(interval string) []map[string]interface{} {
 			date_format(tickets.expire, '%Y-%m') as "month"
 		FROM
 			tickets
-		GROUP by month
-	
-		ORDER BY Number DESC;`
+		GROUP by month;`
 		break
 	case "month":
 		query = `
@@ -177,9 +175,7 @@ func SoldsPer(interval string) []map[string]interface{} {
 				date_format(tickets.expire, '%Y-%m') as "month"
 			FROM
 				tickets
-			GROUP by month
-		
-			ORDER BY Number DESC;`
+			GROUP by month;`
 	case "day":
 		query = `
 			SELECT
@@ -187,9 +183,7 @@ func SoldsPer(interval string) []map[string]interface{} {
     			date_format(tickets.expire, '%Y-%m-%d') as "month"
 			FROM
     			tickets
-			GROUP by month
-
-			ORDER BY Number DESC;`
+			GROUP by month;`
 	case "week":
 		query = `
 			SELECT
@@ -197,9 +191,7 @@ func SoldsPer(interval string) []map[string]interface{} {
 				STR_TO_DATE(CONCAT(YEARWEEK(tickets.expire),' Monday'), '%X%V %W') AS "week" 
 			FROM
 				tickets
-			GROUP by STR_TO_DATE(CONCAT(YEARWEEK(tickets.expire),' Monday'), '%X%V %W')
-
-			ORDER BY STR_TO_DATE(CONCAT(YEARWEEK(tickets.expire), ' Monday'), '%X%V %W') DESC`
+			GROUP by STR_TO_DATE(CONCAT(YEARWEEK(tickets.expire),' Monday'), '%X%V %W');`
 
 	}
 

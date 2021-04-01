@@ -14,6 +14,8 @@ func TicketsBootstrap(app fiber.Router) {
 
 	app.Get("/total", ticketGetTotal)
 
+	app.Get("/:interval", soldsPer)
+
 	app.Post("/", ticketsPos)
 
 	app.Patch("/", ticketUpdate)
@@ -33,6 +35,23 @@ func ticketGetTotal(c *fiber.Ctx) error {
 			"success": true,
 			"Total":   sql_request.TotalSales(),
 			"message": "Total sales",
+		})
+	}
+	return nil
+}
+
+func soldsPer(c *fiber.Ctx) error {
+	name := ifToken(c)
+	if name == "" {
+		c.Status(401).JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success":                          true,
+			"Solds per" + c.Params("interval"): sql_request.SoldsPer(c.Params("interval")),
+			"message":                          "Solds per" + c.Params("interval"),
 		})
 	}
 	return nil

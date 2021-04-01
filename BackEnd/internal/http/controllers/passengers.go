@@ -13,6 +13,8 @@ func PassagersBootstrap(app fiber.Router) {
 
 	app.Get("/perFlight", getPassengerPerFlight)
 
+	app.Get("/mostRegular", regularPassenger)
+
 	app.Patch("/", departuresUpdate)
 
 	app.Delete("/", departuresDelete)
@@ -113,6 +115,23 @@ func passengerDelete(c *fiber.Ctx) error {
 		c.JSON(&fiber.Map{
 			"success": true,
 			"message": "Delete passenger",
+		})
+	}
+	return nil
+}
+
+func regularPassenger(c *fiber.Ctx) error {
+	name := ifToken(c)
+	if name == "" {
+		c.Status(401).JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success": true,
+			"List":    sql_request.MostRegularPassenger(),
+			"message": "List of regular passengers (2 or more flights per month)",
 		})
 	}
 	return nil
