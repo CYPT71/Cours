@@ -26,8 +26,8 @@ func PassagersBootstrap(app fiber.Router) {
 
 func getPassengerPerFlight(c *fiber.Ctx) error {
 	// domain.RegularPassenger()
-	name := ifToken(c)
-	if name == "" {
+
+	if ifToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -44,8 +44,8 @@ func getPassengerPerFlight(c *fiber.Ctx) error {
 
 func getRegularProfession(c *fiber.Ctx) error {
 	// domain.RegularPassenger()
-	name := ifToken(c)
-	if name == "" {
+
+	if ifToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -61,8 +61,8 @@ func getRegularProfession(c *fiber.Ctx) error {
 }
 
 func passagersGetlist(c *fiber.Ctx) error {
-	name := ifToken(c)
-	if name == "" {
+
+	if ifToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -88,8 +88,8 @@ func passengerUpdate(c *fiber.Ctx) error {
 	c.BodyParser(&device)
 
 	sql_request.UpdatePassenger(device.Column, device.Value, device.Condition)
-	name := ifToken(c)
-	if name == "" {
+
+	if ifToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -109,8 +109,8 @@ func passengerDelete(c *fiber.Ctx) error {
 	c.BodyParser(&device)
 
 	sql_request.DeletePassenger(device.Condition)
-	name := ifToken(c)
-	if name == "" {
+
+	if ifToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -125,8 +125,8 @@ func passengerDelete(c *fiber.Ctx) error {
 }
 
 func regularPassenger(c *fiber.Ctx) error {
-	name := ifToken(c)
-	if name == "" {
+
+	if ifToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",

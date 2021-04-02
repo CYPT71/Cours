@@ -18,8 +18,8 @@ func CabincrewBootstrap(app fiber.Router) {
 }
 
 func cabincrewGetlist(c *fiber.Ctx) error {
-	name := ifToken(c)
-	if name == "" {
+
+	if ifToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -41,8 +41,8 @@ type cabincrewtruc struct {
 }
 
 func cabincrewPost(c *fiber.Ctx) error {
-	name := ifToken(c)
-	if name == "" {
+
+	if ifToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -72,8 +72,7 @@ func cabincrewUpdate(c *fiber.Ctx) error {
 
 	sql_request.UpdateCabincrew(cabincrew.Column, cabincrew.Value, cabincrew.Condition)
 
-	name := ifToken(c)
-	if name == "" {
+	if ifToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -94,8 +93,7 @@ func cabincrewDelete(c *fiber.Ctx) error {
 
 	sql_request.DeleteCabincrew(cabincrew.Condition)
 
-	name := ifToken(c)
-	if name == "" {
+	if ifToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
