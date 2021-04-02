@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"airflight/internal/sql_request"
-	"log"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -94,8 +93,12 @@ func piloteGetlist(c *fiber.Ctx) error {
 }
 
 func piloteGetlistDetails(c *fiber.Ctx) error {
-	log.Print(ifToken(c))
 	if ifToken(c) {
+		return c.Status(401).JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
 		pilotes_info := sql_request.GetEmployees("", "`id` in (SELECT `staff_id` FROM `pilote`)")
 
 		c.JSON(&fiber.Map{
@@ -103,13 +106,7 @@ func piloteGetlistDetails(c *fiber.Ctx) error {
 			"value":   pilotes_info,
 			"message": "pilotes details info",
 		})
-		return nil
 	}
-	c.Status(401).JSON(&fiber.Map{
-		"success": false,
-		"message": "Unautorized",
-	})
-
 	return nil
 }
 
