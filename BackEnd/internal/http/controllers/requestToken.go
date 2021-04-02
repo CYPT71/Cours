@@ -5,6 +5,7 @@ import (
 	"log"
 	"regexp"
 	"strings"
+	"time"
 
 	jwt "github.com/form3tech-oss/jwt-go"
 	"github.com/gofiber/fiber/v2"
@@ -26,7 +27,7 @@ func getToken(c *fiber.Ctx) error {
 		return c.SendStatus(fiber.StatusUnauthorized)
 	}
 	// Create token
-	Token := jwt.New(jwt.SigningMethodHS256)
+	Token = jwt.New(jwt.SigningMethodHS256)
 
 	claims := Token.Claims.(jwt.MapClaims)
 	claims["name"] = "Cortney Knorr"
@@ -37,6 +38,16 @@ func getToken(c *fiber.Ctx) error {
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
 	TokenString = t
+
+	c.Cookie(&fiber.Cookie{
+		Name: "token",
+		// Set expiry date to the past
+		Expires:  time.Now().Add(-(time.Hour * 2)),
+		HTTPOnly: true,
+		SameSite: "lax",
+		Value:    t,
+	})
+
 	return c.JSON(fiber.Map{"authentificate": t})
 
 }
@@ -44,6 +55,7 @@ func getToken(c *fiber.Ctx) error {
 func ifNotToken(c *fiber.Ctx) bool {
 	reBearer := regexp.MustCompile("(?i)^Bearer ")
 	ts := c.Get("Authorization")
+
 	if !reBearer.MatchString(ts) {
 
 		c.Status(403).SendString("no bearer")
@@ -58,6 +70,6 @@ func ifNotToken(c *fiber.Ctx) bool {
 		log.Print(err)
 		return true
 	}
-
-	return isToken.Raw == TokenString
+	log.Print(isToken.Raw == TokenString)
+	return isToken.Raw != TokenString
 }
