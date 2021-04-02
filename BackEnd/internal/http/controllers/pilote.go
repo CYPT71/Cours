@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"airflight/internal/sql_request"
+	"log"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -25,9 +26,7 @@ func PiloteBootstrap(app fiber.Router) {
 
 func pilotByArrival(c *fiber.Ctx) error {
 
-	name := ifToken(c)
-
-	if name == "" {
+	if ifToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unauthorized",
@@ -44,9 +43,7 @@ func pilotByArrival(c *fiber.Ctx) error {
 
 func piloteGetAmong(c *fiber.Ctx) error {
 
-	name := ifToken(c)
-
-	if name == "" {
+	if ifToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -63,9 +60,7 @@ func piloteGetAmong(c *fiber.Ctx) error {
 
 func piloteArrivalByCapitain(c *fiber.Ctx) error {
 
-	name := ifToken(c)
-
-	if name == "" {
+	if ifToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -83,9 +78,7 @@ func piloteArrivalByCapitain(c *fiber.Ctx) error {
 
 func piloteGetlist(c *fiber.Ctx) error {
 
-	name := ifToken(c)
-
-	if name == "" {
+	if ifToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -101,31 +94,29 @@ func piloteGetlist(c *fiber.Ctx) error {
 }
 
 func piloteGetlistDetails(c *fiber.Ctx) error {
-	pilotes_info := sql_request.GetEmployees("", "`id` in (SELECT `staff_id` FROM `pilote`)")
+	log.Print(ifToken(c))
+	if ifToken(c) {
+		pilotes_info := sql_request.GetEmployees("", "`id` in (SELECT `staff_id` FROM `pilote`)")
 
-	name := ifToken(c)
-
-	if name == "" {
-		c.Status(401).JSON(&fiber.Map{
-			"success": false,
-			"message": "Unautorized",
-		})
-	} else {
 		c.JSON(&fiber.Map{
 			"succes":  true,
 			"value":   pilotes_info,
 			"message": "pilotes details info",
 		})
+		return nil
 	}
+	c.Status(401).JSON(&fiber.Map{
+		"success": false,
+		"message": "Unautorized",
+	})
+
 	return nil
 }
 
 func piloteGetlistRenewLissence(c *fiber.Ctx) error {
 	pilotes_info := sql_request.GetEmployees("", "`id` in (SELECT `staff_id` FROM `pilote` WHERE license <= DATE_ADD(CURRENT_DATE(), INTERVAL 3 MONTH))")
 
-	name := ifToken(c)
-
-	if name == "" {
+	if ifToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -158,9 +149,7 @@ func pilotePos(c *fiber.Ctx) error {
 	}
 	sql_request.AddPilote(pilote.License, pilote.Among, pilote.Staff_id)
 
-	name := ifToken(c)
-
-	if name == "" {
+	if ifToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -186,9 +175,7 @@ func piloteUpdate(c *fiber.Ctx) error {
 
 	sql_request.UpdateTickets(device.Column, device.Value, device.Condition)
 
-	name := ifToken(c)
-
-	if name == "" {
+	if ifToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -206,9 +193,7 @@ func piloteDelete(c *fiber.Ctx) error {
 
 	sql_request.DeleteTickets(c.Params("name"))
 
-	name := ifToken(c)
-
-	if name == "" {
+	if ifToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",

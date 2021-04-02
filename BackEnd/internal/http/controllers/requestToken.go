@@ -2,13 +2,18 @@ package controllers
 
 import (
 	"airflight/internal/utils"
-	"log"
+	"regexp"
 
 	jwt "github.com/form3tech-oss/jwt-go"
 	"github.com/gofiber/fiber/v2"
 )
 
 var Token *jwt.Token
+
+type Claims struct {
+	jwt.StandardClaims
+	Special string `json:"spc,omitempty"`
+}
 
 func GetTokenLogin(app fiber.Router) {
 	app.Post("/", getToken)
@@ -18,8 +23,6 @@ func GetTokenLogin(app fiber.Router) {
 func getToken(c *fiber.Ctx) error {
 	user := c.FormValue("user")
 	pass := c.FormValue("pass")
-
-	log.Print(user, pass)
 
 	if user != "Cortney" || pass != "Knorr" {
 		return c.SendStatus(fiber.StatusUnauthorized)
@@ -36,16 +39,27 @@ func getToken(c *fiber.Ctx) error {
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
 
-	return c.JSON(fiber.Map{"token": t})
+	return c.JSON(fiber.Map{"authentificate": t})
 
 }
 
-func ifToken(c *fiber.Ctx) string {
+func ifToken(c *fiber.Ctx) bool {
+	reBearer := regexp.MustCompile("(?i)^Bearer ")
+	ts := c.Get("Authorization")
+	if !reBearer.MatchString(ts) {
+		c.Status(403).SendString("no bearer")
+		return false
+	}
 
-	user := c.Locals("user")
-
-	log.Print(user)
-	// claims := user.Claims.(jwt.MapClaims)
-	// name := claims["name"].(string)
-	return "name"
+	// _, err := jwt.ParseWithClaims(ts[len("Bearer "):], &Claims{}, func(t *jwt.Token) (interface{}, error) {
+	// 	if _, ok := t.Method.(*jwt.SigningMethodECDSA); !ok {
+	// 		return nil, fmt.Errorf("Unexpected signing method: %v",
+	// 			t.Header["alg"])
+	// 	}
+	// 	return ts, nil
+	// })
+	// if err != nil {
+	// 	return false
+	// }
+	return true
 }

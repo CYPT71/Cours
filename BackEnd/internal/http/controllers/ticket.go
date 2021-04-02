@@ -24,8 +24,8 @@ func TicketsBootstrap(app fiber.Router) {
 }
 
 func ticketGetTotal(c *fiber.Ctx) error {
-	name := ifToken(c)
-	if name == "" {
+
+	if ifToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -41,8 +41,8 @@ func ticketGetTotal(c *fiber.Ctx) error {
 }
 
 func soldsPer(c *fiber.Ctx) error {
-	name := ifToken(c)
-	if name == "" {
+
+	if ifToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -58,8 +58,8 @@ func soldsPer(c *fiber.Ctx) error {
 }
 
 func ticketsGetlist(c *fiber.Ctx) error {
-	name := ifToken(c)
-	if name == "" {
+
+	if ifToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -75,8 +75,8 @@ func ticketsGetlist(c *fiber.Ctx) error {
 }
 
 func ticketsPos(c *fiber.Ctx) error {
-	name := ifToken(c)
-	if name == "" {
+
+	if ifToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -101,8 +101,8 @@ func ticketUpdate(c *fiber.Ctx) error {
 	c.BodyParser(&device)
 
 	sql_request.UpdateTickets(device.Column, device.Value, device.Condition)
-	name := ifToken(c)
-	if name == "" {
+
+	if ifToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -122,8 +122,8 @@ func ticketDelete(c *fiber.Ctx) error {
 	c.BodyParser(&device)
 
 	sql_request.DeleteTickets(device.Condition)
-	name := ifToken(c)
-	if name == "" {
+
+	if ifToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
