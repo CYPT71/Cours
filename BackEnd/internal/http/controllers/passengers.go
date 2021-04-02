@@ -15,6 +15,10 @@ func PassagersBootstrap(app fiber.Router) {
 
 	app.Get("/mostRegular", regularPassenger)
 
+	app.Get("/byPlane/:start/:end", numbOfPassengersByPeriodByPlane)
+
+	app.Get("/total/:start/:end", numbOfPassengersByPeriod)
+
 	app.Patch("/", departuresUpdate)
 
 	app.Delete("/", departuresDelete)
@@ -132,6 +136,40 @@ func regularPassenger(c *fiber.Ctx) error {
 			"success": true,
 			"List":    sql_request.MostRegularPassenger(),
 			"message": "List of regular passengers (2 or more flights per month)",
+		})
+	}
+	return nil
+}
+
+func numbOfPassengersByPeriodByPlane(c *fiber.Ctx) error {
+	name := ifToken(c)
+	if name == "" {
+		c.Status(401).JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success": true,
+			"List":    sql_request.NumbOfPassengersByPeriodByPlane(c.Params("start"), c.Params("end")),
+			"message": "Number of passengers transported by a plane over a given period",
+		})
+	}
+	return nil
+}
+
+func numbOfPassengersByPeriod(c *fiber.Ctx) error {
+	name := ifToken(c)
+	if name == "" {
+		c.Status(401).JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success":              true,
+			"Number of passengers": sql_request.NumbOfPassengersByPeriod(c.Params("start"), c.Params("end"))[0]["Number of passengers"],
+			"message":              "Number of passengers carried over a given period",
 		})
 	}
 	return nil

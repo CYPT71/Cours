@@ -281,3 +281,107 @@ func MostRegularPassenger() []map[string]interface{} {
 	}
 	return result
 }
+
+func NumbOfPassengersByPeriodByPlane(start string, end string) []map[string]interface{} {
+
+	type NumbPassengers struct {
+		NumberOfPassengers int
+		Date               string
+		Type               string
+	}
+
+	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer db.Close()
+
+	query := `
+		SELECT
+			departures.occupied AS "number of passengers transported by plane", departures.date, device.type
+		FROM
+			passenger
+				JOIN tickets 
+					ON passenger.ticket_id = tickets.id
+				JOIN departures 
+					ON tickets.departures_id = departures.id
+				JOIN flight 
+					ON departures.id = flight.id_departures
+				JOIN device 
+					ON device.id = flight.id_device
+		WHERE
+			departures.date BETWEEN `
+	query += "\"" + start + "\" AND \"" + end + "\";"
+
+	selecte, err := db.Query(query)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	var result []map[string]interface{}
+
+	for selecte.Next() {
+		var tag NumbPassengers
+		selecte.Scan(&tag.NumberOfPassengers, &tag.Date, &tag.Type)
+		if err != nil {
+			panic(err.Error()) // proper error handling instead of panic in your app
+		}
+		result = append(result, map[string]interface{}{
+			"Number of passengers": tag.NumberOfPassengers,
+			"Date":                 tag.Date,
+			"Type of the plane":    tag.Type,
+		})
+	}
+	return result
+}
+
+func NumbOfPassengersByPeriod(start string, end string) []map[string]interface{} {
+
+	type NumbPassengers struct {
+		NumberOfPassengers int
+	}
+
+	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer db.Close()
+
+	query := `
+		SELECT
+			SUM(departures.occupied) AS "number of passengers carried"
+		FROM
+			passenger
+				JOIN tickets 
+					ON passenger.ticket_id = tickets.id
+				JOIN departures 
+					ON tickets.departures_id = departures.id
+				JOIN flight 
+					ON departures.id = flight.id_departures
+		WHERE
+			departures.date BETWEEN `
+	query += "\"" + start + "\" AND \"" + end + "\";"
+
+	selecte, err := db.Query(query)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	var result []map[string]interface{}
+
+	for selecte.Next() {
+		var tag NumbPassengers
+		selecte.Scan(&tag.NumberOfPassengers)
+		if err != nil {
+			panic(err.Error()) // proper error handling instead of panic in your app
+		}
+		result = append(result, map[string]interface{}{
+			"Number of passengers": tag.NumberOfPassengers,
+		})
+	}
+	return result
+}

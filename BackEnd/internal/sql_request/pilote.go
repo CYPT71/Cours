@@ -200,42 +200,53 @@ func GetPiloteDestination(name string) []map[string]interface{} {
 
 }
 
-/*func GetAverageFlight() {
-db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
-if err != nil {
-	panic(err.Error())
-}
+func GetAverageFlight() []map[string]interface{} {
 
-defer db.Close()
-
-query := ""
-
-selecte, err := db.Query(query)
-
-if err != nil {
-	panic(err.Error())
-}
-
-var result []map[string]interface{}
-
-for selecte.Next() {
-	var tag PiloteRoute
-	selecte.Scan(&tag.Name, &tag.FirstName, &tag.Depart, &tag.Arrival)
-	if err != nil {
-		panic(err.Error()) // proper error handling instead of panic in your app
+	type Average struct {
+		Average string
 	}
-	result = append(result, map[string]interface{}{
-		"Name":       tag.Name,
-		"First Name": tag.FirstName,
-		"Depart":     tag.Depart,
-		"Arrival":    tag.Arrival,
-	})
+
+	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer db.Close()
+
+	query := `
+		SELECT 
+			MAX(flight.id) / MAX(pilote.id) AS "Average" 
+		FROM 
+			pilote
+
+				JOIN departures 
+					ON departures.pilote = pilote.id
+
+				JOIN flight 
+					ON flight.id_departures = departures.id;`
+
+	selecte, err := db.Query(query)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	var result []map[string]interface{}
+
+	for selecte.Next() {
+		var tag Average
+		selecte.Scan(&tag.Average)
+		if err != nil {
+			panic(err.Error()) // proper error handling instead of panic in your app
+		}
+		result = append(result, map[string]interface{}{
+			"Aerage flights per pilot": tag.Average,
+		})
+	}
+
+	return result
+
 }
-
-return result
-
-
-}*/
 
 func CityOfThePilot() []map[string]interface{} {
 

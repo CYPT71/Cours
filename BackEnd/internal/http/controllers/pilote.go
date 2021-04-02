@@ -14,6 +14,8 @@ func PiloteBootstrap(app fiber.Router) {
 
 	app.Get("/pilotArrival", pilotByArrival)
 
+	app.Get("/average", averageFlightsPerPilot)
+
 	app.Get("/:name", piloteArrivalByCapitain)
 
 	app.Post("/", pilotePos)
@@ -217,6 +219,25 @@ func piloteDelete(c *fiber.Ctx) error {
 		c.JSON(&fiber.Map{
 			"success": true,
 			"message": "Set passenger",
+		})
+	}
+	return nil
+}
+
+func averageFlightsPerPilot(c *fiber.Ctx) error {
+
+	name := ifToken(c)
+
+	if name == "" {
+		c.Status(401).JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success": true,
+			"Aevrage": sql_request.GetAverageFlight(),
+			"message": "Average flights per pilot",
 		})
 	}
 	return nil
