@@ -1,0 +1,249 @@
+<html>
+
+<head></head>
+
+<body><canvas id="canvas" style="border:1px solid #000000;" <="" canvas="">
+        <script>
+            const ROWS = 20;
+            const COLS = 28;
+            const CANVAS_HEIGHT = 500;
+            const CANVAS_WIDTH = 700;
+            const SQUARE = 25;
+            const COLOR = "black";
+            const FOOD = 4;
+            const RIGHT = 5;
+            const LEFT = 6;
+            const UP = 7;
+            const DOWN = 8;
+
+            var cn = document.getElementById("canvas");
+            cn.width = 2 * CANVAS_WIDTH;
+            cn.height = 2 * CANVAS_HEIGHT;
+
+            cn.style.height = CANVAS_HEIGHT + "px";
+            cn.style.width = CANVAS_WIDTH + "px";
+            cn.getContext("2d").scale(2, 2);
+
+            class Board {
+                constructor(rows, cols, square, color) {
+                    this.grid = [];
+                    this.ROWS = rows;
+                    this.COLS = cols;
+                    for (let i = 0; i < rows; i++) {
+                        this.grid.push(new Array(cols));
+                    }
+                    this.SQUARE = square;
+                    this.fill = document.getElementById("canvas").getContext("2d");
+                    this.COLOR = color;
+
+                    this.eat = 0;
+                    let x = 0;
+                    let y = rows - 1;
+                    this.head = new Snode(x, y);
+                    this.grid[y][x] = this.head;
+                    this.tail = this.head;
+                    this.draw(y, x);
+                    this.food = {}; //stores x and y location of food
+                    this.makeFood();
+                    this.lastOrientation = RIGHT;
+                    this.length = 1;
+                    this.hasFood = false;
+                    this.HamiltonianCycle = [...Array(ROWS)].map(e => Array(COLS).fill(0))
+                    this.HamiltonianIndexes = [...Array(ROWS)].map(e => Array(COLS).fill(0))
+                    var i = 0;
+                    var j = rows - 1;
+                    var index = 0;
+                    while(this.HamiltonianCycle[j][i] == 0){
+                        let orient = this.auto(i, j)
+                        this.HamiltonianCycle[j][i] = orient
+                        this.HamiltonianIndexes[j][i] = index;
+                        index++;
+                        this.lastOrientation = orient
+                        if (orient == UP) j--;
+                        else if (orient == DOWN) j++;
+                        else if (orient == RIGHT) i++;
+                        else i--;
+                    }
+                }
+                draw(row, col) {
+                    this.fill.fillStyle = this.COLOR;
+                    this.fill.fillRect(col * 25 + 1, row * 25 + 1, this.SQUARE - 2, this.SQUARE - 2);
+                }
+                erase(row, col) {
+                    this.fill.clearRect(col * 25, row * 25, this.SQUARE, this.SQUARE);
+                }
+                makeFood() {
+                    let y = Math.floor(Math.random() * this.ROWS);
+                    let x = Math.floor(Math.random() * this.COLS);
+                    while (this.grid[y][x] !== undefined && !this.hasFood) {
+                        y = Math.floor(Math.random() * this.ROWS);
+                        x = Math.floor(Math.random() * this.COLS);
+                    }
+                    if (!this.hasFood) {
+                        this.grid[y][x] = FOOD;
+                        this.drawFood(y, x);
+                        this.hasFood = true;
+                        this.food.x = x;
+                        this.food.y = y;
+                    }
+                }
+                drawFood(row, col) {
+                    this.fill.fillStyle = "green";
+                    this.fill.fillRect(col * 25 + 1, row * 25 + 1, this.SQUARE - 2, this.SQUARE - 2);
+                }
+                update(orientation) {
+                    if (this.length > 1) {
+                        if (orientation == UP && this.lastOrientation == DOWN) orientation = DOWN;
+                        if (orientation == DOWN && this.lastOrientation == UP) orientation = UP;
+                        if (orientation == LEFT && this.lastOrientation == RIGHT) orientation = RIGHT;
+                        if (orientation == RIGHT && this.lastOrientation == LEFT) orientation = LEFT;
+                    }
+                    let x = this.head.x;
+                    let y = this.head.y;
+                    if (orientation == UP) y--;
+                    else if (orientation == DOWN) y++;
+                    else if (orientation == RIGHT) x++;
+                    else x--;
+                    if (y >= this.ROWS || y < 0 || x >= this.COLS || x < 0 || (this.grid[y][x] != undefined && this.grid[y][x] != FOOD)) {
+                        RUNNING = false;
+                        return;
+                    }
+                    let s = new Snode(x, y, null);
+                    this.head.next = s;
+                    if (this.grid[y][x] === FOOD) {
+                        this.eat += 3;
+                        this.makeFood();
+                        this.hasFood = false
+                    }
+                    //hold tail still if eating
+                    if (this.eat > 0) {
+                        this.eat--;
+                        this.length++;
+                    }
+                    else {
+                        this.grid[this.tail.y][this.tail.x] = undefined;
+                        this.erase(this.tail.y, this.tail.x);
+                        this.tail = this.tail.next;
+                    }
+                    //update the head;
+                    this.grid[y][x] = s;
+                    this.draw(y, x);
+                    this.head = this.head.next;
+                    this.lastOrientation = orientation;
+                }
+                auto(x, y) {
+                    //creates a simple hamiltonian cycle (only works for even number of rows)
+                    var newOrientation
+                    if (y != 0 && x != this.COLS - 1) {
+                        //zig zag upwards
+                        //console.log(x, y, this.lastOrientation);
+                        if ((x == 0 || x == this.COLS - 2) && this.lastOrientation != UP &&
+                            this.lastOrientation != DOWN && !(x == this.COLS - 2 && y == this.ROWS - 1)) {
+                            newOrientation = UP;
+                        }
+                        else if (this.lastOrientation == UP || this.lastOrientation == DOWN) {
+                            newOrientation = x == 0 ? RIGHT : LEFT;
+                        }
+                        else newOrientation = this.lastOrientation;
+                    }
+                    else if (y == 0) {
+                        newOrientation = x == COLS - 1 ? DOWN : RIGHT;
+                    }
+                    else {
+                        newOrientation = y == ROWS - 1 ? LEFT : DOWN;
+                    }
+                    return newOrientation
+                }
+                doAuto() {
+                    let idealOrients = [];
+                    var expectedDecrease = this.distanceHFood(this.HamiltonianIndexes[this.head.y][this.head.x]) - 1;
+                    if(this.head.y > 0 && this.distanceHFood(this.HamiltonianIndexes[this.head.y-1][this.head.x]) < expectedDecrease) idealOrients.push(UP)
+                    if(this.head.y < this.rows && this.distanceHFood(this.HamiltonianIndexes[this.head.y+1][this.head.x]) < expectedDecrease) idealOrients.push(DOWN)
+                    if(this.head.x < this.cols && this.distanceHFood(this.HamiltonianIndexes[this.head.y][this.head.x+1]) < expectedDecrease) idealOrients.push(RIGHT)
+                    if(this.head.x > 0 && this.distanceHFood(this.HamiltonianIndexes[this.head.y][this.head.x-1]) < expectedDecrease) idealOrients.push(LEFT)
+                    for(let i = 0; i < idealOrients.length; i++){
+                        var or = idealOrients[i];
+                        if(this.goodNext(or)){
+                            this.update(or);
+                            return;
+                        }
+                        //else throw new Error("break")
+                    }
+                    this.update(this.HamiltonianCycle[this.head.y][this.head.x]);
+                }
+                distanceHFood(head){
+                    return this.distanceH2(head, this.HamiltonianIndexes[this.food.y][this.food.x])
+                }
+                distanceH2(head, tail){
+                    if (head < tail) return tail - head;
+                    else return (ROWS * COLS) - 1 - (head - tail)
+                }
+                goodNext(orientation){
+                    //checks if a new orientation would violate hamiltonian cycle based on the current head and tail location
+                    if (this.length > 1) {
+                        if (orientation == UP && this.lastOrientation == DOWN) return false;
+                        if (orientation == DOWN && this.lastOrientation == UP) return false;
+                        if (orientation == LEFT && this.lastOrientation == RIGHT) return false;
+                        if (orientation == RIGHT && this.lastOrientation == LEFT) return false;
+                    }
+                    let headIndex = this.HamiltonianIndexes[this.head.y][this.head.x];
+                    let tailIndex = this.HamiltonianIndexes[this.tail.y][this.tail.x];
+                    let y = this.head.y;
+                    let x = this.head.x;
+                    if (orientation == UP) y--;
+                    else if (orientation == DOWN) y++;
+                    else if (orientation == RIGHT) x++;
+                    else x--;
+                    let checkIndex = this.HamiltonianIndexes[y][x];
+                    if (headIndex >= tailIndex) 
+                        return !(checkIndex <= headIndex && checkIndex >= tailIndex) && this.distanceH2(checkIndex, tailIndex) > 3;
+                    else return (checkIndex > headIndex && checkIndex < tailIndex) && this.distanceH2(checkIndex, tailIndex) > 3;
+                }
+            }
+
+            class Snode {
+                constructor(x, y, next) {
+                    this.x = x;
+                    this.y = y;
+                    this.next = next;
+                }
+            }
+
+            var board;
+
+            var lastFrameTimeMS = 0;
+            var maxFPS = 60000;
+            var key = RIGHT;
+            var RUNNING = false;
+            function mainLoop(timestamp) {
+                if (!RUNNING) return;
+                if (timestamp < lastFrameTimeMS + (1000 / maxFPS)) {
+                    requestAnimationFrame(mainLoop);
+                    return;
+                }
+                lastFrameTimeMS = timestamp;
+                //board.update(key);
+                board.doAuto()
+                requestAnimationFrame(mainLoop);
+            }
+
+            document.onkeydown = function (evt) {
+                evt = evt || window.event;
+                var charStr = evt.key
+                if (!RUNNING) {
+                    document.getElementById("canvas").getContext("2d").clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+                    board = new Board(ROWS, COLS, SQUARE, COLOR)
+                    requestAnimationFrame(mainLoop);
+                    RUNNING = true;
+                }
+                if (charStr == "W" || charStr == "ArrowUp") key = UP;
+                if (charStr == "A" || charStr == "ArrowLeft") key = LEFT;
+                if (charStr == "S" || charStr == "ArrowDown") key = DOWN;
+                if (charStr == "D" || charStr == "ArrowRight") key = RIGHT;
+            }
+        </script>
+    </canvas></body>
+
+<body></body>
+
+</html>
