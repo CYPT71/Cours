@@ -26,6 +26,14 @@ func Run() {
 		ServerHeader:  "Air Crash",
 		StrictRouting: true,
 		ProxyHeader:   "Sup Info AirLine",
+		ErrorHandler: func(c *fiber.Ctx, e error) error {
+			c.Status(401).JSON(&fiber.Map{
+				"success": false,
+				"error":   e.Error(),
+			})
+
+			return nil
+		},
 	})
 
 	// Setup routes
