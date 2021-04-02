@@ -27,7 +27,7 @@ func PiloteBootstrap(app fiber.Router) {
 
 func pilotByArrival(c *fiber.Ctx) error {
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unauthorized",
@@ -44,7 +44,7 @@ func pilotByArrival(c *fiber.Ctx) error {
 
 func piloteGetAmong(c *fiber.Ctx) error {
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -61,7 +61,7 @@ func piloteGetAmong(c *fiber.Ctx) error {
 
 func piloteArrivalByCapitain(c *fiber.Ctx) error {
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -79,7 +79,7 @@ func piloteArrivalByCapitain(c *fiber.Ctx) error {
 
 func piloteGetlist(c *fiber.Ctx) error {
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -95,7 +95,7 @@ func piloteGetlist(c *fiber.Ctx) error {
 }
 
 func piloteGetlistDetails(c *fiber.Ctx) error {
-	if ifToken(c) {
+	if ifNotToken(c) {
 		return c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -115,7 +115,7 @@ func piloteGetlistDetails(c *fiber.Ctx) error {
 func piloteGetlistRenewLissence(c *fiber.Ctx) error {
 	pilotes_info := sql_request.GetEmployees("", "`id` in (SELECT `staff_id` FROM `pilote` WHERE license <= DATE_ADD(CURRENT_DATE(), INTERVAL 3 MONTH))")
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -148,7 +148,7 @@ func pilotePos(c *fiber.Ctx) error {
 	}
 	sql_request.AddPilote(pilote.License, pilote.Among, pilote.Staff_id)
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -174,7 +174,7 @@ func piloteUpdate(c *fiber.Ctx) error {
 
 	sql_request.UpdateTickets(device.Column, device.Value, device.Condition)
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -192,7 +192,7 @@ func piloteDelete(c *fiber.Ctx) error {
 
 	sql_request.DeleteTickets(c.Params("name"))
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -208,9 +208,7 @@ func piloteDelete(c *fiber.Ctx) error {
 
 func averageFlightsPerPilot(c *fiber.Ctx) error {
 
-	name := ifToken(c)
-
-	if name == "" {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",

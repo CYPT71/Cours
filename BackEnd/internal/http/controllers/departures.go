@@ -19,7 +19,7 @@ func DeparturesBootstrap(app fiber.Router) {
 
 func departuresGetlist(c *fiber.Ctx) error {
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -36,7 +36,7 @@ func departuresGetlist(c *fiber.Ctx) error {
 
 func departuresGetListNow(c *fiber.Ctx) error {
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -67,7 +67,7 @@ func departuresSetFligth(c *fiber.Ctx) error {
 
 	sql_request.AddDepartures(device.Id_flight, device.Date, device.Pilote, device.Copilote, device.Aircrew, device.Free_places, device.Occupied)
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -93,7 +93,7 @@ func departuresUpdate(c *fiber.Ctx) error {
 
 	sql_request.UpdateDepartures(device.Column, device.Value, device.Condition)
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -114,7 +114,7 @@ func departuresDelete(c *fiber.Ctx) error {
 
 	sql_request.DeleteDepartures(device.Condition)
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",

@@ -19,7 +19,7 @@ func RouteBootstrap(app fiber.Router) {
 
 func routeGetlist(c *fiber.Ctx) error {
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -36,7 +36,7 @@ func routeGetlist(c *fiber.Ctx) error {
 
 func DeservedCities(c *fiber.Ctx) error {
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -53,7 +53,7 @@ func DeservedCities(c *fiber.Ctx) error {
 
 func routePos(c *fiber.Ctx) error {
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -79,7 +79,7 @@ func routeUpdate(c *fiber.Ctx) error {
 
 	sql_request.UpdateTickets(device.Column, device.Value, device.Condition)
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -100,7 +100,7 @@ func routeDelete(c *fiber.Ctx) error {
 
 	sql_request.DeleteTickets(device.Condition)
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",

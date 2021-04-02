@@ -24,7 +24,7 @@ func FligthsBootstrap(app fiber.Router) {
 
 func cityGetFLight(c *fiber.Ctx) error {
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -42,7 +42,7 @@ func cityGetFLight(c *fiber.Ctx) error {
 
 func occupancyRate(c *fiber.Ctx) error {
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unauthorized",
@@ -59,7 +59,7 @@ func occupancyRate(c *fiber.Ctx) error {
 
 func flightsGetlist(c *fiber.Ctx) error {
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -86,7 +86,7 @@ func flightUpdate(c *fiber.Ctx) error {
 
 	sql_request.UpdateFlight(device.Column, device.Value, device.Condition)
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -107,7 +107,7 @@ func flightDelete(c *fiber.Ctx) error {
 
 	sql_request.DeleteFlight(device.Condition)
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",

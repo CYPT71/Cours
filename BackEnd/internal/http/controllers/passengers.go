@@ -27,7 +27,7 @@ func PassagersBootstrap(app fiber.Router) {
 func getPassengerPerFlight(c *fiber.Ctx) error {
 	// domain.RegularPassenger()
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -45,7 +45,7 @@ func getPassengerPerFlight(c *fiber.Ctx) error {
 func getRegularProfession(c *fiber.Ctx) error {
 	// domain.RegularPassenger()
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -62,7 +62,7 @@ func getRegularProfession(c *fiber.Ctx) error {
 
 func passagersGetlist(c *fiber.Ctx) error {
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -89,7 +89,7 @@ func passengerUpdate(c *fiber.Ctx) error {
 
 	sql_request.UpdatePassenger(device.Column, device.Value, device.Condition)
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -110,7 +110,7 @@ func passengerDelete(c *fiber.Ctx) error {
 
 	sql_request.DeletePassenger(device.Condition)
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -126,7 +126,7 @@ func passengerDelete(c *fiber.Ctx) error {
 
 func regularPassenger(c *fiber.Ctx) error {
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -142,8 +142,7 @@ func regularPassenger(c *fiber.Ctx) error {
 }
 
 func numbOfPassengersByPeriodByPlane(c *fiber.Ctx) error {
-	name := ifToken(c)
-	if name == "" {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -159,8 +158,7 @@ func numbOfPassengersByPeriodByPlane(c *fiber.Ctx) error {
 }
 
 func numbOfPassengersByPeriod(c *fiber.Ctx) error {
-	name := ifToken(c)
-	if name == "" {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",

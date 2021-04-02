@@ -22,7 +22,7 @@ func EmployeesBootstrap(app fiber.Router) {
 
 func employeesGetlist(c *fiber.Ctx) error {
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -39,7 +39,7 @@ func employeesGetlist(c *fiber.Ctx) error {
 
 func employeesGetByCategories(c *fiber.Ctx) error {
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -72,7 +72,7 @@ func employeePost(c *fiber.Ctx) error {
 	c.BodyParser(&employees)
 	sql_request.AddDevices(employees.Capacity, employees.Model_type)
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -100,7 +100,7 @@ func employeesUpdate(c *fiber.Ctx) error {
 
 	sql_request.UpdateEmployees(employees.Column, employees.Value, employees.Condition)
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",
@@ -121,7 +121,7 @@ func employeesDelete(c *fiber.Ctx) error {
 
 	sql_request.DeleteEmployees(employees.Condition)
 
-	if ifToken(c) {
+	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
 			"success": false,
 			"message": "Unautorized",

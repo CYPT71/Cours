@@ -40,9 +40,10 @@ func getToken(c *fiber.Ctx) error {
 
 }
 
-func ifToken(c *fiber.Ctx) bool {
+func ifNotToken(c *fiber.Ctx) bool {
 	reBearer := regexp.MustCompile("(?i)^Bearer ")
 	ts := c.Get("Authorization")
+	log.Print(ts)
 	if !reBearer.MatchString(ts) {
 
 		c.Status(403).SendString("no bearer")
@@ -58,5 +59,5 @@ func ifToken(c *fiber.Ctx) bool {
 		return true
 	}
 	log.Print(isToken != Token, Token)
-	return isToken != Token
+	return false
 }
