@@ -27,7 +27,7 @@ func Run() {
 		StrictRouting: true,
 		ProxyHeader:   "Sup Info AirLine",
 		ErrorHandler: func(c *fiber.Ctx, e error) error {
-			c.Status(401).JSON(&fiber.Map{
+			c.Status(500).JSON(&fiber.Map{
 				"success": false,
 				"error":   e.Error(),
 			})
