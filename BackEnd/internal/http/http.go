@@ -41,8 +41,7 @@ func Run() {
 
 			return nil
 		},
-		GETOnly: true,
-		Views:   html.New("./html", ".html"),
+		Views: html.New("./html", ".html"),
 	})
 
 	// Setup routes

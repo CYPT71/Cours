@@ -58,5 +58,6 @@ func ifNotToken(c *fiber.Ctx) bool {
 		log.Print(err)
 		return true
 	}
+	log.Print(isToken.Raw, "\n", "\n", TokenString)
 	return isToken.Raw != TokenString
 }
