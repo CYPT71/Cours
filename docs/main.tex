@@ -1,0 +1,170 @@
+\documentclass{article}
+\title{Demo}
+\author{cyprien taib}
+\date{February 2021}
+
+\begin{document}
+
+    \maketitle
+    \section{introduction}
+        
+    In this document we will see how we proced the task and why we make the golang chose for programming, after that we will speak about the tools we use.
+
+
+    The projet is on our github in two part, first part is purlly the backend and maybe in the future the front end in two separates files. \newline\newline
+
+    The seconde part is functionnal, it permit to create table, fill it and run it. We have also put a docker file to create the mysql server and PhpMyAdmin.
+   
+    
+    \section{Backend Part}
+
+    We choose golang for the backend because is more efficency and fastest than python. 
+
+    We enter in the Backend file witch contains files and folders.
+
+    The .air.toml we see is a config file for auto reload the API.
+
+    The config.yaml is the config file for the API.
+
+    The file go.mod and go.sum is for the golang modules.
+
+    We see a directory named internal.
+
+        In internal
+
+    we see three directories
+        \begin{enumerate}
+            \item http
+            \item sql request
+            \item utils
+        \end{enumerate}
+
+    the utils is for loadding configuration into the server \newline\newline
+
+    the folder http contains two directories and one file " http.go ". The file is like the main file for running the API.  
+
+    The folder middlewares contain securty constrain and controllers all the handler for the API. \newline\newline
+
+    Back to the sql request folder, it contains just all the code for making request to the data base. \newline\newline
+
+    Each tables have it handler and it sql request file. \newline
+    
+    \section{Request Possibillity}
+
+    \begin{itemize}
+        \item List of company aircraft
+        \item List of Sup Air Line pilots
+        \item List of personnel by category
+        \item List of passengers per flight
+        \item List of flights to a given city
+        \item List of departures for the day
+        \item List of cities served by Sup Air Line
+        \item List of destinations served by a captain
+        \item List of pilots whose license must be renewed
+        \item Lists of regular passengers who fly more than 2 flights / month
+        \item Professions with the most regular passengers
+        \item Number of hours worked by a captain
+        \item Number of flight hours of each aircraft
+        \item Number of passengers transported by plane over a given period
+        \item Number of passengers carried over a given period
+        \item Number of tickets sold per day / week / month
+        \item Total sales
+        \item Average flights per pilot
+        \item Most profitable destinations (high occupancy rate)
+        \item Average occupancy rate by plane / flight / destination
+        \item Which pilots fly to their city
+        \item Create Data for all tables
+        \item Update Data for all tables
+        \item Delete Data for all tables 
+    \end{itemize}
+
+    \section{Reuqest Details}
+    always will be path method description
+    \begin{itemize}
+        \item /cabincrew 
+                \begin{itemize}
+                    \item / get the list of CabinCrew
+                    \item / post add a new CabinCrew  
+                    \item / path Update a CabinCrew
+                    \item / delete delete a CabinCrew
+                \end{itemize}
+        \item /departures
+            \begin{itemize}
+                \item / get the list of departures
+                \item / post add a new departures  
+                \item / path Update a departures
+                \item / delete delete a departures
+            \end{itemize}
+        \item /devices
+            \begin{itemize}
+                \item / get the list of device
+                \item /time the time flight for device
+                \item / post add a new device  
+                \item / path Update a device
+                \item / delete delete a device
+            \end{itemize}
+        \item /employees
+            \begin{itemize}
+                \item / get the list of employee
+                \item /categories get the list of employee order by categories Pilote, CabinCrew, GroundStaff
+                \item /categories the time flight for employee
+                \item / post add a new employee  
+                \item / path Update a employee
+                \item / delete delete a employee
+            \end{itemize}
+        \item /flights
+            \begin{itemize}
+                \item / get the list of flight
+                \item /:city get the list of a given city
+                \item /categories the time flight for flight
+                \item / post add a new flight  
+                \item / path Update a flight
+                \item / delete delete a flight
+            \end{itemize}
+        \item /passengers
+            \begin{itemize}
+                \item / get the list of passenger List
+                \item /regular get the most regular Profession
+                \item /perFlight get the passenger per flight
+                \item / post add a new passenger  
+                \item / path Update a passenger
+                \item / delete delete a passenger
+            \end{itemize}
+        \item /passengers
+            \begin{itemize}
+                \item / get the list of passenger List
+                \item /regular get the most regular Profession
+                \item /perFlight get the passenger per flight
+                \item / post add a new passenger  
+                \item / path Update a passenger
+                \item / delete delete a passenger
+            \end{itemize}
+        \item /pilote
+            \begin{itemize}
+                \item / get the list of pilote
+                \item /details get details list about pilote
+                \item /:name get a list of pilote for a given name
+                \item /flightHours get a list of flig hours for pilote
+                \item / post add a new pilote  
+                \item / path Update a pilote
+                \item /:name delete delete a pilote
+            \end{itemize}
+        \item /route
+            \begin{itemize}
+                \item / get the list of route
+                \item / post add a new route  
+                \item / path Update a route
+                \item / delete delete a route
+            \end{itemize}
+        \item /tickets
+            \begin{itemize}
+                \item / get the list of tickets
+                \item /total get the total Sales of ticket
+                \item / post add a new tickets  
+                \item / path Update a tickets
+                \item / delete delete a tickets
+            \end{itemize}
+    \end{itemize}
+
+
+\end{document}
