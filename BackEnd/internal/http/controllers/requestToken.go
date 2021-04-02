@@ -36,6 +36,7 @@ func getToken(c *fiber.Ctx) error {
 	if err != nil {
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
+	TokenString = t
 	return c.JSON(fiber.Map{"authentificate": t})
 
 }
@@ -43,7 +44,6 @@ func getToken(c *fiber.Ctx) error {
 func ifNotToken(c *fiber.Ctx) bool {
 	reBearer := regexp.MustCompile("(?i)^Bearer ")
 	ts := c.Get("Authorization")
-	log.Print(ts)
 	if !reBearer.MatchString(ts) {
 
 		c.Status(403).SendString("no bearer")
@@ -58,6 +58,5 @@ func ifNotToken(c *fiber.Ctx) bool {
 		log.Print(err)
 		return true
 	}
-	log.Print(isToken != Token, Token)
-	return false
+	return isToken.Raw != TokenString
 }
