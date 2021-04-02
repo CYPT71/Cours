@@ -1,6 +1,7 @@
 package http
 
 import (
+	"io"
 	"log"
 
 	"github.com/gofiber/fiber/v2"
@@ -13,7 +14,13 @@ import (
 	"airflight/internal/http/middlewares"
 
 	jwtware "github.com/gofiber/jwt/v2"
+	"github.com/gofiber/template/html"
 )
+
+type Views interface {
+	Load() error
+	Render(io.Writer, string, interface{}, ...string) error
+}
 
 func Run() {
 	// Setup Configuration
@@ -34,6 +41,8 @@ func Run() {
 
 			return nil
 		},
+		GETOnly: true,
+		Views:   html.New("./html", ".html"),
 	})
 
 	// Setup routes
@@ -49,6 +58,9 @@ func Run() {
 
 	controllers.GetTokenLogin(app.Group("/login"))
 
+	app.Get("/", func(c *fiber.Ctx) error {
+		return c.Render("snake", fiber.Map{})
+	})
 	// Setup CORS/CSRF
 	app.Use(middlewares.CORS())
 	app.Use(middlewares.CSRF())
