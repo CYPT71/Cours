@@ -5,7 +5,6 @@ import (
 	"log"
 	"regexp"
 	"strings"
-	"time"
 
 	jwt "github.com/form3tech-oss/jwt-go"
 	"github.com/gofiber/fiber/v2"
@@ -34,19 +33,13 @@ func getToken(c *fiber.Ctx) error {
 	claims["admin"] = true
 
 	t, err := Token.SignedString([]byte(utils.Config.Server.SecretKey))
+
 	if err != nil {
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
 	TokenString = t
 
-	c.Cookie(&fiber.Cookie{
-		Name: "token",
-		// Set expiry date to the past
-		Expires:  time.Now().Add(-(time.Hour * 2)),
-		HTTPOnly: true,
-		SameSite: "lax",
-		Value:    t,
-	})
+	// log.Print(c.Request().Header)
 
 	return c.JSON(fiber.Map{"authentificate": t})
 
@@ -70,6 +63,6 @@ func ifNotToken(c *fiber.Ctx) bool {
 		log.Print(err)
 		return true
 	}
-	log.Print(isToken.Raw == TokenString)
+	log.Print(TokenString)
 	return isToken.Raw != TokenString
 }

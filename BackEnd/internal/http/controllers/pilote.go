@@ -8,6 +8,9 @@ import (
 
 func PiloteBootstrap(app fiber.Router) {
 	app.Get("/details", piloteGetlist)
+
+	app.Get("/renew", piloteGetlistRenewLissence)
+
 	app.Get("/", piloteGetlistDetails)
 
 	app.Get("/flightHours", piloteGetAmong)
