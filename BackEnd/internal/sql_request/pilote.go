@@ -156,7 +156,7 @@ func GetPiloteAmong() []map[string]interface{} {
 	return return_val
 }
 
-func GetPiloteDestination(name string) []map[string]interface{} {
+func GetPiloteDestination(name string, firstName string) []map[string]interface{} {
 
 	type PiloteRoute struct {
 		Name      string
@@ -172,7 +172,7 @@ func GetPiloteDestination(name string) []map[string]interface{} {
 
 	defer db.Close()
 
-	query := "SELECT name, first_name, route.origin, route.arrival FROM `pilote` JOIN `employees` ON pilote.staff_id = employees.id JOIN `departures` ON pilote.id = departures.pilote JOIN `flight` ON departures.id = flight.id_departures JOIN `route` ON route.id = flight.id_route WHERE name = \"" + name + "\";"
+	query := "SELECT name, first_name, route.origin, route.arrival FROM `pilote` JOIN `employees` ON pilote.staff_id = employees.id JOIN `departures` ON pilote.id = departures.pilote JOIN `flight` ON departures.id = flight.id_departures JOIN `route` ON route.id = flight.id_route WHERE name = \"" + name + "\" AND first_name = \"" + firstName + "\";"
 
 	selecte, err := db.Query(query)
 

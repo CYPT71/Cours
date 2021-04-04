@@ -298,7 +298,7 @@ func NumbOfPassengersByPeriodByPlane(start string, end string) []map[string]inte
 	defer db.Close()
 
 	query := `
-		SELECT
+		SELECT DISTINCT
 			departures.occupied AS "number of passengers transported by plane", departures.date, device.type
 		FROM
 			passenger

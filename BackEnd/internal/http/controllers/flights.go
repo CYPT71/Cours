@@ -18,7 +18,7 @@ func FligthsBootstrap(app fiber.Router) {
 
 	app.Patch("/", departuresUpdate)
 
-	app.Delete("/", departuresDelete)
+	app.Delete("/:name", departuresDelete)
 
 }
 
@@ -102,10 +102,7 @@ func flightUpdate(c *fiber.Ctx) error {
 
 func flightDelete(c *fiber.Ctx) error {
 
-	var device UpdateFlight
-	c.BodyParser(&device)
-
-	sql_request.DeleteFlight(device.Condition)
+	sql_request.DeleteFlight(c.Params("name"))
 
 	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{

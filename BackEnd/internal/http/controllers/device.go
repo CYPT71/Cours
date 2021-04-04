@@ -14,7 +14,7 @@ func DevicesBootstrap(app fiber.Router) {
 
 	app.Patch("/", devicesUpdate)
 
-	app.Delete("/", devicesDelete)
+	app.Delete("/:name", devicesDelete)
 }
 
 func devicesGetlist(c *fiber.Ctx) error {
@@ -104,10 +104,7 @@ func devicesUpdate(c *fiber.Ctx) error {
 
 func devicesDelete(c *fiber.Ctx) error {
 
-	var device updateDevices
-	c.BodyParser(&device)
-
-	sql_request.DeleteDevice(device.Condition)
+	sql_request.DeleteDevice(c.Params("name"))
 
 	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{

@@ -21,7 +21,7 @@ func PassagersBootstrap(app fiber.Router) {
 
 	app.Patch("/", departuresUpdate)
 
-	app.Delete("/", departuresDelete)
+	app.Delete("/:name", departuresDelete)
 }
 
 func getPassengerPerFlight(c *fiber.Ctx) error {

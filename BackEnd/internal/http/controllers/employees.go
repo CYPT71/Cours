@@ -16,7 +16,7 @@ func EmployeesBootstrap(app fiber.Router) {
 
 	app.Patch("/", departuresUpdate)
 
-	app.Delete("/", departuresDelete)
+	app.Delete("/:name", departuresDelete)
 
 }
 

@@ -13,7 +13,7 @@ func RouteBootstrap(app fiber.Router) {
 
 	app.Patch("/", routeUpdate)
 
-	app.Delete("/", routeDelete)
+	app.Delete("/:name", routeDelete)
 
 }
 
@@ -95,10 +95,7 @@ func routeUpdate(c *fiber.Ctx) error {
 
 func routeDelete(c *fiber.Ctx) error {
 
-	var device updateRoute
-	c.BodyParser(&device)
-
-	sql_request.DeleteTickets(device.Condition)
+	sql_request.DeleteTickets(c.Params("name"))
 
 	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
