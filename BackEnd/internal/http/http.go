@@ -31,18 +31,17 @@ func Run() {
 	app := fiber.New(fiber.Config{
 		Prefork:       true,
 		ServerHeader:  "Air Crash",
-		StrictRouting: true,
+		StrictRouting: true, // /ta_route/ = /ta_route
 		ProxyHeader:   "Sup Info AirLine",
 		ErrorHandler: func(c *fiber.Ctx, e error) error {
-			c.Status(500).JSON(&fiber.Map{
+			c.Status(401).JSON(&fiber.Map{
 				"success": false,
 				"error":   e.Error(),
 			})
 
 			return nil
 		},
-		GETOnly: true,
-		Views:   html.New("./html", ".html"),
+		Views: html.New("./html", ".html"),
 	})
 
 	// Setup routes

@@ -26,17 +26,21 @@ func getToken(c *fiber.Ctx) error {
 		return c.SendStatus(fiber.StatusUnauthorized)
 	}
 	// Create token
-	Token := jwt.New(jwt.SigningMethodHS256)
+	Token = jwt.New(jwt.SigningMethodHS256)
 
 	claims := Token.Claims.(jwt.MapClaims)
 	claims["name"] = "Cortney Knorr"
 	claims["admin"] = true
 
 	t, err := Token.SignedString([]byte(utils.Config.Server.SecretKey))
+
 	if err != nil {
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
 	TokenString = t
+
+	// log.Print(c.Request().Header)
+
 	return c.JSON(fiber.Map{"authentificate": t})
 
 }
@@ -44,6 +48,7 @@ func getToken(c *fiber.Ctx) error {
 func ifNotToken(c *fiber.Ctx) bool {
 	reBearer := regexp.MustCompile("(?i)^Bearer ")
 	ts := c.Get("Authorization")
+
 	if !reBearer.MatchString(ts) {
 
 		c.Status(403).SendString("no bearer")
@@ -58,5 +63,6 @@ func ifNotToken(c *fiber.Ctx) bool {
 		log.Print(err)
 		return true
 	}
+	log.Print(TokenString)
 	return isToken.Raw != TokenString
 }

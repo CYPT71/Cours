@@ -8,6 +8,9 @@ import (
 
 func PiloteBootstrap(app fiber.Router) {
 	app.Get("/details", piloteGetlist)
+
+	app.Get("/renew", piloteGetlistRenewLissence)
+
 	app.Get("/", piloteGetlistDetails)
 
 	app.Get("/flightHours", piloteGetAmong)
@@ -16,7 +19,7 @@ func PiloteBootstrap(app fiber.Router) {
 
 	app.Get("/average", averageFlightsPerPilot)
 
-	app.Get("/:name", piloteArrivalByCapitain)
+	app.Get("/:name/:firstName", piloteArrivalByCapitain)
 
 	app.Post("/", pilotePos)
 
@@ -69,7 +72,7 @@ func piloteArrivalByCapitain(c *fiber.Ctx) error {
 	} else {
 		c.JSON(&fiber.Map{
 			"success": true,
-			"value":   sql_request.GetPiloteDestination(c.Params("name")),
+			"value":   sql_request.GetPiloteDestination(c.Params("name"), c.Params("firstName")),
 			"message": "destinations served by a captain",
 		})
 	}

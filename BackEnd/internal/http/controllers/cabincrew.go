@@ -14,7 +14,7 @@ func CabincrewBootstrap(app fiber.Router) {
 
 	app.Patch("/", cabincrewUpdate)
 
-	app.Delete("/", cabincrewDelete)
+	app.Delete("/:name", cabincrewDelete)
 }
 
 func cabincrewGetlist(c *fiber.Ctx) error {
@@ -88,10 +88,7 @@ func cabincrewUpdate(c *fiber.Ctx) error {
 
 func cabincrewDelete(c *fiber.Ctx) error {
 
-	var cabincrew updatecabincrew
-	c.BodyParser(&cabincrew)
-
-	sql_request.DeleteCabincrew(cabincrew.Condition)
+	sql_request.DeleteCabincrew(c.Params("name"))
 
 	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{

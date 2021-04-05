@@ -20,7 +20,7 @@ func TicketsBootstrap(app fiber.Router) {
 
 	app.Patch("/", ticketUpdate)
 
-	app.Delete("/", ticketDelete)
+	app.Delete("/:name", ticketDelete)
 }
 
 func ticketGetTotal(c *fiber.Ctx) error {
@@ -118,10 +118,7 @@ func ticketUpdate(c *fiber.Ctx) error {
 
 func ticketDelete(c *fiber.Ctx) error {
 
-	var device updateTicket
-	c.BodyParser(&device)
-
-	sql_request.DeleteTickets(device.Condition)
+	sql_request.DeleteTickets(c.Params("name"))
 
 	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{

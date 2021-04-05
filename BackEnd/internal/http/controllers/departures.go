@@ -13,7 +13,7 @@ func DeparturesBootstrap(app fiber.Router) {
 
 	app.Patch("/", departuresUpdate)
 
-	app.Delete("/", departuresDelete)
+	app.Delete("/:name", departuresDelete)
 
 }
 
@@ -109,10 +109,7 @@ func departuresUpdate(c *fiber.Ctx) error {
 
 func departuresDelete(c *fiber.Ctx) error {
 
-	var device updatedepart
-	c.BodyParser(&device)
-
-	sql_request.DeleteDepartures(device.Condition)
+	sql_request.DeleteDepartures(c.Params("name"))
 
 	if ifNotToken(c) {
 		c.Status(401).JSON(&fiber.Map{
