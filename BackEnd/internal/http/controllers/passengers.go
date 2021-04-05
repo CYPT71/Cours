@@ -15,6 +15,8 @@ func PassagersBootstrap(app fiber.Router) {
 
 	app.Get("/mostRegular", regularPassenger)
 
+	app.Get("/occupancyRate/:stage", averageOccupancyRate)
+
 	app.Get("/byPlane/:start/:end", numbOfPassengersByPeriodByPlane)
 
 	app.Get("/total/:start/:end", numbOfPassengersByPeriod)
@@ -168,6 +170,23 @@ func numbOfPassengersByPeriod(c *fiber.Ctx) error {
 			"success":              true,
 			"Number of passengers": sql_request.NumbOfPassengersByPeriod(c.Params("start"), c.Params("end"))[0]["Number of passengers"],
 			"message":              "Number of passengers carried over a given period",
+		})
+	}
+	return nil
+}
+
+func averageOccupancyRate(c *fiber.Ctx) error {
+
+	if ifNotToken(c) {
+		c.Status(401).JSON(&fiber.Map{
+			"success": false,
+			"message": "Unautorized",
+		})
+	} else {
+		c.JSON(&fiber.Map{
+			"success":                         true,
+			"average by " + c.Params("stage"): sql_request.AverageOccupancyRate(c.Params("stage")),
+			"message":                         "average occupancy rate by " + c.Params("stage"),
 		})
 	}
 	return nil

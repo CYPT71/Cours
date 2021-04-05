@@ -23,6 +23,8 @@ func GetPilote(selector string, filter string) []map[string]interface{} {
 
 	defer db.Close()
 
+	db.Exec("USE aircraft")
+
 	query := "SELECT "
 	if selector != "" {
 		query += selector
@@ -71,6 +73,8 @@ func AddPilote(license string, among string, staff_id int) {
 
 	defer db.Close()
 
+	db.Exec("USE aircraft")
+
 	if license == "" || among == "" {
 		return
 	}
@@ -97,6 +101,8 @@ func UpdatePilote(column string, new_value string, condition string) {
 
 	defer db.Close()
 
+	db.Exec("USE aircraft")
+
 	query := "UPDATE `Pilote` SET " + column + " " + new_value + " WHERE " + condition
 	db.Query(query)
 
@@ -109,6 +115,8 @@ func DeletePilote(condition string) {
 	}
 
 	defer db.Close()
+
+	db.Exec("USE aircraft")
 
 	query := "DELETE FROM `Pilote` WHERE " + condition
 
@@ -129,6 +137,8 @@ func GetPiloteAmong() []map[string]interface{} {
 	}
 
 	defer db.Close()
+
+	db.Exec("USE aircraft")
 
 	query := "SELECT name, first_name, among FROM `pilote` JOIN `employees` ON pilote.staff_id = employees.id JOIN `departures` ON pilote.id = departures.pilote;"
 
@@ -172,6 +182,8 @@ func GetPiloteDestination(name string, firstName string) []map[string]interface{
 
 	defer db.Close()
 
+	db.Exec("USE aircraft")
+
 	query := "SELECT name, first_name, route.origin, route.arrival FROM `pilote` JOIN `employees` ON pilote.staff_id = employees.id JOIN `departures` ON pilote.id = departures.pilote JOIN `flight` ON departures.id = flight.id_departures JOIN `route` ON route.id = flight.id_route WHERE name = \"" + name + "\" AND first_name = \"" + firstName + "\";"
 
 	selecte, err := db.Query(query)
@@ -213,9 +225,11 @@ func GetAverageFlight() []map[string]interface{} {
 
 	defer db.Close()
 
+	db.Exec("USE aircraft")
+
 	query := `
 		SELECT 
-			MAX(flight.id) / MAX(pilote.id) AS "Average" 
+			MAX(flight.id) / MAX(pilote.id) AS "Average flights per pilot" 
 		FROM 
 			pilote
 
@@ -263,11 +277,13 @@ func CityOfThePilot() []map[string]interface{} {
 
 	defer db.Close()
 
+	db.Exec("USE aircraft")
+
 	query := `
 		SELECT 
 			name, 
 			first_name, 
-			route.arrival 
+			arrival 
 		FROM 
 			pilote 
 				JOIN employees 
@@ -278,7 +294,7 @@ func CityOfThePilot() []map[string]interface{} {
 					ON departures.id = flight.id_departures 
 				JOIN route 
 					ON route.id = flight.id_route 
-		WHERE employees.address LIKE CONCAT("%", route.arrival, "%")`
+		WHERE employees.address LIKE CONCAT("%", arrival, "%")`
 
 	selecte, err := db.Query(query)
 

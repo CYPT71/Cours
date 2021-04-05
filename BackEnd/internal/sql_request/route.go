@@ -23,6 +23,8 @@ func AddRoute(Origin string, Arrival string) {
 
 	defer db.Close()
 
+	db.Exec("USE aircraft")
+
 	// perform a db.Query insert
 	insert, err := db.Query("INSERT INTO `route`(`origin`, `arrival`) VALUES (?, ?)",
 		Origin, Arrival)
@@ -45,6 +47,8 @@ func GetRoute(selector string, filter string) []map[string]interface{} {
 	}
 
 	defer db.Close()
+
+	db.Exec("USE aircraft")
 
 	query := "SELECT "
 	if selector != "" {
@@ -92,6 +96,8 @@ func UpdateRoute(column string, new_value string, condition string) {
 
 	defer db.Close()
 
+	db.Exec("USE aircraft")
+
 	query := "UPDATE `route` SET " + column + " " + new_value + " WHERE " + condition
 	db.Query(query)
 
@@ -104,6 +110,8 @@ func DeleteRoute(condition string) {
 	}
 
 	defer db.Close()
+
+	db.Exec("USE aircraft")
 
 	query := "DELETE FROM `route` WHERE " + condition
 

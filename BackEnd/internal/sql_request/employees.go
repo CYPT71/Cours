@@ -26,6 +26,8 @@ func AddEmployees(Aicrew int, Ground int, Social_security int, Name string, Firs
 
 	defer db.Close()
 
+	db.Exec("USE aircraft")
+
 	// perform a db.Query insert
 	insert, err := db.Query("INSERT INTO `employees`(`aircrew`, `ground`, `social_security`, `name`, `first_name`, `address`) VALUES (?, ?, ?, ?, ?, ?)",
 		Aicrew, Ground, Social_security, Name, First_name, Address)
@@ -47,6 +49,8 @@ func GetEmployees(selector string, filter string) []map[string]interface{} {
 		panic(err.Error())
 	}
 	defer db.Close()
+
+	db.Exec("USE aircraft")
 
 	query := "SELECT "
 	if selector != "" {
@@ -96,6 +100,9 @@ func UpdateEmployees(column string, new_value string, condition string) {
 	}
 
 	defer db.Close()
+
+	db.Exec("USE aircraft")
+
 	query := "UPDATE `employees` SET " + column + " " + new_value + " WHERE " + condition
 	db.Query(query)
 
@@ -108,6 +115,9 @@ func DeleteEmployees(condition string) {
 	}
 
 	defer db.Close()
+
+	db.Exec("USE aircraft")
+
 	query := "DELETE FROM `employees` WHERE " + condition
 
 	db.Query(query)

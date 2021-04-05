@@ -24,6 +24,8 @@ func AddCabincrew(Among string, Fonction string, Staff_id int) {
 
 	defer db.Close()
 
+	db.Exec("USE aircraft")
+
 	// perform a db.Query insert
 	insert, err := db.Query("INSERT INTO `cabincrew`(`among`, `fonction`, `staff_id`) VALUES  VALUES (?, ?, ?)",
 		Among, Fonction, Staff_id)
@@ -46,6 +48,8 @@ func GetCabincrew(selector string, filter string) []map[string]interface{} {
 	}
 
 	defer db.Close()
+
+	db.Exec("USE aircraft")
 
 	query := "SELECT "
 	if selector != "" {
@@ -94,6 +98,8 @@ func UpdateCabincrew(column string, new_value string, condition string) {
 
 	defer db.Close()
 
+	db.Exec("USE aircraft")
+
 	query := "UPDATE `cabincrew` SET " + column + " " + new_value + " WHERE " + condition
 	db.Query(query)
 
@@ -106,6 +112,8 @@ func DeleteCabincrew(condition string) {
 	}
 
 	defer db.Close()
+
+	db.Exec("USE aircraft")
 
 	query := "DELETE FROM `cabincrew` WHERE " + condition
 

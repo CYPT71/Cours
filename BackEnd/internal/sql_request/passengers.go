@@ -28,6 +28,8 @@ func AddPassenger(Name string, First_name string, Address string, Profession str
 
 	defer db.Close()
 
+	db.Exec("USE aircraft")
+
 	// perform a db.Query insert
 	insert, err := db.Query("INSERT INTO `passenger`(`name`, `first_name`, `address`, `profession`, `bank`, `ticket_id`) VALUES (?, ?, ?, ?, ?, ?)",
 		Name, First_name, Address, Profession, Bank, Ticket_id)
@@ -50,6 +52,8 @@ func GetPassenger(selector string, filter string) []map[string]interface{} {
 	}
 
 	defer db.Close()
+
+	db.Exec("USE aircraft")
 
 	query := "SELECT "
 	if selector != "" {
@@ -102,6 +106,8 @@ func UpdatePassenger(column string, new_value string, condition string) {
 
 	defer db.Close()
 
+	db.Exec("USE aircraft")
+
 	query := "UPDATE `passenger` SET " + column + " " + new_value + " WHERE " + condition
 	db.Query(query)
 
@@ -114,6 +120,8 @@ func DeletePassenger(condition string) {
 	}
 
 	defer db.Close()
+
+	db.Exec("USE aircraft")
 
 	query := "DELETE FROM `passenger` WHERE " + condition
 
@@ -139,22 +147,15 @@ func ListPassengerperFlight() []map[string]interface{} {
 
 	defer db.Close()
 
+	db.Exec("USE aircraft")
+
 	query := "SELECT id_route from flight"
 	selecte, err := db.Query(query)
 
 	if err != nil {
 		panic(err.Error())
 	}
-	/*
-		SELECT name, first_name, address, ticket_id FROM flight
 
-		JOIN tickets ON tickets.departures_id = flight.id_departures
-
-		JOIN passenger ON passenger.ticket_id = tickets.id
-
-		WHERE id_route = 35;
-
-	*/
 	var result []map[string]interface{}
 
 	for selecte.Next() {
@@ -206,6 +207,8 @@ func MostRegularProfession() []map[string]interface{} {
 
 	defer db.Close()
 
+	db.Exec("USE aircraft")
+
 	query := "SELECT profession, MAX(regular) \"passengers\" FROM (SELECT profession, COUNT(profession) AS \"regular\" FROM `passenger` GROUP BY profession) as tab1 GROUP BY profession ORDER BY profession DESC;"
 	selecte, err := db.Query(query)
 
@@ -245,18 +248,17 @@ func MostRegularPassenger() []map[string]interface{} {
 
 	defer db.Close()
 
+	db.Exec("USE aircraft")
+
 	query := `
 		SELECT
 			passenger.name,
 			passenger.first_name,
 			COUNT(tickets.id) as "c"
 		FROM passenger
-
 			JOIN tickets 
 				ON tickets.id = passenger.ticket_id
-
 		GROUP BY date_format(tickets.expire, '%Y-%m'), passenger.name, passenger.first_name
-
 		HAVING c >= 2;`
 
 	selecte, err := db.Query(query)
@@ -296,6 +298,8 @@ func NumbOfPassengersByPeriodByPlane(start string, end string) []map[string]inte
 	}
 
 	defer db.Close()
+
+	db.Exec("USE aircraft")
 
 	query := `
 		SELECT DISTINCT
@@ -350,6 +354,8 @@ func NumbOfPassengersByPeriod(start string, end string) []map[string]interface{}
 
 	defer db.Close()
 
+	db.Exec("USE aircraft")
+
 	query := `
 		SELECT
 			SUM(departures.occupied) AS "number of passengers carried"
@@ -386,10 +392,10 @@ func NumbOfPassengersByPeriod(start string, end string) []map[string]interface{}
 	return result
 }
 
-func AverageOcupenciRate(stage string) interface{} {
+func AverageOccupancyRate(stage string) []map[string]interface{} {
 
 	var query string
-	var response interface{}
+	var response []map[string]interface{}
 
 	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
 	if err != nil {
@@ -397,12 +403,15 @@ func AverageOcupenciRate(stage string) interface{} {
 	}
 	defer db.Close()
 
+	db.Exec("USE aircraft")
+
 	switch stage {
 	default:
 		type ReturnStruct struct {
 			DeviceId       int
 			DeviceType     string
-			DeviceCapacity float64
+			DeviceCapacity int
+			Average        string
 		}
 		query = `SELECT
 			device.id,
@@ -429,7 +438,7 @@ func AverageOcupenciRate(stage string) interface{} {
 
 		for selecte.Next() {
 			var tag ReturnStruct
-			selecte.Scan(&tag.DeviceId, tag.DeviceType, tag.DeviceCapacity)
+			selecte.Scan(&tag.DeviceId, &tag.DeviceType, &tag.DeviceCapacity, &tag.Average)
 			if err != nil {
 				panic(err.Error()) // proper error handling instead of panic in your app
 			}
@@ -437,6 +446,7 @@ func AverageOcupenciRate(stage string) interface{} {
 				"Device id":       tag.DeviceId,
 				"Device Type":     tag.DeviceType,
 				"Device Capacity": tag.DeviceCapacity,
+				"Average":         tag.Average,
 			})
 		}
 
@@ -450,7 +460,7 @@ func AverageOcupenciRate(stage string) interface{} {
 			FreePace   int
 			Occupied   int
 			Capacity   int
-			Average    float64
+			Average    string
 		}
 		query = `
 			SELECT
@@ -474,7 +484,7 @@ func AverageOcupenciRate(stage string) interface{} {
 
 		for selecte.Next() {
 			var tag ResponseStruct
-			selecte.Scan(&tag.FlightId, tag.DeviceType, tag.FreePace, tag.Occupied, tag.Capacity, tag.Average)
+			selecte.Scan(&tag.FlightId, &tag.DeviceType, &tag.FreePace, &tag.Occupied, &tag.Capacity, &tag.Average)
 			if err != nil {
 				panic(err.Error()) // proper error handling instead of panic in your app
 			}
@@ -490,10 +500,10 @@ func AverageOcupenciRate(stage string) interface{} {
 
 		response = result
 		break
-	case "plane":
+	case "destination":
 		type ResponseStruct struct {
 			Arrival string
-			Average int
+			Average string
 		}
 		query =
 			`
@@ -520,7 +530,7 @@ func AverageOcupenciRate(stage string) interface{} {
 
 		for selecte.Next() {
 			var tag ResponseStruct
-			selecte.Scan(&tag.Arrival, tag.Average)
+			selecte.Scan(&tag.Arrival, &tag.Average)
 			if err != nil {
 				panic(err.Error()) // proper error handling instead of panic in your app
 			}
@@ -532,7 +542,53 @@ func AverageOcupenciRate(stage string) interface{} {
 
 		response = result
 		break
+	case "plane":
+		type ReturnStruct struct {
+			DeviceId       int
+			DeviceType     string
+			DeviceCapacity int
+			Average        string
+		}
+		query = `SELECT
+			device.id,
+			device.type,
+			device.capacity,
+			(
+				SUM(
+					departures.occupied / device.capacity
+				) / COUNT(device.id)
+			) AS "Occupancy rate by plane"
+		FROM
+			device
+		LEFT JOIN flight ON flight.id_device = device.id
+		JOIN departures ON departures.id = flight.id_departures
+		GROUP BY
+			device.id;`
 
+		selecte, err := db.Query(query)
+		if err != nil {
+			panic(err.Error())
+		}
+
+		var result []map[string]interface{}
+
+		for selecte.Next() {
+			var tag ReturnStruct
+			selecte.Scan(&tag.DeviceId, &tag.DeviceType, &tag.DeviceCapacity, &tag.Average)
+			if err != nil {
+				panic(err.Error()) // proper error handling instead of panic in your app
+			}
+			result = append(result, map[string]interface{}{
+				"Device id":       tag.DeviceId,
+				"Device Type":     tag.DeviceType,
+				"Device Capacity": tag.DeviceCapacity,
+				"Average":         tag.Average,
+			})
+		}
+
+		response = result
+
+		break
 	}
 	return response
 }

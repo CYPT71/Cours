@@ -21,6 +21,9 @@ func GetDevices(selector string, filter string) []map[string]interface{} {
 	}
 
 	defer db.Close()
+
+	db.Exec("USE aircraft")
+
 	query := "SELECT "
 	if selector != "" {
 		query += selector
@@ -65,6 +68,8 @@ func AddDevices(capacity int, types string) {
 
 	defer db.Close()
 
+	db.Exec("USE aircraft")
+
 	// perform a db.Query insert
 	insert, err := db.Query("INSERT INTO `device` (`capacity`, `type`) VALUES (? , ?)", capacity, types)
 
@@ -87,6 +92,8 @@ func UpdateDevice(column string, new_value string, condition string) {
 
 	defer db.Close()
 
+	db.Exec("USE aircraft")
+
 	query := "UPDATE `device` SET " + column + " " + new_value + " WHERE " + condition
 	db.Query(query)
 
@@ -99,6 +106,9 @@ func DeleteDevice(condition string) {
 	}
 
 	defer db.Close()
+
+	db.Exec("USE aircraft")
+
 	query := "DELETE FROM `device` WHERE " + condition
 
 	db.Query(query)
@@ -118,6 +128,8 @@ func DeviveHours() []map[string]interface{} {
 	}
 
 	defer db.Close()
+
+	db.Exec("USE aircraft")
 
 	query := "SELECT type, SEC_TO_TIME(SUM(TIME_TO_SEC(among))) AS \"flight hours\" FROM `pilote` JOIN `departures` ON pilote.id = departures.pilote JOIN `flight` ON departures.id = flight.id_departures JOIN `device` ON device.id = flight.id_device GROUP BY device.id;"
 

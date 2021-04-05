@@ -26,6 +26,8 @@ func AddFlight(Id_departures int, Arrival string, Id_route int, Id_device int) {
 
 	defer db.Close()
 
+	db.Exec("USE aircraft")
+
 	// perform a db.Query insert
 	insert, err := db.Query("INSERT INTO `flight`(`id_departures`, `arrival`, `id_route`, `id_device`) VALUES (?, ?, ?, ?)",
 		Id_departures, Arrival, Id_route, Id_device)
@@ -48,6 +50,8 @@ func GetFlight(selector string, filter string) []map[string]interface{} {
 	}
 
 	defer db.Close()
+
+	db.Exec("USE aircraft")
 
 	query := "SELECT "
 	if selector != "" {
@@ -99,6 +103,8 @@ func UpdateFlight(column string, new_value string, condition string) {
 
 	defer db.Close()
 
+	db.Exec("USE aircraft")
+
 	query := "UPDATE `flight` SET " + column + " " + new_value + " WHERE " + condition
 	db.Query(query)
 
@@ -111,6 +117,8 @@ func DeleteFlight(condition string) {
 	}
 
 	defer db.Close()
+
+	db.Exec("USE aircraft")
 
 	query := "DELETE FROM `flight` WHERE " + condition
 
@@ -129,6 +137,8 @@ func GetFlightByCity(city string) []map[string]interface{} {
 	}
 
 	defer db.Close()
+
+	db.Exec("USE aircraft")
 
 	query := "SELECT device.type FROM `flight` JOIN `route` ON route.id = flight.id_route JOIN `device` ON device.id = flight.id_device WHERE route.arrival = \"" + city + "\";"
 
@@ -167,6 +177,8 @@ func OccupancyRate() []map[string]interface{} {
 	}
 
 	defer db.Close()
+
+	db.Exec("USE aircraft")
 
 	query := `
 		SELECT

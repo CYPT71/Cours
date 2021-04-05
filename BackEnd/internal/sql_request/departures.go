@@ -25,6 +25,9 @@ func GetDepartures(selector string, filter string) []map[string]interface{} {
 	}
 
 	defer db.Close()
+
+	db.Exec("USE aircraft")
+
 	query := "SELECT "
 	if selector != "" {
 		query += selector
@@ -75,6 +78,8 @@ func AddDepartures(Id_flight int, Date string, Pilote int, Copilote int, Aircrew
 
 	defer db.Close()
 
+	db.Exec("USE aircraft")
+
 	// perform a db.Query insert
 	insert, err := db.Query("INSERT INTO `departures`(`id_flight`, `date`, `pilote`, `copilote`, `aircrew`, `free_places`, `occupied`, `ticket_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
 		Id_flight, Date, Pilote, Copilote, Aircrew, Free_places, Occupied)
@@ -98,6 +103,8 @@ func UpdateDepartures(column string, new_value string, condition string) {
 
 	defer db.Close()
 
+	db.Exec("USE aircraft")
+
 	query := "UPDATE `departures` SET " + column + " " + new_value + " WHERE " + condition
 	db.Query(query)
 
@@ -110,6 +117,9 @@ func DeleteDepartures(condition string) {
 	}
 
 	defer db.Close()
+
+	db.Exec("USE aircraft")
+
 	query := "DELETE FROM `departures` WHERE " + condition
 
 	db.Query(query)

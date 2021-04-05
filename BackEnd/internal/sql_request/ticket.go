@@ -24,6 +24,8 @@ func AddTickets(Expire string, Price int, Departures_id int) {
 
 	defer db.Close()
 
+	db.Exec("USE aircraft")
+
 	// perform a db.Query insert
 	insert, err := db.Query("INSERT INTO `tickets`(`expire`, `price`, `departures_id`) VALUES (?, ?, ?)",
 		Expire, Price, Departures_id)
@@ -46,6 +48,8 @@ func GetTickets(selector string, filter string) []map[string]interface{} {
 	}
 
 	defer db.Close()
+
+	db.Exec("USE aircraft")
 
 	query := "SELECT "
 	if selector != "" {
@@ -94,6 +98,8 @@ func UpdateTickets(column string, new_value string, condition string) {
 
 	defer db.Close()
 
+	db.Exec("USE aircraft")
+
 	query := "UPDATE `tickets` SET " + column + " " + new_value + " WHERE " + condition
 	db.Query(query)
 
@@ -122,6 +128,8 @@ func TotalSales() int {
 	}
 
 	defer db.Close()
+
+	db.Exec("USE aircraft")
 
 	query := "SELECT SUM(price)  AS `total` FROM `tickets`;"
 
@@ -155,6 +163,8 @@ func SoldsPer(interval string) []map[string]interface{} {
 	}
 
 	defer db.Close()
+
+	db.Exec("USE aircraft")
 
 	var query string
 
