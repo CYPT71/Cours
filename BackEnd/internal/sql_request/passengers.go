@@ -385,3 +385,154 @@ func NumbOfPassengersByPeriod(start string, end string) []map[string]interface{}
 	}
 	return result
 }
+
+func AverageOcupenciRate(stage string) interface{} {
+
+	var query string
+	var response interface{}
+
+	db, err := sql.Open("mysql", utils.Config.Mysql.Dns)
+	if err != nil {
+		panic(err.Error())
+	}
+	defer db.Close()
+
+	switch stage {
+	default:
+		type ReturnStruct struct {
+			DeviceId       int
+			DeviceType     string
+			DeviceCapacity float64
+		}
+		query = `SELECT
+			device.id,
+			device.type,
+			device.capacity,
+			(
+				SUM(
+					departures.occupied / device.capacity
+				) / COUNT(device.id)
+			) AS "Occupancy rate by plane"
+		FROM
+			device
+		LEFT JOIN flight ON flight.id_device = device.id
+		JOIN departures ON departures.id = flight.id_departures
+		GROUP BY
+			device.id;`
+
+		selecte, err := db.Query(query)
+		if err != nil {
+			panic(err.Error())
+		}
+
+		var result []map[string]interface{}
+
+		for selecte.Next() {
+			var tag ReturnStruct
+			selecte.Scan(&tag.DeviceId, tag.DeviceType, tag.DeviceCapacity)
+			if err != nil {
+				panic(err.Error()) // proper error handling instead of panic in your app
+			}
+			result = append(result, map[string]interface{}{
+				"Device id":       tag.DeviceId,
+				"Device Type":     tag.DeviceType,
+				"Device Capacity": tag.DeviceCapacity,
+			})
+		}
+
+		response = result
+
+		break
+	case "flight":
+		type ResponseStruct struct {
+			FlightId   int
+			DeviceType string
+			FreePace   int
+			Occupied   int
+			Capacity   int
+			Average    float64
+		}
+		query = `
+			SELECT
+				flight.id,
+				device.type,
+				departures.free_places,
+				departures.occupied,
+				device.capacity,
+				departures.occupied / device.capacity AS "Occupancy rate by flight"
+			FROM
+				flight
+			JOIN device ON device.id = flight.id_device
+			JOIN departures ON departures.id = flight.id_departures;
+			`
+		selecte, err := db.Query(query)
+		if err != nil {
+			panic(err.Error())
+		}
+
+		var result []map[string]interface{}
+
+		for selecte.Next() {
+			var tag ResponseStruct
+			selecte.Scan(&tag.FlightId, tag.DeviceType, tag.FreePace, tag.Occupied, tag.Capacity, tag.Average)
+			if err != nil {
+				panic(err.Error()) // proper error handling instead of panic in your app
+			}
+			result = append(result, map[string]interface{}{
+				"Flight id":   tag.FlightId,
+				"Device Type": tag.DeviceType,
+				"Free Dents":  tag.FreePace,
+				"ifrice":      tag.Occupied,
+				"Capacity":    tag.Capacity,
+				"Average":     tag.Average,
+			})
+		}
+
+		response = result
+		break
+	case "plane":
+		type ResponseStruct struct {
+			Arrival string
+			Average int
+		}
+		query =
+			`
+				SELECT
+					arrival,
+					(
+						SUM(
+							departures.occupied / device.capacity
+						) / COUNT(route.arrival)
+					) AS "Occupancy rate by destination"
+				FROM
+					route
+				JOIN flight ON flight.id_route = route.id
+				JOIN device ON device.id = flight.id_device
+				JOIN departures ON departures.id = flight.id_departures
+				GROUP BY
+					arrival;`
+		selecte, err := db.Query(query)
+		if err != nil {
+			panic(err.Error())
+		}
+
+		var result []map[string]interface{}
+
+		for selecte.Next() {
+			var tag ResponseStruct
+			selecte.Scan(&tag.Arrival, tag.Average)
+			if err != nil {
+				panic(err.Error()) // proper error handling instead of panic in your app
+			}
+			result = append(result, map[string]interface{}{
+				"Arrival": tag.Arrival,
+				"Average": tag.Average,
+			})
+		}
+
+		response = result
+		break
+
+	}
+	return response
+}
