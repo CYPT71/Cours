@@ -1,6 +1,6 @@
 \documentclass{article}
-\title{Projet 1SGBD}
-\author{Cyprien Taib, Lounes Behloul, Soufian Oualla}
+\title{Demo}
+\author{cyprien taib}
 \date{February 2021}
 
 \begin{document}
@@ -78,22 +78,22 @@
         \item Delete Data for all tables 
     \end{itemize}
 
-    \section{Request Details}
-    always will be path method description
+    \section{Reuqest Details} 
+    always will be path method description and ":variable" is change part of url
     \begin{itemize}
         \item /cabincrew 
                 \begin{itemize}
                     \item / get the list of CabinCrew
                     \item / post add a new CabinCrew  
                     \item / path Update a CabinCrew
-                    \item / delete delete a CabinCrew
+                    \item /:name delete delete a CabinCrew
                 \end{itemize}
         \item /departures
             \begin{itemize}
                 \item / get the list of departures
                 \item / post add a new departures  
                 \item / path Update a departures
-                \item / delete delete a departures
+                \item /:name delete delete a departures
             \end{itemize}
         \item /devices
             \begin{itemize}
@@ -101,7 +101,7 @@
                 \item /time the time flight for device
                 \item / post add a new device  
                 \item / path Update a device
-                \item / delete delete a device
+                \item /:name delete delete a device
             \end{itemize}
         \item /employees
             \begin{itemize}
@@ -110,7 +110,7 @@
                 \item /categories the time flight for employee
                 \item / post add a new employee  
                 \item / path Update a employee
-                \item / delete delete a employee
+                \item /:name delete delete a employee
             \end{itemize}
         \item /flights
             \begin{itemize}
@@ -119,32 +119,29 @@
                 \item /categories the time flight for flight
                 \item / post add a new flight  
                 \item / path Update a flight
-                \item / delete delete a flight
+                \item /:name delete delete a flight
             \end{itemize}
         \item /passengers
             \begin{itemize}
                 \item / get the list of passenger List
                 \item /regular get the most regular Profession
                 \item /perFlight get the passenger per flight
+                \item /mostRegular get get Passenger Most regular per Flight
+                \item /byPlane/:start/:end get Number of passenger by plane by period (Y-m-d)
+                \item /total/:start/:end Number of passenger by period
                 \item / post add a new passenger  
                 \item / path Update a passenger
-                \item / delete delete a passenger
-            \end{itemize}
-        \item /passengers
-            \begin{itemize}
-                \item / get the list of passenger List
-                \item /regular get the most regular Profession
-                \item /perFlight get the passenger per flight
-                \item / post add a new passenger  
-                \item / path Update a passenger
-                \item / delete delete a passenger
-            \end{itemize}
+                \item /:name delete delete a passenger
+            \end{itemize}       
         \item /pilote
             \begin{itemize}
                 \item / get the list of pilote
                 \item /details get details list about pilote
-                \item /:name get a list of pilote for a given name
+                \item /renew get the pilote who need to renew there licence
+                \item /:name/:firstName get a list of pilote for a given name
                 \item /flightHours get a list of flig hours for pilote
+                \item /piloteArrival get pilote who go to there home
+                \item /average get Pilote flight average
                 \item / post add a new pilote  
                 \item / path Update a pilote
                 \item /:name delete delete a pilote
@@ -154,25 +151,18 @@
                 \item / get the list of route
                 \item / post add a new route  
                 \item / path Update a route
-                \item / delete delete a route
+                \item /:name delete delete a route
             \end{itemize}
         \item /tickets
             \begin{itemize}
                 \item / get the list of tickets
                 \item /total get the total Sales of ticket
+                \item /:interval get ticket sold filter by month, week, day
                 \item / post add a new tickets  
                 \item / path Update a tickets
                 \item / delete delete a tickets
             \end{itemize}
     \end{itemize}
-    
-    \section{Data Generator}
-    
-    In order to set data in our database, we have made the choice to code a python script that will allow us to fill our database with more diversified data. \newline
-
-    That would enable us both to make the output of the requests more interesting and to save an incredible amount of time. We thought that it more interesting to realize this generator. \newline
-    
-    In this code, a number of coding techniques were employed to make the most realistic and consistent dataset possible. You can have a look at our code for more information.
 
 
 \end{document}
