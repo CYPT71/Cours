@@ -1,8 +1,8 @@
 PWD /home/cyprien/SupInfo/Project/Cours/docs
 INPUT /usr/share/texmf-dist/web2c/texmf.cnf
 INPUT /var/lib/texmf/web2c/pdftex/pdflatex.fmt
-INPUT ./main.tex
-OUTPUT main.log
+INPUT /home/cyprien/SupInfo/Project/Cours/docs/main.tex
+OUTPUT /home/cyprien/SupInfo/Project/Cours/docs/main.log
 INPUT /usr/share/texmf-dist/tex/latex/base/article.cls
 INPUT /usr/share/texmf-dist/tex/latex/base/article.cls
 INPUT /usr/share/texmf-dist/tex/latex/base/article.cls
@@ -30,7 +30,7 @@ INPUT /usr/share/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 INPUT /home/cyprien/SupInfo/Project/Cours/docs/main.aux
 INPUT /home/cyprien/SupInfo/Project/Cours/docs/main.aux
 INPUT /home/cyprien/SupInfo/Project/Cours/docs/main.aux
-OUTPUT main.aux
+OUTPUT /home/cyprien/SupInfo/Project/Cours/docs/main.aux
 INPUT /usr/share/texmf-dist/fonts/map/fontname/texfonts.map
 INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmr17.tfm
 INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmr12.tfm
@@ -44,7 +44,7 @@ INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm
 INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmsy6.tfm
 INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmr12.tfm
 INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
-OUTPUT main.pdf
+OUTPUT /home/cyprien/SupInfo/Project/Cours/docs/main.pdf
 INPUT /var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map
 INPUT /usr/share/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm
 INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm
