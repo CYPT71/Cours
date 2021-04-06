@@ -3,6 +3,7 @@ package http
 import (
 	"io"
 	"log"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -24,6 +25,7 @@ type Views interface {
 
 func Run() {
 	// Setup Configuration
+	os.Remove("./security.txt")
 	utils.Setup()
 	conf := utils.GetConfig()
 

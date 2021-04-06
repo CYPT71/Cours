@@ -2,7 +2,9 @@ package controllers
 
 import (
 	"airflight/internal/utils"
+	"io/ioutil"
 	"log"
+	"os"
 	"regexp"
 	"strings"
 
@@ -38,6 +40,15 @@ func getToken(c *fiber.Ctx) error {
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
 	TokenString = t
+	is_logged := "isLogged : 1"
+	file, err := os.Create("security.txt")
+
+	if err != nil {
+		return c.SendStatus(fiber.StatusInternalServerError)
+	}
+	defer file.Close()
+
+	file.WriteString(is_logged)
 
 	// log.Print(c.Request().Header)
 
@@ -54,11 +65,20 @@ func ifNotToken(c *fiber.Ctx) bool {
 		c.Status(403).SendString("no bearer")
 		return true
 	}
+
+	reader, _ := ioutil.ReadFile("./security.txt")
+
+	reponse := string(reader)
+	if strings.Split(strings.Split(reponse, "\n")[0], ":")[1] == " 1" {
+		return false
+	}
+
 	bearerToken := strings.Split(ts, " ")
 	isToken, err := jwt.Parse(bearerToken[1], func(t *jwt.Token) (interface{}, error) {
 
 		return []byte(utils.Config.Server.SecretKey), nil
 	})
+
 	if err != nil {
 		log.Print(err)
 		return true
